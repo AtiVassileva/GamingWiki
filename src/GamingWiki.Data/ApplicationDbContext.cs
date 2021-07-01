@@ -1,10 +1,10 @@
-﻿using GamingWiki.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-
 namespace GamingWiki.Data
 {
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Models;
+    
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
