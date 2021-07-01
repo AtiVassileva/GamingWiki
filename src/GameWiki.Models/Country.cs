@@ -5,14 +5,14 @@
     
     public class Country
     {
-        [Key]
-        [Required]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
+        [MaxLength(10)]
         public string CountryCode { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         public long Population { get; set; }
