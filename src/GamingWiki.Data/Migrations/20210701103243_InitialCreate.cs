@@ -1,22 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GamingWiki.Data.Migrations
+namespace GamingWiki.Web.Data.Migrations
 {
-    public partial class IntroduceEntities : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "CountryId",
-                table: "AspNetUsers",
-                type: "nvarchar(450)",
-                nullable: true);
-
             migrationBuilder.AddColumn<int>(
-                name: "DiscussionId",
+                name: "CountryId",
                 table: "AspNetUsers",
                 type: "int",
                 nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Discriminator",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.CreateTable(
                 name: "Articles",
@@ -44,10 +45,11 @@ namespace GamingWiki.Data.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Population = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CountryCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Population = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,6 +158,30 @@ namespace GamingWiki.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserDiscussion",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DiscussionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDiscussion", x => new { x.UserId, x.DiscussionId });
+                    table.ForeignKey(
+                        name: "FK_UserDiscussion_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_UserDiscussion_Discussions_DiscussionId",
+                        column: x => x.DiscussionId,
+                        principalTable: "Discussions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Games",
                 columns: table => new
                 {
@@ -255,11 +281,6 @@ namespace GamingWiki.Data.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_DiscussionId",
-                table: "AspNetUsers",
-                column: "DiscussionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Articles_AuthorId",
                 table: "Articles",
                 column: "AuthorId");
@@ -314,31 +335,24 @@ namespace GamingWiki.Data.Migrations
                 table: "Replies",
                 column: "ReplierId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDiscussion_DiscussionId",
+                table: "UserDiscussion",
+                column: "DiscussionId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Countries_CountryId",
                 table: "AspNetUsers",
                 column: "CountryId",
                 principalTable: "Countries",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Discussions_DiscussionId",
-                table: "AspNetUsers",
-                column: "DiscussionId",
-                principalTable: "Discussions",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUsers_Countries_CountryId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Discussions_DiscussionId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
@@ -357,16 +371,19 @@ namespace GamingWiki.Data.Migrations
                 name: "Replies");
 
             migrationBuilder.DropTable(
+                name: "UserDiscussion");
+
+            migrationBuilder.DropTable(
                 name: "Creators");
 
             migrationBuilder.DropTable(
                 name: "Games");
 
             migrationBuilder.DropTable(
-                name: "Discussions");
+                name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Discussions");
 
             migrationBuilder.DropTable(
                 name: "Places");
@@ -378,16 +395,12 @@ namespace GamingWiki.Data.Migrations
                 name: "IX_AspNetUsers_CountryId",
                 table: "AspNetUsers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_DiscussionId",
-                table: "AspNetUsers");
-
             migrationBuilder.DropColumn(
                 name: "CountryId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "DiscussionId",
+                name: "Discriminator",
                 table: "AspNetUsers");
         }
     }

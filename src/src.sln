@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Data", "GamingHub.Data\GamingWiki.Data.csproj", "{9BAE870B-6552-473F-B5EA-C5CD0A1E5705}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Services", "GamingWiki.Services\GamingWiki.Services.csproj", "{967F4DB0-1439-4B38-9EC8-9ECD0F168158}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Models", "GameWiki.Models\GamingWiki.Models.csproj", "{944AC996-ADDC-4C54-ABAE-5860EBCC89C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingWiki.Web", "GamingWiki.Web\GamingWiki.Web.csproj", "{2611DBFF-52D8-4A73-B037-CBCE13FEA988}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Data", "GamingWiki.Data\GamingWiki.Data.csproj", "{D1713AD2-F688-4A33-ACA8-34A510663B31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingWiki.Web", "GamingWiki.Web\GamingWiki.Web.csproj", "{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9BAE870B-6552-473F-B5EA-C5CD0A1E5705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BAE870B-6552-473F-B5EA-C5CD0A1E5705}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BAE870B-6552-473F-B5EA-C5CD0A1E5705}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BAE870B-6552-473F-B5EA-C5CD0A1E5705}.Release|Any CPU.Build.0 = Release|Any CPU
 		{967F4DB0-1439-4B38-9EC8-9ECD0F168158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{967F4DB0-1439-4B38-9EC8-9ECD0F168158}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{967F4DB0-1439-4B38-9EC8-9ECD0F168158}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,10 +25,14 @@ Global
 		{944AC996-ADDC-4C54-ABAE-5860EBCC89C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{944AC996-ADDC-4C54-ABAE-5860EBCC89C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{944AC996-ADDC-4C54-ABAE-5860EBCC89C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2611DBFF-52D8-4A73-B037-CBCE13FEA988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2611DBFF-52D8-4A73-B037-CBCE13FEA988}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2611DBFF-52D8-4A73-B037-CBCE13FEA988}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2611DBFF-52D8-4A73-B037-CBCE13FEA988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1713AD2-F688-4A33-ACA8-34A510663B31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1713AD2-F688-4A33-ACA8-34A510663B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1713AD2-F688-4A33-ACA8-34A510663B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1713AD2-F688-4A33-ACA8-34A510663B31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

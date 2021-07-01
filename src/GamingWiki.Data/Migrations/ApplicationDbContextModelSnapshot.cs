@@ -4,16 +4,14 @@ using GamingWiki.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GamingWiki.Data.Migrations
 {
-    [DbContext(typeof(GamingWikiDbContext))]
-    [Migration("20210701074028_ChangedCountryPopulationType")]
-    partial class ChangedCountryPopulationType
+    [DbContext(typeof(ApplicationDbContext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,16 +102,20 @@ namespace GamingWiki.Data.Migrations
 
             modelBuilder.Entity("GamingWiki.Models.Country", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CountryCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<long>("Population")
                         .HasColumnType("bigint");
@@ -277,6 +279,21 @@ namespace GamingWiki.Data.Migrations
                     b.ToTable("Replies");
                 });
 
+            modelBuilder.Entity("GamingWiki.Models.UserDiscussion", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DiscussionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "DiscussionId");
+
+                    b.HasIndex("DiscussionId");
+
+                    b.ToTable("UserDiscussion");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -340,11 +357,9 @@ namespace GamingWiki.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CountryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("DiscussionId")
-                        .HasColumnType("int");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -388,10 +403,6 @@ namespace GamingWiki.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("DiscussionId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -401,6 +412,8 @@ namespace GamingWiki.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -487,10 +500,22 @@ namespace GamingWiki.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GamingWiki.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
             modelBuilder.Entity("GamingWiki.Models.Article", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Author")
-                        .WithMany()
+                    b.HasOne("GamingWiki.Models.ApplicationUser", "Author")
+                        .WithMany("Articles")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -512,15 +537,15 @@ namespace GamingWiki.Data.Migrations
             modelBuilder.Entity("GamingWiki.Models.Comment", b =>
                 {
                     b.HasOne("GamingWiki.Models.Article", "Article")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Commenter")
-                        .WithMany()
+                    b.HasOne("GamingWiki.Models.ApplicationUser", "Commenter")
+                        .WithMany("Comments")
                         .HasForeignKey("CommenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Article");
@@ -530,7 +555,7 @@ namespace GamingWiki.Data.Migrations
 
             modelBuilder.Entity("GamingWiki.Models.Discussion", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
+                    b.HasOne("GamingWiki.Models.ApplicationUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -577,8 +602,8 @@ namespace GamingWiki.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Sender")
-                        .WithMany()
+                    b.HasOne("GamingWiki.Models.ApplicationUser", "Sender")
+                        .WithMany("Messages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -591,13 +616,13 @@ namespace GamingWiki.Data.Migrations
             modelBuilder.Entity("GamingWiki.Models.Reply", b =>
                 {
                     b.HasOne("GamingWiki.Models.Comment", "Comment")
-                        .WithMany()
+                        .WithMany("Replies")
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Replier")
-                        .WithMany()
+                    b.HasOne("GamingWiki.Models.ApplicationUser", "Replier")
+                        .WithMany("Replies")
                         .HasForeignKey("ReplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -607,6 +632,25 @@ namespace GamingWiki.Data.Migrations
                     b.Navigation("Replier");
                 });
 
+            modelBuilder.Entity("GamingWiki.Models.UserDiscussion", b =>
+                {
+                    b.HasOne("GamingWiki.Models.Discussion", "Discussion")
+                        .WithMany("UsersDiscussions")
+                        .HasForeignKey("DiscussionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamingWiki.Models.ApplicationUser", "User")
+                        .WithMany("UserDiscussions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Discussion");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -614,17 +658,6 @@ namespace GamingWiki.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.HasOne("GamingWiki.Models.Country", null)
-                        .WithMany("Users")
-                        .HasForeignKey("CountryId");
-
-                    b.HasOne("GamingWiki.Models.Discussion", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("DiscussionId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -669,6 +702,27 @@ namespace GamingWiki.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GamingWiki.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("GamingWiki.Models.Country", "Country")
+                        .WithMany("Users")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("GamingWiki.Models.Article", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("GamingWiki.Models.Comment", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
             modelBuilder.Entity("GamingWiki.Models.Country", b =>
                 {
                     b.Navigation("Users");
@@ -683,7 +737,7 @@ namespace GamingWiki.Data.Migrations
                 {
                     b.Navigation("Messages");
 
-                    b.Navigation("Participants");
+                    b.Navigation("UsersDiscussions");
                 });
 
             modelBuilder.Entity("GamingWiki.Models.Game", b =>
@@ -691,6 +745,19 @@ namespace GamingWiki.Data.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("GamesCreators");
+                });
+
+            modelBuilder.Entity("GamingWiki.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Replies");
+
+                    b.Navigation("UserDiscussions");
                 });
 #pragma warning restore 612, 618
         }

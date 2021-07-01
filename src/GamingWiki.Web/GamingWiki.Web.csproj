@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>aspnet-GamingWiki.Web-342FD7D5-60F2-4DA3-9B39-B5F441A132BD</UserSecretsId>
+    <UserSecretsId>aspnet-GamingWiki.Web-DA08F7F1-7EA0-4C1B-8785-7C7DCEE48D22</UserSecretsId>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
   </PropertyGroup>
 
@@ -16,8 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GamingHub.Data\GamingWiki.Data.csproj" />
-    <ProjectReference Include="..\GamingWiki.Services\GamingWiki.Services.csproj" />
+    <ProjectReference Include="..\GamingWiki.Data\GamingWiki.Data.csproj" />
   </ItemGroup>
 
 </Project>
