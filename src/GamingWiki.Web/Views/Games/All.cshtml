@@ -1,0 +1,22 @@
+﻿@model IEnumerable<GamingWiki.Web.Models.Games.GameSimpleModel>
+
+@*@section Styles{
+    <link href="/css/all-games.css" rel="stylesheet" />
+}*@
+
+<section id="recent-games">
+    <h1>All Games</h1>
+    <div class="flex">
+        @foreach (var game in Model)
+        {
+            <div class="box">
+                <span class="badge new">@game.Name</span>
+                <img src="@game.PictureUrl"/>
+                <div class="box-lower-section">
+                    <h4>Designed by: @game.Creators</h4>
+                    <a href="/Games/Details?gameId=@game.Id" class="comments">See more</a>
+                </div>
+            </div>
+        }
+    </div>
+</section>

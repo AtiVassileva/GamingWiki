@@ -1,0 +1,49 @@
+﻿@model GamingWiki.Web.Models.Games.GameListingModel
+
+<form action="/Games/Edit?gameId=@Model.Id" method="post">
+
+    <div class="card">
+        <h2>Edit @Model.Name</h2>
+        <img src="@Model.PictureUrl" width="250" height="300" />
+        <div class="row">
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>PictureUrl: </label>
+                    <input type="url" name="pictureUrl" value="@Model.PictureUrl">
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Place name: </label>
+                    <input type="text" name="placeName" value="@Model.Place" />
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Place type:</label>
+                    <select name="placeType">
+                        <option>Select a place...</option>
+                            @foreach (var @placeType in @ViewBag.PlaceTypes)
+                            {
+                            <option>@placeType</option>
+                        }
+                        </select>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Description: </label>
+                    <textarea name="description">@Model.Description</textarea>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</form>

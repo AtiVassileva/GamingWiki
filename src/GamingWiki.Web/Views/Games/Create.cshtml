@@ -1,0 +1,68 @@
+﻿@model IEnumerable<string>
+
+@*@section Styles {
+    <link href="~/css/create-form.css" rel="stylesheet" />
+}*@
+
+<form action="/Games/Create" method="post">
+
+    <div class="card">
+        <h2>Add a new game:</h2>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Name: </label>
+                    <input type="text" name="name">
+                </div>
+            </div>
+            <br />
+            
+            <div class="col">
+                <div class="form-group">
+                    <label>Creators: (separated by ", ")</label>
+                    <input type="text" name="creatorsNames">
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>PictureUrl: </label>
+                    <input type="url" name="pictureUrl">
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Place name: </label>
+                    <input type="text" name="placeName" />
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Place type:</label>
+                    <select name="placeType">
+                        <option>Select a place...</option>
+                        @foreach (var @placeType in Model)
+                        {
+                            <option>@placeType</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Description: </label>
+                    <textarea name="description"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+
+
+</form>
