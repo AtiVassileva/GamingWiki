@@ -19,6 +19,9 @@ namespace GamingWiki.Web.Models.Games
         public string Description { get; set; }
 
         [Required]
+        public string Class { get; set; }
+
+        [Required]
         public string CreatorsNames { get; set; }
 
         [Required]

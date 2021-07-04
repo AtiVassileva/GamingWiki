@@ -43,10 +43,16 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Create()
         {
-            var placesModels = GetPlaceTypes();
+            var placeTypes = GetPlaceTypes();
+            var gamesClasses = GetGamesClasses();
 
-            return this.View(placesModels);
-        } 
+            var collectionsModel = new GameCollectionsModel
+            {
+                PlaceTypes = placeTypes,
+                GameClasses = gamesClasses
+            };
+            return this.View(collectionsModel);
+        }
 
         [HttpPost]
         public IActionResult Create(GameFormModel model)
@@ -66,7 +72,8 @@ namespace GamingWiki.Web.Controllers
                 Name = model.Name,
                 Description = model.Description,
                 PictureUrl = model.PictureUrl,
-                PlaceId = place.Id
+                PlaceId = place.Id,
+                Class = Enum.Parse<GameClass>(model.Class)
             };
 
             var game = mapper.Map<Game>(gameDto);
@@ -104,6 +111,7 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl,
                     Description = g.Description,
                     Place = $"{g.Place.Name} ({g.Place.PlaceType})",
+                    Class = g.Class.ToString(),
                     Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList()
                 }).FirstOrDefault();
 
@@ -121,6 +129,7 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl,
                     Description = g.Description,
                     Place = g.Place.Name,
+                    Class = g.Class.ToString()
                 }).FirstOrDefault();
 
             ViewBag.PlaceTypes = GetPlaceTypes();
@@ -166,7 +175,14 @@ namespace GamingWiki.Web.Controllers
         {
             return Enum.GetValues<PlaceType>()
                 .Select(en =>
-                    new string(en.ToString())).ToList();
+                   new string(en.ToString())).ToList();
+        }
+
+        private static IEnumerable<string> GetGamesClasses()
+        {
+            return Enum.GetValues<GameClass>()
+                .Select(gc =>
+                    new string(gc.ToString())).ToList();
         }
     }
 }

@@ -7,11 +7,12 @@
         <img src="@Model.PictureUrl" />
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-center">@Model.Description</li>
                     <li class="list-group-item text-center">Place: @Model.Place</li>
+                    <li class="list-group-item text-center">Class: @Model.Class</li>
                     <li class="list-group-item">
                         <span class="text-success">Creators: @string.Join(", ", @Model.Creators))</span>
                     </li>
+                    <li class="list-group-item text-center">@Model.Description</li>
                 </ul>
                 <a href="/Games/Edit?gameId=@Model.Id" class="btn btn-block btn-primary">Edit</a>
                 <a href="/Games/Delete?gameId=@Model.Id" class="btn btn-block btn-danger">Delete</a>

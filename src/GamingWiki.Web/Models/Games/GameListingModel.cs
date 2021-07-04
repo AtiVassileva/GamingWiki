@@ -10,6 +10,8 @@ namespace GamingWiki.Web.Models.Games
 
         public string Description { get; set; }
 
+        public string Class { get; set; }
+
         public string PictureUrl { get; set; }
 
         public string Place { get; set; }

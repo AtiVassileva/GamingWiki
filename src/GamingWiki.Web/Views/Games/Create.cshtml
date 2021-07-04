@@ -1,4 +1,4 @@
-﻿@model IEnumerable<string>
+﻿@model GamingWiki.Web.Models.Games.GameCollectionsModel
 
 @*@section Styles {
     <link href="~/css/create-form.css" rel="stylesheet" />
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <br />
-            
+
             <div class="col">
                 <div class="form-group">
                     <label>Creators: (separated by ", ")</label>
@@ -42,10 +42,22 @@
                 <div class="form-group">
                     <label>Place type:</label>
                     <select name="placeType">
-                        <option>Select a place...</option>
-                        @foreach (var @placeType in Model)
+                        <option style="display:none">Select a place...</option>
+                        @foreach (var @placeType in Model.PlaceTypes)
                         {
                             <option>@placeType</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Game class:</label>
+                    <select name="class">
+                        <option style="display:none">Select a class...</option>
+                        @foreach (var gameClass in Model.GameClasses)
+                        {
+                            <option>@gameClass</option>
                         }
                     </select>
                 </div>

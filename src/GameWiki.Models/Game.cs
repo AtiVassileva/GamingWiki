@@ -1,4 +1,6 @@
-﻿namespace GamingWiki.Models
+﻿using GamingWiki.Models.Enums;
+
+namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
@@ -19,6 +21,8 @@
         public int PlaceId { get; set; }
 
         public Place Place { get; set; }
+
+        public GameClass Class { get; set; }
 
         public ICollection<Character> Characters { get; set; }
         = new HashSet<Character>();
