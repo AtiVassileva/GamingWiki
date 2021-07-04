@@ -3,7 +3,7 @@ using GamingWiki.Models;
 
 namespace GamingWiki.Services.Contracts
 {
-    public interface IEntityHelper
+    public interface IGameHelper
     {
         Place ParsePlace(string placeName, string placeType);
 

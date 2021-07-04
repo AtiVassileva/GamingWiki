@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
@@ -15,15 +16,15 @@ namespace GamingWiki.Web.Controllers
     public class GamesController : Controller
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IEntityHelper helper;
+        private readonly IGameHelper helper;
         private readonly IMapper mapper;
 
         public GamesController
-            (ApplicationDbContext dbContext, IMapper mapper, IEntityHelper creator)
+            (ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            this.helper = new EntityHelper(dbContext);
+            this.helper = new GameHelper(dbContext);
         }
 
         public IActionResult All()
@@ -42,9 +43,7 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Create()
         {
-            var placesModels = Enum.GetValues<PlaceType>()
-                .Select(en => 
-                    new string(en.ToString())).ToList();
+            var placesModels = GetPlaceTypes();
 
             return this.View(placesModels);
         } 
@@ -104,7 +103,7 @@ namespace GamingWiki.Web.Controllers
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
                     Description = g.Description,
-                    Place = $"{g.Place.Name} ({g.Place.PlaceType.ToString()})",
+                    Place = $"{g.Place.Name} ({g.Place.PlaceType})",
                     Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList()
                 }).FirstOrDefault();
 
@@ -124,9 +123,7 @@ namespace GamingWiki.Web.Controllers
                     Place = g.Place.Name,
                 }).FirstOrDefault();
 
-            ViewBag.PlaceTypes = Enum.GetValues<PlaceType>()
-                .Select(en =>
-                    new string(en.ToString())).ToList();
+            ViewBag.PlaceTypes = GetPlaceTypes();
 
             return this.View(game);
         }
@@ -163,6 +160,13 @@ namespace GamingWiki.Web.Controllers
             this.dbContext.SaveChanges();
 
             return this.Redirect("/Games/All");
+        }
+
+        private static IEnumerable<string> GetPlaceTypes()
+        {
+            return Enum.GetValues<PlaceType>()
+                .Select(en =>
+                    new string(en.ToString())).ToList();
         }
     }
 }

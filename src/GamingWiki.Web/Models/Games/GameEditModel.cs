@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static GamingWiki.Web.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Games
 {
@@ -6,17 +7,17 @@ namespace GamingWiki.Web.Models.Games
     {
         public int Id { get; set; }
 
-        [Required]
         [Url]
+        [Required]
         public string PictureUrl { get; set; }
 
         [Required]
-        [MinLength(10)]
+        [MinLength(DescriptionMinLength)]
         public string Description { get; set; }
 
         [Required]
-        [MinLength(3)]
-        [RegularExpression(@"[A-Za-z\s\.]+")]
+        [MinLength(DefaultMinLength)]
+        [RegularExpression(ValidPlaceNameRegex)]
         public string PlaceName { get; set; }
 
         [Required]

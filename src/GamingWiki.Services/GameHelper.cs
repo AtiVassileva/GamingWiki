@@ -8,11 +8,11 @@ using GamingWiki.Services.Contracts;
 
 namespace GamingWiki.Services
 {
-    public class EntityHelper : IEntityHelper
+    public class GameHelper : IGameHelper
     {
         private readonly ApplicationDbContext dbContext;
 
-        public EntityHelper(ApplicationDbContext dbContext)
+        public GameHelper(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

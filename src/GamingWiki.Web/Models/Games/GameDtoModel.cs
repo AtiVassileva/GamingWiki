@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using GamingWiki.Models.Enums;
-
-namespace GamingWiki.Web.Models.Games
+﻿namespace GamingWiki.Web.Models.Games
 {
     public class GameDtoModel
     {
