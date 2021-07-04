@@ -1,0 +1,30 @@
+﻿@model GamingWiki.Web.Models.Characters.CharacterEditModel
+
+<form action="/Characters/Edit?characterId=@Model.Id" method="post">
+
+    <div class="card">
+        <h2>Edit @Model.Name</h2>
+        <img src="@Model.PictureUrl" width="250" height="300" />
+        <div class="row">
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>PictureUrl: </label>
+                    <input type="url" name="pictureUrl" value="@Model.PictureUrl">
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Description: </label>
+                    <textarea name="description">@Model.Description</textarea>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</form>

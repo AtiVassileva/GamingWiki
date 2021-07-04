@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using GamingWiki.Models;
+using GamingWiki.Web.Models.Characters;
 using GamingWiki.Web.Models.Games;
 
 namespace GamingWiki.Web.MappingConfiguration
@@ -15,6 +16,8 @@ namespace GamingWiki.Web.MappingConfiguration
             this.CreateMap<GameDtoModel, Game>();
 
             this.CreateMap<GameCreatorDto, GameCreator>();
+
+            this.CreateMap<CharacterDtoModel, Character>();
         }
     }
 }

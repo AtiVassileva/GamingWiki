@@ -1,0 +1,18 @@
+﻿@model IEnumerable<GamingWiki.Web.Models.Characters.CharacterSimpleModel>
+
+<section id="recent-games">
+    <h1>All Characters</h1>
+    <div class="flex">
+        @foreach (var character in Model)
+        {
+            <div class="box">
+                <span class="badge new">@character.Name</span>
+                <img src="@character.PictureUrl" />
+                <div class="box-lower-section">
+                    <h4>Class: @character.Class</h4>
+                    <a href="/Characters/Details?characterId=@character.Id" class="comments">See more</a>
+                </div>
+            </div>
+        }
+    </div>
+</section>

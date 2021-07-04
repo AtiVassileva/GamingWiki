@@ -1,0 +1,17 @@
+﻿@model GamingWiki.Web.Models.Characters.CharacterListingModel
+
+<h1>Character details for @Model.Name</h1>
+<div class="row mt-2 mb-4">
+    <div class="card col-6 col-lg-3 game-card">
+        <img src="@Model.PictureUrl" />
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-center">Game: @Model.Game</li>
+                <li class="list-group-item text-center">Class: @Model.Class</li>
+                <li class="list-group-item text-center">@Model.Description</li>
+            </ul>
+            <a href="/Characters/Edit?characterId=@Model.Id" class="btn btn-block btn-primary">Edit</a>
+            <a href="/Characters/Delete?characterId=@Model.Id" class="btn btn-block btn-danger">Delete</a>
+        </div>
+    </div>
+</div>

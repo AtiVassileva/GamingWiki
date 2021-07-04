@@ -1,0 +1,61 @@
+﻿@model GamingWiki.Web.Models.Characters.CharacterCollectionsModel
+
+<form action="/Characters/Create" method="post">
+
+    <div class="card">
+        <h2>Add a new character:</h2>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Name: </label>
+                    <input type="text" name="name">
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>PictureUrl: </label>
+                    <input type="url" name="pictureUrl">
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Game:</label>
+                    <select name="game">
+                        <option style="display:none">Select a game...</option>
+                        @foreach (var gameName in Model.GameNames)
+                        {
+                            <option>@gameName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Character class:</label>
+                    <select name="class">
+                        <option style="display:none">Select a class...</option>
+                        @foreach (var gameClass in Model.CharacterClasses)
+                        {
+                            <option>@gameClass</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Description: </label>
+                    <textarea name="description"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</form>
