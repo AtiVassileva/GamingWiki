@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Models", "GameWi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Data", "GamingWiki.Data\GamingWiki.Data.csproj", "{D1713AD2-F688-4A33-ACA8-34A510663B31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingWiki.Web", "GamingWiki.Web\GamingWiki.Web.csproj", "{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Web", "GamingWiki.Web\GamingWiki.Web.csproj", "{06AFCF5C-BDCE-45B2-9B6C-9262B4F5AC54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
