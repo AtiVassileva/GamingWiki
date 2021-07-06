@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace GamingWiki.Models
 {
@@ -11,6 +13,8 @@ namespace GamingWiki.Models
         [Required]
         public string Content { get; set; }
 
+        public DateTime AddedOn { get; set; }
+
         public int ArticleId { get; set; }
 
         public Article Article { get; set; }
@@ -18,7 +22,7 @@ namespace GamingWiki.Models
         [Required]
         public string CommenterId { get; set; }
 
-        public ApplicationUser Commenter { get; set; }
+        public IdentityUser Commenter { get; set; }
 
         public ICollection<Reply> Replies { get; set; }
         = new HashSet<Reply>();

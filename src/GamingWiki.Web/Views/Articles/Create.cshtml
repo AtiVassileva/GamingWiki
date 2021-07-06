@@ -1,0 +1,46 @@
+﻿@model IEnumerable<string>
+
+<form action="/Articles/Create" method="post">
+
+    <div class="card">
+        <h2>Add a new article:</h2>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Heading: </label>
+                    <input type="text" name="heading">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Picture Url: </label>
+                    <input type="url" name="pictureUrl">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Category:</label>
+                    <select name="category">
+                        <option style="display:none">Select a category...</option>
+                        @foreach (var category in Model)
+                        {
+                            <option>@category</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <div class="form-group">
+                    <label>Content: </label>
+                    <textarea name="content"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="col">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</form>
+

@@ -1,0 +1,22 @@
+﻿@model GamingWiki.Web.Models.Articles.ArticleListingModel
+
+<h1>@Model.Heading</h1>
+
+<div class="card text-white bg-dark mb-3">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="@Model.PictureUrl" class="img-fluid rounded-end" style="width: 1108.17px; height: 540px; object-fit: cover">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h4 class="card-title">Category: @Model.Category</h4>
+                <h4 class="card-title">Author: @Model.Author</h4>
+                <h4 class="card-title">Published On: @Model.PublishedOn</h4>
+                <p class="card-text">@Model.Content</p>
+                <a href="/Articles/Edit?articleId=@Model.Id" class="btn btn-block btn-primary">Edit</a>
+                <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-block btn-danger">Delete</a>
+                <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-block btn-success">Comment</a>
+            </div>
+        </div>
+    </div>
+</div>

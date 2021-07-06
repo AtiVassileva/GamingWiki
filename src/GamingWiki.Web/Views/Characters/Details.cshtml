@@ -1,17 +1,20 @@
 ﻿@model GamingWiki.Web.Models.Characters.CharacterListingModel
 
 <h1>Character details for @Model.Name</h1>
-<div class="row mt-2 mb-4">
-    <div class="card col-6 col-lg-3 game-card">
-        <img src="@Model.PictureUrl" />
-        <div class="card-body">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item text-center">Game: @Model.Game</li>
-                <li class="list-group-item text-center">Class: @Model.Class</li>
-                <li class="list-group-item text-center">@Model.Description</li>
-            </ul>
-            <a href="/Characters/Edit?characterId=@Model.Id" class="btn btn-block btn-primary">Edit</a>
-            <a href="/Characters/Delete?characterId=@Model.Id" class="btn btn-block btn-danger">Delete</a>
+
+<div class="card text-white bg-dark mb-3">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="@Model.PictureUrl" class="img-fluid rounded-start" style="width: 500px; height: 500px; object-fit: cover">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h4 class="card-title">Game: @Model.Game</h4>
+                <h4 class="card-title">Class: @Model.Class</h4>
+                <p class="card-text">@Model.Description</p>
+                <a href="/Characters/Edit?characterId=@Model.Id" class="btn btn-block btn-primary">Edit</a>
+                <a href="/Characters/Delete?characterId=@Model.Id" class="btn btn-block btn-danger">Delete</a>
+            </div>
         </div>
     </div>
 </div>

@@ -1,4 +1,6 @@
-﻿namespace GamingWiki.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
@@ -11,7 +13,7 @@
         [Required]
         public string CreatorId { get; set; }
 
-        public ApplicationUser Creator { get; set; }
+        public IdentityUser Creator { get; set; }
 
         public Category Category { get; set; }
 

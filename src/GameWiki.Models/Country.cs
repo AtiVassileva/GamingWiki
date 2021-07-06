@@ -1,4 +1,6 @@
-﻿namespace GamingWiki.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
@@ -17,7 +19,7 @@
 
         public long Population { get; set; }
 
-        public ICollection<ApplicationUser> Users { get; set; }
-        = new HashSet<ApplicationUser>();
+        public ICollection<IdentityUser> Users { get; set; }
+        = new HashSet<IdentityUser>();
     }
 }

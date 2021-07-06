@@ -1,19 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using GamingWiki.Data;
-using GamingWiki.Models;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 
@@ -33,6 +26,7 @@ namespace GamingWiki.Web
         {
             services.AddTransient<IGameHelper, GameHelper>();
             services.AddTransient<ICharacterHelper, CharacterHelper>();
+            services.AddTransient<IArticleHelper, ArticleHelper>();
 
             services.AddAutoMapper(Assembly.GetEntryAssembly());
 
@@ -43,6 +37,7 @@ namespace GamingWiki.Web
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
         }
 

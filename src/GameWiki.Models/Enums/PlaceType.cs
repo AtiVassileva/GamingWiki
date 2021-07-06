@@ -8,6 +8,7 @@
         Underwater = 40,
         Desert = 50,
         Forest = 60,
-        Jungle = 70
+        Jungle = 70,
+        Playground = 80
     }
 }

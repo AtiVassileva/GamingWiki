@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace GamingWiki.Models
 {
@@ -17,10 +19,15 @@ namespace GamingWiki.Models
 
         public Category Category { get; set; }
 
+        public DateTime PublishedOn { get; set; }
+
+        [Required]
+        public string PictureUrl { get; set; }
+
         [Required]
         public string AuthorId { get; set; }
 
-        public ApplicationUser Author { get; set; }
+        public IdentityUser Author { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
         = new HashSet<Comment>();

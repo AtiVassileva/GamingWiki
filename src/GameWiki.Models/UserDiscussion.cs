@@ -1,4 +1,6 @@
-﻿namespace GamingWiki.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -7,7 +9,7 @@
         [Required]
         public string UserId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public IdentityUser User { get; set; }
 
         public int DiscussionId { get; set; }
 

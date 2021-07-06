@@ -1,0 +1,18 @@
+﻿@model IEnumerable<GamingWiki.Web.Models.Articles.ArticleSimpleModel>
+
+<section>
+    <h1 align="center" style="font-weight: bold">All Articles</h1>
+    <div class="flex">
+        @foreach (var article in Model)
+        {
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="@article.PictureUrl" alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-title">@article.Heading</h4>
+                    <h6 class="card-title">Author: @article.Author</h6>
+                    <a href="/Articles/Details?articleId=@article.Id" class="btn btn-info">Read full article</a>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -5,16 +5,16 @@
 }*@
 
 <section id="recent-games">
-    <h1>All Games</h1>
+    <h1 align="center" style="font-weight: bold">All Games</h1>
     <div class="flex">
         @foreach (var game in Model)
         {
-            <div class="box">
-                <span class="badge new">@game.Name</span>
-                <img src="@game.PictureUrl"/>
-                <div class="box-lower-section">
-                    <h4>Designed by: @game.Creators</h4>
-                    <a href="/Games/Details?gameId=@game.Id" class="comments">See more</a>
+            <div class="card text-white bg-dark mb-3" style="width: 18rem;">
+                <img class="card-img-top" src="@game.PictureUrl" alt="Game image">
+                <div class="card-body">
+                    <h4 class="card-title">@game.Name</h4>
+                    <h6 class="card-title">Designed by: @game.Creators</h6>
+                    <a href="/Games/Details?gameId=@game.Id" class="btn btn-info">See more</a>
                 </div>
             </div>
         }

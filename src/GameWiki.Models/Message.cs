@@ -1,4 +1,6 @@
-﻿namespace GamingWiki.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -16,6 +18,6 @@
         [Required]
         public string SenderId { get; set; }
 
-        public ApplicationUser Sender { get; set; }
+        public IdentityUser Sender { get; set; }
     }
 }

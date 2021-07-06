@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<GamingWiki.Web.Models.Characters.CharacterSimpleModel>
 
 <section id="recent-games">
-    <h1>All Characters</h1>
+    <h1 align="center" style="font-weight: bold; ">All Characters</h1>
     <div class="flex">
         @foreach (var character in Model)
         {
-            <div class="box">
-                <span class="badge new">@character.Name</span>
-                <img src="@character.PictureUrl" />
-                <div class="box-lower-section">
-                    <h4>Class: @character.Class</h4>
-                    <a href="/Characters/Details?characterId=@character.Id" class="comments">See more</a>
+            <div class="card text-white bg-dark mb-3" style="width: 18rem;">
+                <img class="card-img-top" src="@character.PictureUrl" alt="Character image">
+                <div class="card-body">
+                    <h4 class="card-title">@character.Name</h4>
+                    <h6 class="card-title">Class: @character.Class</h6>
+                    <a href="/Characters/Details?characterId=@character.Id" class="btn btn-info">See more</a>
                 </div>
             </div>
         }
