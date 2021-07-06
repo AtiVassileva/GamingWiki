@@ -47,7 +47,8 @@ namespace GamingWiki.Web.Controllers
 
             var articleId = this.dbContext.Comments
                 .Where(c => c.Id == commentId)
-                .Select(c => c.ArticleId);
+                .Select(c => c.ArticleId)
+                .FirstOrDefault();
 
            return this.Redirect($"/Articles/Details?articleId={articleId}");
         }

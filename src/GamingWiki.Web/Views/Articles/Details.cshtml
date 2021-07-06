@@ -26,7 +26,7 @@
                         <p>@comment.Commenter: @comment.Content </p>
                         @foreach (var reply in comment.Replies)
                         {
-                            <p>@reply.Replier replied to @comment.Commenter: @reply.Content</p>
+                            <p>@reply.Replier replied: @reply.Content</p>
                             <form action="/Replies/Add?commentId=@comment.Id" method="post">
                                 <textarea name="replyContent">Write your reply here...</textarea>
                                 <button type="submit" class="btn-info btn-sm">Reply</button>
