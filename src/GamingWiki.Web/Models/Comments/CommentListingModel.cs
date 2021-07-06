@@ -11,6 +11,7 @@ namespace GamingWiki.Web.Models.Comments
 
         public string Commenter { get; set; }
 
+        public string AddedOn { get; set; }
         public IEnumerable<ReplyListingModel> Replies { get; set; }
     }
 }

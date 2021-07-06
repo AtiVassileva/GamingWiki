@@ -98,6 +98,7 @@ namespace GamingWiki.Web.Controllers
                             Id = c.Id,
                             Content = c.Content,
                             Commenter = c.Commenter.UserName,
+                            AddedOn = c.AddedOn.ToString("f"),
                             Replies = c.Replies.Select(r => 
                                 new ReplyListingModel
                             {
