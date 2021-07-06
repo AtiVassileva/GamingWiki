@@ -9,6 +9,8 @@ using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
+using GamingWiki.Web.Models.Comments;
+using GamingWiki.Web.Models.Replies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -34,7 +36,7 @@ namespace GamingWiki.Web.Controllers
                     Id = a.Id,
                     Heading = a.Heading,
                     PictureUrl = a.PictureUrl,
-                    Author = a.Author.UserName
+                    PublishedOn = a.PublishedOn.ToString("D")
                 }).ToList();
 
             return this.View(articleModels);
@@ -67,7 +69,7 @@ namespace GamingWiki.Web.Controllers
                 AuthorId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
                 PictureUrl = model.PictureUrl,
                 PublishedOn = DateTime.UtcNow
-        };
+            };
 
             var article = this.mapper.Map<Article>(articleDto);
 
@@ -89,11 +91,75 @@ namespace GamingWiki.Web.Controllers
                     Content = a.Content,
                     Author = a.Author.UserName,
                     PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString("D")
+                    PublishedOn = a.PublishedOn.ToString("f"),
+                    Comments = a.Comments.Select(c =>
+                        new CommentListingModel
+                        {
+                            Id = c.Id,
+                            Content = c.Content,
+                            Commenter = c.Commenter.UserName,
+                            Replies = c.Replies.Select(r => 
+                                new ReplyListingModel
+                            {
+                                    Id = r.Id,
+                                    Content = r.Content,
+                                    Replier = r.Replier.UserName
+                            }).ToList()
+                        }).ToList()
                 }).FirstOrDefault();
 
 
             return this.View(articleModel);
+        }
+
+        public IActionResult Edit(int articleId)
+        {
+            var articleModel = this.dbContext.Articles
+                .Where(a => a.Id == articleId)
+                .Select(a => new ArticleEditModel
+                {
+                    Id = a.Id,
+                    Heading = a.Heading,
+                    PictureUrl = a.PictureUrl,
+                    Content = a.Content
+
+                }).FirstOrDefault();
+
+            return this.View(articleModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ArticleEditModel model, int articleId)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("Error", new ErrorViewModel
+                {
+                    RequestId = Guid.NewGuid().ToString()
+                });
+            }
+
+            var article = this.dbContext.Articles
+                .First(a => a.Id == articleId);
+
+            article.Heading = model.Heading;
+            article.PictureUrl = model.PictureUrl;
+            article.Content = model.Content;
+
+            this.dbContext.SaveChanges();
+
+            return this.Redirect($"/Articles/Details?articleId={article.Id}");
+        }
+
+        public IActionResult Delete(int articleId)
+        {
+            var article = this.dbContext.Articles
+                .First(a => a.Id == articleId);
+
+            this.dbContext.Articles.Remove(article);
+            this.dbContext.SaveChanges();
+
+            return this.Redirect("/Articles/All");
         }
     }
 }

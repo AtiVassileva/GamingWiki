@@ -6,7 +6,7 @@
 
         public string Heading { get; set; }
 
-        public string Author { get; set; }
+        public string PublishedOn { get; set; }
 
         public string PictureUrl { get; set; }
     }

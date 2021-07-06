@@ -13,9 +13,33 @@
                 <h4 class="card-title">Author: @Model.Author</h4>
                 <h4 class="card-title">Published On: @Model.PublishedOn</h4>
                 <p class="card-text">@Model.Content</p>
-                <a href="/Articles/Edit?articleId=@Model.Id" class="btn btn-block btn-primary">Edit</a>
-                <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-block btn-danger">Delete</a>
-                <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-block btn-success">Comment</a>
+                @if (!Model.Comments.Any())
+                {
+                    <p>No comments yet.</p>
+                }
+                else
+                {
+                    <h5>Comments:</h5>
+
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <p>@comment.Commenter: @comment.Content </p>
+                        @foreach (var reply in comment.Replies)
+                        {
+                            <p>@reply.Replier replied to @comment.Commenter: @reply.Content</p>
+                            <form action="/Replies/Add?commentId=@comment.Id" method="post">
+                                <textarea name="replyContent">Write your reply here...</textarea>
+                                <button type="submit" class="btn-info btn-sm">Reply</button>
+                            </form>
+                        }
+                    }
+                }
+                <form action="/Comments/Add?articleId=@Model.Id" method="post">
+                    <textarea name="content">Write your comment here...</textarea>
+                    <button type="submit" class="btn-success btn-sm">Comment</button>
+                </form>
+                <a href="/Articles/Edit?articleId=@Model.Id" class="btn-primary btn-sm">Edit</a>
+                <a href="/Articles/Delete?articleId=@Model.Id" class="btn-danger btn-sm">Delete</a>
             </div>
         </div>
     </div>

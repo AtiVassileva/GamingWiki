@@ -1,0 +1,21 @@
+﻿@model GamingWiki.Web.Models.Articles.ArticleEditModel
+
+<form action="/Articles/Edit?articleId=@Model.Id" method="post">
+    <h2>Edit @Model.Heading</h2>
+    <img src="@Model.PictureUrl"/>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="heading">Heading</label>
+            <input type="text" class="form-control" id="heading" name="heading" value="@Model.Heading">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="content">Picture url</label>
+            <input type="url" class="form-control" id="pictureUrl" name="pictureUrl" value="@Model.PictureUrl">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" name="content">@Model.Content</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Done</button>
+</form>

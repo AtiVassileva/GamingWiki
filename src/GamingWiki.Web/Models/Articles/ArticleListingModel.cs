@@ -1,4 +1,7 @@
-﻿namespace GamingWiki.Web.Models.Articles
+﻿using System.Collections.Generic;
+using GamingWiki.Web.Models.Comments;
+
+namespace GamingWiki.Web.Models.Articles
 {
     public class ArticleListingModel
     {
@@ -15,5 +18,7 @@
         public string PublishedOn { get; set; }
 
         public string PictureUrl { get; set; }
+
+        public IEnumerable<CommentListingModel> Comments { get; set; }
     }
 }

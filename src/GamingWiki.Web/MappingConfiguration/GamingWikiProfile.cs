@@ -6,7 +6,9 @@ using AutoMapper;
 using GamingWiki.Models;
 using GamingWiki.Web.Models.Articles;
 using GamingWiki.Web.Models.Characters;
+using GamingWiki.Web.Models.Comments;
 using GamingWiki.Web.Models.Games;
+using GamingWiki.Web.Models.Replies;
 
 namespace GamingWiki.Web.MappingConfiguration
 {
@@ -21,6 +23,10 @@ namespace GamingWiki.Web.MappingConfiguration
             this.CreateMap<CharacterDtoModel, Character>();
 
             this.CreateMap<ArticleDtoModel, Article>();
+
+            this.CreateMap<CommentDtoModel, Comment>();
+
+            this.CreateMap<ReplyDtoModel, Reply>();
         }
     }
 }
