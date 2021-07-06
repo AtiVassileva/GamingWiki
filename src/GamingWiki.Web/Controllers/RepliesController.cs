@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
@@ -44,7 +45,11 @@ namespace GamingWiki.Web.Controllers
             this.dbContext.Replies.Add(reply);
             this.dbContext.SaveChanges();
 
-            return this.Redirect(Request.Path);
+            var articleId = this.dbContext.Comments
+                .Where(c => c.Id == commentId)
+                .Select(c => c.ArticleId);
+
+           return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
     }
 }
