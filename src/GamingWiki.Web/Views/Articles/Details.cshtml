@@ -1,5 +1,105 @@
 ﻿@model GamingWiki.Web.Models.Articles.ArticleListingModel
 
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
+    <div class="page-info">
+        <h2>@Model.Heading</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Articles/All">Articles</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-single-page">
+    <div class="container">
+        <div class="game-single-preview">
+            <img src="@Model.PictureUrl" alt="">
+        </div>
+        <div class="row">
+            <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
+                <h2 class="gs-title">@Model.Heading</h2>
+                <h4>Author: @Model.Author</h4>
+                <p>@Model.Content</p>
+                <a href="/Articles/Edit?articleId=@Model.Id" class="btn btn-outline-success">Edit</a>
+                <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-outline-danger">Delete</a>
+                @if (!Model.Comments.Any())
+                {
+                    <p>No comments yet.</p>
+                }
+                else
+                {
+                    <h5>Comments (@Model.Comments.Count())</h5>
+
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <div class="be-comment">
+                            <div class="be-comment-content">
+                                <span class="be-comment-name">
+                                    <a href="#">@comment.Commenter</a>
+                                </span>
+                                <span class="be-comment-time">
+                                    <i class="fa fa-clock-o"></i>
+                                    @comment.AddedOn
+                                </span>
+                                <p class="be-comment-text">@comment.Content</p>
+                            </div>
+                            @foreach (var reply in comment.Replies)
+                            {
+                                <p>@reply.Replier replied: @reply.Content</p>
+                            }
+                            <form action="/Replies/Add?commentId=@comment.Id" method="post">
+                                <textarea name="replyContent" placeholder="Reply to @comment.Commenter..."></textarea>
+                                <button type="submit" class="btn-info btn-sm">Reply</button>
+                            </form>
+                        </div>
+
+                    }
+                }
+                <form action="/Comments/Add?articleId=@Model.Id" method="post">
+                    <textarea name="content" placeholder="Write your comment here..."></textarea>
+                    <button type="submit" class="btn-success btn-sm">Post</button>
+                </form>
+                <a href="/Articles/Edit?articleId=@Model.Id" class="btn-primary btn-sm">Edit</a>
+                <a href="/Articles/Delete?articleId=@Model.Id" class="btn-danger btn-sm">Delete</a>
+                <div class="geme-social-share pt-5 d-flex">
+                    <p>Share:</p>
+                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-dribbble"></i></a>
+                    <a href="#"><i class="fa fa-behance"></i></a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
+                <div id="stickySidebar">
+                    <div class="widget-item">
+                        <div class="rating-widget">
+                            <h4 class="widget-title">Ratings</h4>
+                            <ul>
+                                <li>Price<span>3.5/5</span></li>
+                                <li>Graphics<span>4.5/5</span></li>
+                                <li>Levels<span>3.5/5</span></li>
+                                <li>Difficulty<span>4.5/5</span></li>
+                            </ul>
+                            <div class="rating">
+                                <h5><i>Rating</i><span>4.5</span> / 5</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="testimonials-widget">
+                            <h4 class="widget-title">Testimonials</h4>
+                            <div class="testim-text">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolo re magna aliqua. Quis ipsum suspend isse ultrices.</p>
+                                <h6><span>James Smith,</span>Gamer</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <h1>@Model.Heading</h1>
 
 <div class="card text-white bg-dark mb-3">
@@ -23,26 +123,26 @@
 
                     @foreach (var comment in Model.Comments)
                     {
-            <div class="be-comment">
-                <div class="be-comment-content">
-                    <span class="be-comment-name">
-                        <a href="#">@comment.Commenter</a>
-                    </span>
-                    <span class="be-comment-time">
-                        <i class="fa fa-clock-o"></i>
-                        @comment.AddedOn
-                    </span>
-                    <p class="be-comment-text">@comment.Content</p>
-                </div>
-                @foreach (var reply in comment.Replies)
-                {
-                    <p>@reply.Replier replied: @reply.Content</p>
-                }
-                <form action="/Replies/Add?commentId=@comment.Id" method="post">
-                    <textarea name="replyContent" placeholder="Reply to @comment.Commenter..."></textarea>
-                    <button type="submit" class="btn-info btn-sm">Reply</button>
-                </form>
-            </div>
+                        <div class="be-comment">
+                            <div class="be-comment-content">
+                                <span class="be-comment-name">
+                                    <a href="#">@comment.Commenter</a>
+                                </span>
+                                <span class="be-comment-time">
+                                    <i class="fa fa-clock-o"></i>
+                                    @comment.AddedOn
+                                </span>
+                                <p class="be-comment-text">@comment.Content</p>
+                            </div>
+                            @foreach (var reply in comment.Replies)
+                            {
+                                <p>@reply.Replier replied: @reply.Content</p>
+                            }
+                            <form action="/Replies/Add?commentId=@comment.Id" method="post">
+                                <textarea name="replyContent" placeholder="Reply to @comment.Commenter..."></textarea>
+                                <button type="submit" class="btn-info btn-sm">Reply</button>
+                            </form>
+                        </div>
 
                     }
                 }
