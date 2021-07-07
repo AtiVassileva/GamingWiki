@@ -6,10 +6,6 @@
 
         public string Name { get; set; }
 
-        public string Game { get; set; }
-
-        public string Class { get; set; }
-
         public string PictureUrl { get; set; }
     }
 }

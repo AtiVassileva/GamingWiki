@@ -35,7 +35,6 @@ namespace GamingWiki.Web.Controllers
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
-                    Creators = string.Join(", ", g.GamesCreators.Select(gc => gc.Creator.Name))
                 }).ToList();
 
             return this.View(gameModels);
@@ -169,6 +168,21 @@ namespace GamingWiki.Web.Controllers
             this.dbContext.SaveChanges();
 
             return this.Redirect("/Games/All");
+        }
+
+        public IActionResult Search(string letter)
+        {
+            var gameModels = this.dbContext.Games
+                .Where(g => g.Name.ToUpper()
+                    .StartsWith(letter))
+                .Select(g => new GameSimpleModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    PictureUrl = g.PictureUrl,
+                }).ToList();
+
+            return this.View("All", gameModels);
         }
 
         private static IEnumerable<string> GetPlaceTypes()

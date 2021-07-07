@@ -19,7 +19,7 @@ namespace GamingWiki.Web.Controllers
         private readonly ICharacterHelper helper;
         private readonly IMapper mapper;
 
-        public CharactersController(ApplicationDbContext dbContext, IMapper mapper, ICharacterHelper helper)
+        public CharactersController(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
@@ -34,8 +34,6 @@ namespace GamingWiki.Web.Controllers
                     Id = c.Id,
                     Name = c.Name,
                     PictureUrl = c.PictureUrl,
-                    Class = c.Class.ToString(),
-                    Game = c.Game.Name
                 }).ToList();
 
             return this.View(characterModels);
@@ -95,7 +93,8 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = c.PictureUrl,
                     Description = c.Description,
                     Class = c.Class.ToString(),
-                    Game = c.Game.Name
+                    Game = c.Game.Name,
+                    GameId = c.Game.Id
                 }).FirstOrDefault();
 
             return this.View(characterModel);
@@ -149,6 +148,22 @@ namespace GamingWiki.Web.Controllers
 
             return this.Redirect("/Characters/All");
         }
+
+        public IActionResult Search(string letter)
+        {
+            var characterModels = this.dbContext.Characters
+                .Where(c => c.Name.ToUpper()
+                    .StartsWith(letter))
+                .Select(c => new CharacterSimpleModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    PictureUrl = c.PictureUrl,
+                }).ToList();
+
+            return this.View("All", characterModels);
+        }
+
         private static IEnumerable<string> GetCharacterClasses()
         {
             return Enum.GetValues<CharacterClass>()

@@ -162,5 +162,21 @@ namespace GamingWiki.Web.Controllers
 
             return this.Redirect("/Articles/All");
         }
+
+        [HttpPost]
+        public IActionResult Search(string searchCriteria)
+        {
+            var articleModels = this.dbContext.Articles
+                .Where(a => a.Heading.ToLower().Contains(searchCriteria.ToLower().Trim()))
+                .Select(a => new ArticleSimpleModel
+                {
+                    Id = a.Id,
+                    Heading = a.Heading,
+                    PictureUrl = a.PictureUrl,
+                    PublishedOn = a.PublishedOn.ToString("D")
+                }).ToList();
+
+            return View("All", articleModels);
+        }
     }
 }

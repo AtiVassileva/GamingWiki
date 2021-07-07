@@ -1,8 +1,79 @@
 ﻿@model GamingWiki.Web.Models.Games.GameCollectionsModel
 
-@*@section Styles {
-    <link href="~/css/create-form.css" rel="stylesheet" />
-}*@
+
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
+    <div class="page-info">
+        <h2>Add a new game</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Games/All">Games</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    <form class="bg-light" action="/Games/Create" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
+                <div id="stickySidebar">
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">categories</h4>
+                            <ul>
+                                <li><a href="">Games</a></li>
+                                <li><a href="">Gaming Tips & Tricks</a></li>
+                                <li><a href="">Online Games</a></li>
+                                <li><a href="">Team Games</a></li>
+                                <li><a href="">Community</a></li>
+                                <li><a href="">Uncategorized</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">platform</h4>
+                            <ul>
+                                <li><a href="">Xbox</a></li>
+                                <li><a href="">X box 360</a></li>
+                                <li><a href="">Play Station</a></li>
+                                <li><a href="">Play Station VR</a></li>
+                                <li><a href="">Nintendo Wii</a></li>
+                                <li><a href="">Nintendo Wii U</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">Genre</h4>
+                            <ul>
+                                <li><a href="">Online</a></li>
+                                <li><a href="">Adventure</a></li>
+                                <li><a href="">S.F.</a></li>
+                                <li><a href="">Strategy</a></li>
+                                <li><a href="">Racing</a></li>
+                                <li><a href="">Shooter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <form action="/Games/Create" method="post">
 

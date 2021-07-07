@@ -1,18 +1,107 @@
 ﻿@model IEnumerable<GamingWiki.Web.Models.Characters.CharacterSimpleModel>
 
-<section id="recent-games">
-    <h1 align="center" style="font-weight: bold; ">All Characters</h1>
-    <div class="flex">
-        @foreach (var character in Model)
-        {
-            <div class="card text-white bg-dark mb-3" style="width: 18rem;">
-                <img class="card-img-top" src="@character.PictureUrl" alt="Character image">
-                <div class="card-body">
-                    <h4 class="card-title">@character.Name</h4>
-                    <h6 class="card-title">Class: @character.Class</h6>
-                    <a href="/Characters/Details?characterId=@character.Id" class="btn btn-info">See more</a>
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/4.jpg">
+    <div class="page-info">
+        <h2>Characters</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Characters/All">Characters</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <ul class="game-filter">
+            <li><a href="/Characters/Search?letter=A">A</a></li>
+            <li><a href="/Characters/Search?letter=B">B</a></li>
+            <li><a href="/Characters/Search?letter=C">C</a></li>
+            <li><a href="/Characters/Search?letter=D">D</a></li>
+            <li><a href="/Characters/Search?letter=E">E</a></li>
+            <li><a href="/Characters/Search?letter=F">F</a></li>
+            <li><a href="/Characters/Search?letter=G">G</a></li>
+            <li><a href="/Characters/Search?letter=H">H</a></li>
+            <li><a href="/Characters/Search?letter=I">I</a></li>
+            <li><a href="/Characters/Search?letter=J">J</a></li>
+            <li><a href="/Characters/Search?letter=K">K</a></li>
+            <li><a href="/Characters/Search?letter=L">L</a></li>
+            <li><a href="/Characters/Search?letter=M">M</a></li>
+            <li><a href="/Characters/Search?letter=N">N</a></li>
+            <li><a href="/Characters/Search?letter=O">O</a></li>
+            <li><a href="/Characters/Search?letter=P">P</a></li>
+            <li><a href="/Characters/Search?letter=Q">Q</a></li>
+            <li><a href="/Characters/Search?letter=R">R</a></li>
+            <li><a href="/Characters/Search?letter=S">S</a></li>
+            <li><a href="/Characters/Search?letter=T">T</a></li>
+            <li><a href="/Characters/Search?letter=U">U</a></li>
+            <li><a href="/Characters/Search?letter=V">V</a></li>
+            <li><a href="/Characters/Search?letter=W">W</a></li>
+            <li><a href="/Characters/Search?letter=X">X</a></li>
+            <li><a href="/Characters/Search?letter=Y">Y</a></li>
+            <li><a href="/Characters/Search?letter=Z">Z</a></li>
+        </ul>
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    @foreach (var character in Model)
+                    {
+                        <div class="col-lg-4 col-md-6">
+                            <div class="game-item">
+                                <img src="@character.PictureUrl" alt="#">
+                                <h5>@character.Name</h5>
+                                <a href="/Characters/Details?characterId=@character.Id" class="read-more">See More <img src="/img/icons/double-arrow.png" alt="#" /></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="site-pagination">
+                    <a href="#" class="active">01.</a>
+                    <a href="#">02.</a>
+                    <a href="#">03.</a>
                 </div>
             </div>
-        }
+            <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
+                <div id="stickySidebar">
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">categories</h4>
+                            <ul>
+                                <li><a href="">Games</a></li>
+                                <li><a href="">Gaming Tips & Tricks</a></li>
+                                <li><a href="">Online Games</a></li>
+                                <li><a href="">Team Games</a></li>
+                                <li><a href="">Community</a></li>
+                                <li><a href="">Uncategorized</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">platform</h4>
+                            <ul>
+                                <li><a href="">Xbox</a></li>
+                                <li><a href="">X box 360</a></li>
+                                <li><a href="">Play Station</a></li>
+                                <li><a href="">Play Station VR</a></li>
+                                <li><a href="">Nintendo Wii</a></li>
+                                <li><a href="">Nintendo Wii U</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">Genre</h4>
+                            <ul>
+                                <li><a href="">Online</a></li>
+                                <li><a href="">Adventure</a></li>
+                                <li><a href="">S.F.</a></li>
+                                <li><a href="">Strategy</a></li>
+                                <li><a href="">Racing</a></li>
+                                <li><a href="">Shooter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>

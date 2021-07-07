@@ -8,7 +8,5 @@
 
         public string PictureUrl { get; set; }
 
-        public string Creators { get; set; }
-
     }
 }
