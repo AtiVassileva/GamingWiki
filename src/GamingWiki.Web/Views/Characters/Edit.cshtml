@@ -1,30 +1,36 @@
 ﻿@model GamingWiki.Web.Models.Characters.CharacterEditModel
 
-<form action="/Characters/Edit?characterId=@Model.Id" method="post">
-
-    <div class="card">
-        <h2>Edit @Model.Name</h2>
-        <img src="@Model.PictureUrl" width="250" height="300" />
-        <div class="row">
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>PictureUrl: </label>
-                    <input type="url" name="pictureUrl" value="@Model.PictureUrl">
-                </div>
-            </div>
-            <br />
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>Description: </label>
-                    <textarea name="description">@Model.Description</textarea>
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <input type="submit" value="Submit">
-            </div>
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/4.jpg">
+    <div class="page-info">
+        <h2>@Model.Name / Edit</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Characters/All">Characters</a>
         </div>
     </div>
-</form>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    <form action="/Characters/Edit?characterId=@Model.Id" method="post">
+                        <div class="form-group"> <label>PictureUrl</label> <input type="url" name="pictureUrl" value="@Model.PictureUrl" class="form-control"> </div>
+                        <br />
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" msg cols="100" rows="5" class="form-control"
+                                      style="background-color: black;">@Model.Description</textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Edit Character
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

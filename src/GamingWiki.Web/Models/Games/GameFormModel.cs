@@ -14,6 +14,10 @@ namespace GamingWiki.Web.Models.Games
         [Required]
         public string PictureUrl { get; set; }
 
+        [Url]
+        [Required]
+        public string TrailerUrl { get; set; }
+
         [Required]
         [MinLength(DescriptionMinLength)]
         public string Description { get; set; }

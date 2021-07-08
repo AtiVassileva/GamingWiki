@@ -17,56 +17,55 @@
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
                 <h2 class="gs-title">@Model.Heading</h2>
-                <h4>Author: @Model.Author</h4>
+                <h4>By: @Model.Author</h4>
                 <p>@Model.Content</p>
                 <a href="/Articles/Edit?articleId=@Model.Id" class="btn btn-outline-success">Edit</a>
                 <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-outline-danger">Delete</a>
+                <br />
+                <br />
+                <h4 style="color: white;">Comments (@Model.Comments.Count())</h4>
                 @if (!Model.Comments.Any())
                 {
                     <p>No comments yet.</p>
                 }
                 else
                 {
-                    <h5>Comments (@Model.Comments.Count())</h5>
-
-                    @foreach (var comment in Model.Comments)
-                    {
-                        <div class="be-comment">
-                            <div class="be-comment-content">
-                                <span class="be-comment-name">
-                                    <a href="#">@comment.Commenter</a>
-                                </span>
-                                <span class="be-comment-time">
-                                    <i class="fa fa-clock-o"></i>
-                                    @comment.AddedOn
-                                </span>
-                                <p class="be-comment-text">@comment.Content</p>
-                            </div>
-                            @foreach (var reply in comment.Replies)
+                    <div class="row">
+                        <div class="col-sm-5 col-md-6 col-12 pb-4 darker">
+                            
+                            @foreach (var comment in Model.Comments)
                             {
-                                <p>@reply.Replier replied: @reply.Content</p>
+                                <div class="text-justify mt-4 float-left">
+                                    <img src="/img/icons/gamer-icon.jpg" alt="" class="rounded-circle" width="40" height="40">
+                                    <h4>@comment.Commenter</h4>
+                                    <br />
+                                    <span> <i class="fa fa-clock-o"></i> @comment.AddedOn</span>
+                                    <p>@comment.Content</p>
+                                </div>
                             }
-                            <form action="/Replies/Add?commentId=@comment.Id" method="post">
-                                <textarea name="replyContent" placeholder="Reply to @comment.Commenter..."></textarea>
-                                <button type="submit" class="btn-info btn-sm">Reply</button>
-                            </form>
                         </div>
-
-                    }
+                    </div>
                 }
-                <form action="/Comments/Add?articleId=@Model.Id" method="post">
-                    <textarea name="content" placeholder="Write your comment here..."></textarea>
-                    <button type="submit" class="btn-success btn-sm">Post</button>
+                <br />
+                <form class="algin-form" action="/Comments/Add?articleId=@Model.Id" method="post">
+                    <div class="form-group">
+                        <h4>Leave a comment</h4>
+                        <textarea name="content" placeholder="Write your comment here..." msg cols="30" rows="5" class="form-control" style="background-color: black;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id="post" class="btn btn-success btn-block">
+                            Post Comment
+                        </button>
+                    </div>
                 </form>
-                <a href="/Articles/Edit?articleId=@Model.Id" class="btn-primary btn-sm">Edit</a>
-                <a href="/Articles/Delete?articleId=@Model.Id" class="btn-danger btn-sm">Delete</a>
+
                 <div class="geme-social-share pt-5 d-flex">
                     <p>Share:</p>
-                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-dribbble"></i></a>
-                    <a href="#"><i class="fa fa-behance"></i></a>
+                    <a href="https://www.pinterest.com/"><i class="fa fa-pinterest"></i></a>
+                    <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
+                    <a href="https://twitter.com/"><i class="fa fa-twitter"></i></a>
+                    <a href="https://dribbble.com/"><i class="fa fa-dribbble"></i></a>
+                    <a href="https://www.behance.net/"><i class="fa fa-behance"></i></a>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
@@ -87,10 +86,10 @@
                     </div>
                     <div class="widget-item">
                         <div class="testimonials-widget">
-                            <h4 class="widget-title">Testimonials</h4>
+                            <h4 class="widget-title">Quotes</h4>
                             <div class="testim-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolo re magna aliqua. Quis ipsum suspend isse ultrices.</p>
-                                <h6><span>James Smith,</span>Gamer</h6>
+                                <p>"I'm the hero of a thousand stories. I'm a superhero, an assassin a soldier. I've slain dragons and traveled through portals. I am a spartan, a commander. A king. I've saved a thousand worlds and countless more lives. What am I? I'm a gamer."</p>
+                                <h6><span>The art of being a </span>Gamer</h6>
                             </div>
                         </div>
                     </div>
@@ -99,60 +98,3 @@
         </div>
     </div>
 </section>
-
-<h1>@Model.Heading</h1>
-
-<div class="card text-white bg-dark mb-3">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="@Model.PictureUrl" class="img-fluid rounded-end" style="width: 1108.17px; height: 540px; object-fit: cover">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h4 class="card-title">Category: @Model.Category</h4>
-                <h4 class="card-title">Author: @Model.Author</h4>
-                <h4 class="card-title">Published On: @Model.PublishedOn</h4>
-                <p class="card-text">@Model.Content</p>
-                @if (!Model.Comments.Any())
-                {
-                    <p>No comments yet.</p>
-                }
-                else
-                {
-                    <h5>Comments (@Model.Comments.Count())</h5>
-
-                    @foreach (var comment in Model.Comments)
-                    {
-                        <div class="be-comment">
-                            <div class="be-comment-content">
-                                <span class="be-comment-name">
-                                    <a href="#">@comment.Commenter</a>
-                                </span>
-                                <span class="be-comment-time">
-                                    <i class="fa fa-clock-o"></i>
-                                    @comment.AddedOn
-                                </span>
-                                <p class="be-comment-text">@comment.Content</p>
-                            </div>
-                            @foreach (var reply in comment.Replies)
-                            {
-                                <p>@reply.Replier replied: @reply.Content</p>
-                            }
-                            <form action="/Replies/Add?commentId=@comment.Id" method="post">
-                                <textarea name="replyContent" placeholder="Reply to @comment.Commenter..."></textarea>
-                                <button type="submit" class="btn-info btn-sm">Reply</button>
-                            </form>
-                        </div>
-
-                    }
-                }
-                <form action="/Comments/Add?articleId=@Model.Id" method="post">
-                    <textarea name="content" placeholder="Write your comment here..."></textarea>
-                    <button type="submit" class="btn-success btn-sm">Post</button>
-                </form>
-                <a href="/Articles/Edit?articleId=@Model.Id" class="btn-primary btn-sm">Edit</a>
-                <a href="/Articles/Delete?articleId=@Model.Id" class="btn-danger btn-sm">Delete</a>
-            </div>
-        </div>
-    </div>
-</div>

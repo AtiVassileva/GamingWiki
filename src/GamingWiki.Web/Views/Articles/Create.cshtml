@@ -1,46 +1,47 @@
 ﻿@model IEnumerable<string>
 
-<form action="/Articles/Create" method="post">
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
+    <div class="page-info">
+        <h2>New article</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Articles/All">Articles</a>
+        </div>
+    </div>
+</section>
 
-    <div class="card">
-        <h2>Add a new article:</h2>
+<section class="games-section">
+    <div class="container">
         <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Heading: </label>
-                    <input type="text" name="heading">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    <form action="/Articles/Create" method="post">
+                        <div class="form-group"> <label>Heading</label> <input type="text" name="heading" class="form-control"> </div>
+                        <div class="form-group"> <label>Picture Url</label> <input type="url" name="pictureUrl" class="form-control"> </div>
+                        <br />
+                        <div class="form-group" style="display: inline-block;">
+                            <label>Category: </label>
+                            <select name="category">
+                                <option style="display:none">Select a category...</option>
+                                @foreach (var category in Model)
+                                {
+                                    <option>@category</option>
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea name="content" msg cols="100" rows="5" class="form-control"
+                                      style="background-color: black;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Add Article
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Picture Url: </label>
-                    <input type="url" name="pictureUrl">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Category:</label>
-                    <select name="category">
-                        <option style="display:none">Select a category...</option>
-                        @foreach (var category in Model)
-                        {
-                            <option>@category</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>Content: </label>
-                    <textarea name="content"></textarea>
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <input type="submit" value="Submit">
             </div>
         </div>
     </div>
-</form>
-
+</section>

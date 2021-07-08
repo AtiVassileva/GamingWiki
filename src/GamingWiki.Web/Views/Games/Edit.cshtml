@@ -1,5 +1,53 @@
 ﻿@model GamingWiki.Web.Models.Games.GameListingModel
 
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
+    <div class="page-info">
+        <h2>@Model.Name / Edit</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Games/All">Games</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    <form action="/Games/Edit?gameId=@Model.Id" method="post">
+                        <div class="form-group"> <label>Picture Url</label> <input type="url" name="pictureUrl" class="form-control" value="@Model.PictureUrl"> </div>
+                        <div class="form-group"> <label>Trailer Url</label> <input type="url" name="trailerUrl" class="form-control" value="@Model.TrailerUrl"> </div>
+                        <div class="form-group"> <label>Gaming area</label> <input type="text" name="placeName" class="form-control" value="@Model.Place"> </div>
+                        <br />
+                        
+                        <div class="form-group" style="display: inline-block;">
+                            <label>Gaming area type:</label>
+                            <select name="placeType">
+                                <option style="display:none">Select a place...</option>
+                                @foreach (var @placeType in @ViewBag.PlaceTypes)
+                                {
+                                    <option>@placeType</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" msg cols="100" rows="5" class="form-control"
+                                      style="background-color: black;">@Model.Description</textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Edit Game
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 <form action="/Games/Edit?gameId=@Model.Id" method="post">
 
     <div class="card">
@@ -26,11 +74,11 @@
                     <label>Place type:</label>
                     <select name="placeType">
                         <option style="display:none">Select a place...</option>
-                            @foreach (var @placeType in @ViewBag.PlaceTypes)
-                            {
+                        @foreach (var @placeType in @ViewBag.PlaceTypes)
+                        {
                             <option>@placeType</option>
                         }
-                        </select>
+                    </select>
                 </div>
             </div>
             <br />

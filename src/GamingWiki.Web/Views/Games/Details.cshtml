@@ -29,7 +29,7 @@
                 <a href="/Games/Edit?gameId=@Model.Id" class="btn btn-outline-success">Edit</a>
                 <a href="/Games/Delete?gameId=@Model.Id" class="btn btn-outline-danger">Delete</a>
                 <section class="intro-video-section set-bg d-flex align-items-end " data-setbg="./img/promo-bg.jpg">
-                    <a href="https://youtu.be/Jmliox1trPQ" class="video-play-btn video-popup"><img src="/img/icons/solid-right-arrow.png" alt="#"></a>
+                    <a href="@Model.TrailerUrl" class="video-play-btn video-popup"><img src="/img/icons/solid-right-arrow.png" alt="#"></a>
                     <div class="container">
                         <div class="video-text">
                             <h2>Trailer of the game. Tap to watch.</h2>
@@ -85,14 +85,3 @@
         </div>
     </div>
 </section>*@
-
-
-<section class="newsletter-section">
-    <div class="container">
-        <h2>Subscribe to our newsletter</h2>
-        <form class="newsletter-form">
-            <input type="text" placeholder="ENTER YOUR E-MAIL">
-            <button class="site-btn">subscribe  <img src="img/icons/double-arrow.png" alt="#" /></button>
-        </form>
-    </div>
-</section>

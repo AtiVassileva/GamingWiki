@@ -71,6 +71,7 @@ namespace GamingWiki.Web.Controllers
                 Name = model.Name,
                 Description = model.Description,
                 PictureUrl = model.PictureUrl,
+                TrailerUrl = model.TrailerUrl,
                 PlaceId = place.Id,
                 Class = Enum.Parse<GameClass>(model.Class)
             };
@@ -108,6 +109,7 @@ namespace GamingWiki.Web.Controllers
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
+                    TrailerUrl = g.TrailerUrl,
                     Description = g.Description,
                     Place = $"{g.Place.Name} ({g.Place.PlaceType})",
                     Class = g.Class.ToString(),
@@ -126,6 +128,7 @@ namespace GamingWiki.Web.Controllers
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
+                    TrailerUrl = g.TrailerUrl,
                     Description = g.Description,
                     Place = g.Place.Name,
                     Class = g.Class.ToString()
@@ -153,6 +156,7 @@ namespace GamingWiki.Web.Controllers
             game.Description = model.Description;
             game.PictureUrl = model.PictureUrl;
             game.PlaceId = this.helper.ParsePlace(model.PlaceName, model.PlaceType).Id;
+            game.TrailerUrl = model.TrailerUrl;
 
             this.dbContext.SaveChanges();
 

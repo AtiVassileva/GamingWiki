@@ -98,7 +98,7 @@ namespace GamingWiki.Web.Controllers
                             Id = c.Id,
                             Content = c.Content,
                             Commenter = c.Commenter.UserName,
-                            AddedOn = c.AddedOn.ToString("f"),
+                            AddedOn = c.AddedOn.ToString("dd/MM/yyyy"),
                             Replies = c.Replies.Select(r => 
                                 new ReplyListingModel
                             {

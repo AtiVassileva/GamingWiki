@@ -1,8 +1,43 @@
 ﻿@model GamingWiki.Web.Models.Articles.ArticleEditModel
 
-<form action="/Articles/Edit?articleId=@Model.Id" method="post">
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
+    <div class="page-info">
+        <h2>@Model.Heading / Edit</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Articles/All">Articles</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    <form action="/Articles/Edit?articleId=@Model.Id" method="post">
+                        <div class="form-group"> <label>Heading</label> <input type="text" name="heading" value="@Model.Heading" class="form-control"> </div>
+                        <div class="form-group"> <label>Picture Url</label> <input type="url" name="pictureUrl" value="@Model.PictureUrl" class="form-control"> </div>
+                        <br />
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea name="content" msg cols="100" rows="5" class="form-control"
+                                      style="background-color: black;">@Model.Content</textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Edit Article
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*<form action="/Articles/Edit?articleId=@Model.Id" method="post">
     <h2>Edit @Model.Heading</h2>
-    <img src="@Model.PictureUrl"/>
+    <img src="@Model.PictureUrl" />
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="heading">Heading</label>
@@ -18,4 +53,4 @@
         <textarea class="form-control" id="content" name="content">@Model.Content</textarea>
     </div>
     <button type="submit" class="btn btn-primary">Done</button>
-</form>
+</form>*@

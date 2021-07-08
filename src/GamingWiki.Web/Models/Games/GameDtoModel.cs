@@ -8,6 +8,8 @@ namespace GamingWiki.Web.Models.Games
 
         public string PictureUrl { get; set; }
 
+        public string TrailerUrl { get; set; }
+
         public GameClass Class { get; set; }
 
         public string Description { get; set; }
