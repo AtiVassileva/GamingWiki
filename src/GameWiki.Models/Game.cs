@@ -1,4 +1,5 @@
-﻿using GamingWiki.Models.Enums;
+﻿using System.ComponentModel;
+using GamingWiki.Models.Enums;
 
 namespace GamingWiki.Models
 {
@@ -7,6 +8,7 @@ namespace GamingWiki.Models
 
     public class Game
     {
+        private const double DefaultRating = 0.0;
         public int Id { get; set; }
 
         [Required]
@@ -18,11 +20,17 @@ namespace GamingWiki.Models
         [Required]
         public string PictureUrl { get; set; }
 
+        public string TrailerUrl { get; set; }
+
         public int PlaceId { get; set; }
 
         public Place Place { get; set; }
 
         public GameClass Class { get; set; }
+
+        [Required]
+        [DefaultValue(DefaultRating)]
+        public double Rating { get; set; }
 
         public ICollection<Character> Characters { get; set; }
         = new HashSet<Character>();

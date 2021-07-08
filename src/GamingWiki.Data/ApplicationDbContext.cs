@@ -33,6 +33,7 @@ namespace GamingWiki.Data
 
         public DbSet<Reply> Replies { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
