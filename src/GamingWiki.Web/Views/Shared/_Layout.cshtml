@@ -31,8 +31,7 @@
 
 </head>
 <body>
-
-    <header>
+@*<header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GamingWiki</a>
@@ -71,102 +70,106 @@
                 </div>
             </div>
         </nav>
+    </header>*@
+    <header class="header-section">
+        <div class="header-warp">
+            <div class="header-bar-warp d-flex">
+                site logo
+                <a href="/" class="site-logo">
+                    <img src="/img/logo.png" alt="">
+                </a>
+                <nav class="top-nav-area w-100">
+                    @*@if (User == null)
+                    {
+                        <div class="user-panel">
+                            <a href="/Identity/Account/Login">Login</a> / <a href="/Identity/Account/Register">Register</a>
+                        </div>
+                    }
+                    <div class="user-panel">
+                        <a href="/Identity/Account/Logout">Logout</a>
+                    </div>*@
+                    <ul class="main-menu primary-menu">
+                        <li>
+                            <a href="/">Home</a>
+                            <ul class="sub-menu">
+                                <li><a href="/Home/Privacy">Privacy</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Games/All">Games</a>
+                            <ul class="sub-menu">
+                                <li><a href="/Games/Create">New Game</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Characters/All">Characters</a>
+                            <ul class="sub-menu">
+                                <li><a href="/Characters/Create">New Character</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Articles/All">Articles</a>
+                            <ul class="sub-menu">
+                                <li><a href="/Articles/Create">New Article</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/Home/Privacy">Reviews</a>
+                            <ul class="sub-menu">
+                                <li><a href="/Articles/Create">New Review</a></li>
+                            </ul>
+                            </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </header>
-<!--<header class="header-section">
-<div class="header-warp">
-<div class="header-bar-warp d-flex">-->
-<!-- site logo -->
-<!--<a href="/" class="site-logo">
-    <img src="/img/logo.png" alt="">
-</a>
-<nav class="top-nav-area w-100">
-    @if (User == null)
-    {
-        <div class="user-panel">
-            <a href="/Identity/Account/Login">Login</a> / <a href="/Identity/Account/Register">Register</a>
-        </div>
-    }
-    <div class="user-panel">
-        <a href="/Identity/Account/Logout">Logout</a>
+
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
-    <ul class="main-menu primary-menu">
-        <li>
-            <a href="/">Home</a>
-            <ul class="sub-menu">
-                <li><a href="/Home/Privacy">Privacy</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/Games/All">Games</a>
-            <ul class="sub-menu">
-                <li><a href="/Games/Create">New Game</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/Characters/All">Characters</a>
-            <ul class="sub-menu">
-                <li><a href="/Characters/Create">New Character</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/Articles/All">Articles</a>
-            <ul class="sub-menu">
-                <li><a href="/Articles/Create">New Article</a></li>
-            </ul>
-        </li>
-        <li><a href="/Home/Privacy">Contact</a></li>
-    </ul>
-</nav>
-</div>
-</div>
-</header>-->
 
-<div class="container-fluid">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
-
-<footer class="footer-section">
-    <div class="container">
-        <div class="footer-left-pic">
-            <img src="/img/footer-left-pic.png" alt="">
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-left-pic">
+                <img src="/img/footer-left-pic.png" alt="">
+            </div>
+            <div class="footer-right-pic">
+                <img src="/img/footer-right-pic.png" alt="">
+            </div>
+            <a href="#" class="footer-logo">
+                <img src="/img/logo.png" alt="">
+            </a>
+            <ul class="main-menu footer-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/Games/All">Games</a></li>
+                <li><a href="/Characters/All">Characters</a></li>
+                <li><a href="/Articles/All">Articles</a></li>
+                <li><a href="#">Reviews</a></li>
+            </ul>
+            <div class="footer-social d-flex justify-content-center">
+                <a href="#"><i class="fa fa-pinterest"></i></a>
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-dribbble"></i></a>
+                <a href="#"><i class="fa fa-behance"></i></a>
+            </div>
+            <div class="copyright"><a href="">Colorlib</a> 2018 All rights reserved</div>
         </div>
-        <div class="footer-right-pic">
-            <img src="/img/footer-right-pic.png" alt="">
-        </div>
-        <a href="#" class="footer-logo">
-            <img src="/img/logo.png" alt="">
-        </a>
-        <ul class="main-menu footer-menu">
-            <li><a href="/">Home</a></li>
-            <li><a href="/Games/All">Games</a></li>
-            <li><a href="/Characters/All">Characters</a></li>
-            <li><a href="/Articles/All">Articles</a></li>
-            <li><a href="#">Reviews</a></li>
-        </ul>
-        <div class="footer-social d-flex justify-content-center">
-            <a href="#"><i class="fa fa-pinterest"></i></a>
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-dribbble"></i></a>
-            <a href="#"><i class="fa fa-behance"></i></a>
-        </div>
-        <div class="copyright"><a href="">Colorlib</a> 2018 All rights reserved</div>
-    </div>
-</footer>
+    </footer>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script src="/js/jquery-3.2.1.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/jquery.slicknav.min.js"></script>
-<script src="/js/owl.carousel.min.js"></script>
-<script src="/js/jquery.sticky-sidebar.min.js"></script>
-<script src="/js/jquery.magnific-popup.min.js"></script>
-<script src="/js/main.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.slicknav.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.sticky-sidebar.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/main.js"></script>
 
-@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
