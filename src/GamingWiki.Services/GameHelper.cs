@@ -59,11 +59,29 @@ namespace GamingWiki.Services
                     this.dbContext.Creators.Add(creator);
                     this.dbContext.SaveChanges();
                 }
-                
+
                 creators.Add(creator);
             }
 
             return creators;
+        }
+
+        public IDictionary<string, double> GetRatings(int gameId)
+        {
+            var reviews = this.dbContext.Reviews
+                .Where(r => r.GameId == gameId).ToList();
+
+            var ratings = new Dictionary<string, double>()
+            {
+                { "Price" ,  reviews.Count > 0 ?reviews.Select(r => r.PriceRate).Average() : 0.0},
+                { "Graphics" , reviews.Count > 0 ? reviews.Select(r => r.GraphicsRate)
+                    .Average() : 0.0},
+                { "Levels" , reviews.Count > 0 ? reviews.Select(r => r.LevelsRate).Average() : 0.0},
+                { "Difficulty" , reviews.Count > 0 ? reviews.Select(
+                    r => r.DifficultyRate).Average() : 0.0},
+            };
+
+            return ratings;
         }
     }
 }

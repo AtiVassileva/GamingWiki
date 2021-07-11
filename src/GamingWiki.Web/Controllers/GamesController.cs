@@ -113,6 +113,8 @@ namespace GamingWiki.Web.Controllers
                     Description = g.Description,
                     Place = $"{g.Place.Name} ({g.Place.PlaceType})",
                     Class = g.Class.ToString(),
+                    Ratings = this.helper.GetRatings(g.Id),
+                    Rating = this.helper.GetRatings(g.Id).Values.Average(),
                     Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList()
                 }).FirstOrDefault();
 

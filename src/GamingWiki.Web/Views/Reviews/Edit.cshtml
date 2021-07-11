@@ -1,0 +1,105 @@
+﻿@model GamingWiki.Web.Models.Reviews.ReviewListingModel;
+
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
+    <div class="page-info">
+        <h2>@Model.Game.Name Review / Edit</h2>
+        <div class="site-breadcrumb">
+            <a href="/">Home</a>  / <a href="/Reviews/All">Reviews</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    <img src="@Model.Game.PictureUrl" alt="" style="padding: 15px; object-fit: cover">
+                    <form action="/Reviews/Edit?reviewId=@Model.Id" method="post">
+                        <div class="form-group">
+                            <label>Price rate:</label>
+                            <input type="radio" class="btn btn-danger" name="priceRate" autocomplete="off" checked value="1">
+                            <label class="btn btn-danger">1</label>
+
+                            <input type="radio" class="btn btn-warning" name="priceRate" autocomplete="off" value="2">
+                            <label class="btn btn-warning">2</label>
+
+                            <input type="radio" class="btn btn-primary" name="priceRate" autocomplete="off" value="3">
+                            <label class="btn btn-primary">3</label>
+
+                            <input type="radio" class="btn btn-info" name="priceRate" autocomplete="off" value="4">
+                            <label class="btn btn-info">4</label>
+
+                            <input type="radio" class="btn btn-success" name="priceRate" autocomplete="off" value="5">
+                            <label class="btn btn-success">5</label>
+                            <br />
+                            <br />
+
+                            <label>Levels rate:</label>
+                            <input type="radio" class="btn btn-danger" name="levelsRate" autocomplete="off" checked value="1">
+                            <label class="btn btn-danger">1</label>
+
+                            <input type="radio" class="btn btn-warning" name="levelsRate" autocomplete="off" value="2">
+                            <label class="btn btn-warning">2</label>
+
+                            <input type="radio" class="btn btn-primary" name="levelsRate" autocomplete="off" value="3">
+                            <label class="btn btn-primary">3</label>
+
+                            <input type="radio" class="btn btn-info" name="levelsRate" autocomplete="off" value="4">
+                            <label class="btn btn-info">4</label>
+
+                            <input type="radio" class="btn btn-success" name="levelsRate" autocomplete="off" value="5">
+                            <label class="btn btn-success">5</label>
+                            <br />
+                            <br />
+                            <label>Graphics rate:</label>
+                            <input type="radio" class="btn btn-danger" name="graphicsRate" autocomplete="off" checked value="1">
+                            <label class="btn btn-danger">1</label>
+
+                            <input type="radio" class="btn btn-warning" name="graphicsRate" autocomplete="off" value="2">
+                            <label class="btn btn-warning">2</label>
+
+                            <input type="radio" class="btn btn-primary" name="graphicsRate" autocomplete="off" value="3">
+                            <label class="btn btn-primary">3</label>
+
+                            <input type="radio" class="btn btn-info" name="graphicsRate" autocomplete="off" value="4">
+                            <label class="btn btn-info">4</label>
+
+                            <input type="radio" class="btn btn-success" name="graphicsRate" autocomplete="off" value="5">
+                            <label class="btn btn-success">5</label>
+                            <br />
+                            <br />
+
+                            <label>Difficulty rate:</label>
+                            <input type="radio" class="btn btn-danger" name="difficultyRate" autocomplete="off" checked value="1">
+                            <label class="btn btn-danger">1</label>
+
+                            <input type="radio" class="btn btn-warning" name="difficultyRate" autocomplete="off" value="2">
+                            <label class="btn btn-warning">2</label>
+
+                            <input type="radio" class="btn btn-primary" name="difficultyRate" autocomplete="off" value="3">
+                            <label class="btn btn-primary">3</label>
+
+                            <input type="radio" class="btn btn-info" name="difficultyRate" autocomplete="off" value="4">
+                            <label class="btn btn-info">4</label>
+
+                            <input type="radio" class="btn btn-success" name="difficultyRate" autocomplete="off" value="5">
+                            <label class="btn btn-success">5</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" msg cols="100" rows="5" class="form-control"
+                                      style="background-color: black;">@Model.Description</textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Edit Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

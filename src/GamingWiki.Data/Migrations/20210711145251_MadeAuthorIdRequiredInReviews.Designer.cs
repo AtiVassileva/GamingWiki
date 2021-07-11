@@ -4,14 +4,16 @@ using GamingWiki.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GamingWiki.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210711145251_MadeAuthorIdRequiredInReviews")]
+    partial class MadeAuthorIdRequiredInReviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,6 +204,9 @@ namespace GamingWiki.Data.Migrations
 
                     b.Property<int>("PlaceId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("TrailerUrl")
                         .HasColumnType("nvarchar(max)");

@@ -9,6 +9,7 @@ using GamingWiki.Web.Models.Characters;
 using GamingWiki.Web.Models.Comments;
 using GamingWiki.Web.Models.Games;
 using GamingWiki.Web.Models.Replies;
+using GamingWiki.Web.Models.Reviews;
 
 namespace GamingWiki.Web.MappingConfiguration
 {
@@ -27,6 +28,8 @@ namespace GamingWiki.Web.MappingConfiguration
             this.CreateMap<CommentDtoModel, Comment>();
 
             this.CreateMap<ReplyDtoModel, Reply>();
+
+            this.CreateMap<ReviewDtoModel, Review>();
         }
     }
 }

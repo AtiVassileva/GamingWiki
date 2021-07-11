@@ -28,7 +28,10 @@
                 <p>@Model.Description</p>
                 <a href="/Games/Edit?gameId=@Model.Id" class="btn btn-outline-success">Edit</a>
                 <a href="/Games/Delete?gameId=@Model.Id" class="btn btn-outline-danger">Delete</a>
-                <section class="intro-video-section set-bg d-flex align-items-end " data-setbg="./img/promo-bg.jpg">
+                <a href="/Reviews/Create?gameId=@Model.Id" class="btn btn-outline-info">Add review</a>
+                <br /> 
+                <br /> 
+                <section class="intro-video-section set-bg d-flex align-items-end " data-setbg="@Model.PictureUrl">
                     <a href="@Model.TrailerUrl" class="video-play-btn video-popup"><img src="/img/icons/solid-right-arrow.png" alt="#"></a>
                     <div class="container">
                         <div class="video-text">
@@ -51,13 +54,13 @@
                         <div class="rating-widget">
                             <h4 class="widget-title">Ratings</h4>
                             <ul>
-                                <li>Price<span>3.5/5</span></li>
-                                <li>Graphics<span>4.5/5</span></li>
-                                <li>Levels<span>3.5/5</span></li>
-                                <li>Difficulty<span>4.5/5</span></li>
+                                <li>Price<span>@Model.Ratings["Price"].ToString("F1")/5</</span></li>
+                                <li>Graphics<span>@Model.Ratings["Graphics"].ToString("F1")/5</span></li>
+                                <li>Levels<span>@Model.Ratings["Levels"].ToString("F1")/5</span></li>
+                                <li>Difficulty<span>@Model.Ratings["Difficulty"].ToString("F1")/5</span></li>
                             </ul>
                             <div class="rating">
-                                <h5><i>Rating</i><span>4.5</span> / 5</h5>
+                                <h5><i>Rating</i><span>@Model.Rating.ToString("F1")</span> / 5</h5>
                             </div>
                         </div>
                     </div>

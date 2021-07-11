@@ -31,7 +31,7 @@
 
 </head>
 <body>
-@*<header>
+    <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GamingWiki</a>
@@ -51,27 +51,30 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="All">All Games</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="Create">Add new game</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="Create">New game</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Characters" asp-action="All">All Characters</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Characters" asp-action="Create">Add new character</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Characters" asp-action="Create">New character</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="All">All Articles</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="Create">Add new article</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="Create">New article</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reviews" asp-action="All">All Reviews</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
-    </header>*@
-    <header class="header-section">
+    </header>
+    @*<header class="header-section">
         <div class="header-warp">
             <div class="header-bar-warp d-flex">
                 site logo
@@ -79,16 +82,17 @@
                     <img src="/img/logo.png" alt="">
                 </a>
                 <nav class="top-nav-area w-100">
-                    @*@if (User == null)
-                    {
-                        <div class="user-panel">
-                            <a href="/Identity/Account/Login">Login</a> / <a href="/Identity/Account/Register">Register</a>
-                        </div>
-                    }
-                    <div class="user-panel">
-                        <a href="/Identity/Account/Logout">Logout</a>
-                    </div>*@
-                    <ul class="main-menu primary-menu">
+    @if (User == null)
+        {
+            <div class="user-panel">
+                <a href="/Identity/Account/Login">Login</a> / <a href="/Identity/Account/Register">Register</a>
+            </div>
+        }
+    <div class="user-panel">
+        <button onclick="User."></button>
+        <a href="/Identity/Account/Logout">Logout</a>
+    </div>
+    <ul class="main-menu primary-menu">
                         <li>
                             <a href="/">Home</a>
                             <ul class="sub-menu">
@@ -122,7 +126,7 @@
                 </nav>
             </div>
         </div>
-    </header>
+    </header>*@
 
     <div class="container-fluid">
         <main role="main" class="pb-3">
@@ -146,7 +150,7 @@
                 <li><a href="/Games/All">Games</a></li>
                 <li><a href="/Characters/All">Characters</a></li>
                 <li><a href="/Articles/All">Articles</a></li>
-                <li><a href="#">Reviews</a></li>
+                <li><a href="/Reviews/All">Reviews</a></li>
             </ul>
             <div class="footer-social d-flex justify-content-center">
                 <a href="#"><i class="fa fa-pinterest"></i></a>

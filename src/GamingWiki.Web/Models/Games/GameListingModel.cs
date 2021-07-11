@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GamingWiki.Web.Models.Games
 {
@@ -14,10 +15,14 @@ namespace GamingWiki.Web.Models.Games
 
         public string PictureUrl { get; set; }
 
+        public double Rating { get; set; }
+
         public string TrailerUrl { get; set; }
 
         public string Place { get; set; }
 
         public IEnumerable<string> Creators { get; set; }
+
+        public IDictionary<string, double> Ratings { get; set; }
     }
 }

@@ -28,10 +28,6 @@ namespace GamingWiki.Models
 
         public GameClass Class { get; set; }
 
-        [Required]
-        [DefaultValue(DefaultRating)]
-        public double Rating { get; set; }
-
         public ICollection<Character> Characters { get; set; }
         = new HashSet<Character>();
 
