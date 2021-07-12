@@ -18,14 +18,12 @@ namespace GamingWiki.Web.Controllers
     public class ArticlesController : Controller
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IArticleHelper helper;
         private readonly IMapper mapper;
 
-        public ArticlesController(ApplicationDbContext dbContext, IMapper mapper, IArticleHelper helper)
+        public ArticlesController(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            this.helper = new ArticleHelper(dbContext);
         }
 
         public IActionResult All()

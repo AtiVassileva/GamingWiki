@@ -142,6 +142,7 @@ namespace GamingWiki.Web.Controllers
 
             return this.Redirect("/Reviews/All");
         }
+
         [HttpPost]
         public IActionResult Search(string searchCriteria)
         {
