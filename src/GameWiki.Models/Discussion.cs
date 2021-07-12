@@ -4,7 +4,6 @@ namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
-    using Enums;
 
     public class Discussion
     {
@@ -14,8 +13,6 @@ namespace GamingWiki.Models
         public string CreatorId { get; set; }
 
         public IdentityUser Creator { get; set; }
-
-        public Category Category { get; set; }
 
         public ICollection<Message> Messages { get; set; }
         = new HashSet<Message>();

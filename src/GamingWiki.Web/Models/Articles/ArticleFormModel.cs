@@ -1,15 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using static GamingWiki.Web.Common.DataConstants;
+﻿using System.ComponentModel.DataAnnotations;
+using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Articles
 {
     public class ArticleFormModel
     {
         [Required]
-        [MinLength(DefaultMinLength)]
-        [MaxLength(DefaultMaxLength)]
+        [StringLength(DefaultMaxLength, MinimumLength = DefaultMinLength)]
         public string Heading { get; set; }
 
         [Required]

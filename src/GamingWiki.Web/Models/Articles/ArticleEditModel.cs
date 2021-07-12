@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static GamingWiki.Web.Common.DataConstants;
+using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Articles
 {
@@ -8,12 +8,11 @@ namespace GamingWiki.Web.Models.Articles
         public int Id { get; set; }
 
         [Required]
-        [MinLength(DefaultMinLength)]
-        [MaxLength(DefaultMaxLength)]
+        [StringLength(DefaultMaxLength, MinimumLength = DefaultMinLength)]
         public string Heading { get; set; }
 
         [Required]
-        [MinLength(ContentMinLength)]
+        [StringLength(int.MaxValue, MinimumLength = ContentMinLength)]
         public string Content { get; set; }
 
         [Url]

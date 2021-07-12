@@ -1,17 +1,15 @@
-﻿using System.ComponentModel;
-using GamingWiki.Models.Enums;
-
-namespace GamingWiki.Models
+﻿namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
+    using static Common.DataConstants;
 
     public class Game
     {
-        private const double DefaultRating = 0.0;
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(GameNameMaxLength)]
         public string Name { get; set; }
 
         [Required]
@@ -20,13 +18,16 @@ namespace GamingWiki.Models
         [Required]
         public string PictureUrl { get; set; }
 
+        [Required]
         public string TrailerUrl { get; set; }
 
-        public int PlaceId { get; set; }
+        public int AreaId { get; set; }
 
-        public Place Place { get; set; }
+        public Area Area { get; set; }
 
-        public GameClass Class { get; set; }
+        public int GenreId { get; set; }
+
+        public Genre Genre { get; set; }
 
         public ICollection<Character> Characters { get; set; }
         = new HashSet<Character>();

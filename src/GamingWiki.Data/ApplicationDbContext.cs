@@ -11,13 +11,16 @@ namespace GamingWiki.Data
         {
         }
 
+        public DbSet<Area> Areas { get; set; }
+
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public DbSet<Character> Characters { get; set; }
 
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Class> Classes { get; set; }
 
-        public DbSet<Country> Countries { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Creator> Creators { get; set; }
 
@@ -27,9 +30,9 @@ namespace GamingWiki.Data
 
         public DbSet<GameCreator> GamesCreators { get; set; }
 
-        public DbSet<Message> Messages { get; set; }
+        public DbSet<Genre> Genres { get; set; }
 
-        public DbSet<Place> Places { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public DbSet<Reply> Replies { get; set; }
 

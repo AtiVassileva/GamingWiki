@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static GamingWiki.Web.Common.DataConstants;
+using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Replies
 {

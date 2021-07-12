@@ -17,21 +17,20 @@ namespace GamingWiki.Services
             this.dbContext = dbContext;
         }
 
-        public Place ParsePlace(string placeName, string placeType)
+        public Area ParsePlace(string placeName, string placeType)
         {
-            var place = this.dbContext.Places
+            var place = this.dbContext.Areas
                 .FirstOrDefault
                     (p => p.Name == placeName);
 
             if (place == null)
             {
-                place = new Place
+                place = new Area
                 {
                     Name = placeName,
-                    PlaceType = Enum.Parse<PlaceType>(placeType)
                 };
 
-                this.dbContext.Places.Add(place);
+                this.dbContext.Areas.Add(place);
                 this.dbContext.SaveChanges();
             }
 

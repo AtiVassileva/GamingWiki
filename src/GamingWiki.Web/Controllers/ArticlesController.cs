@@ -42,7 +42,7 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Create()
         {
-            var categories = Enum.GetValues<Category>()
+            var categories = this.dbContext.Categories
                 .Select(c => new string(c.ToString()));
 
             return this.View(categories);
@@ -63,7 +63,7 @@ namespace GamingWiki.Web.Controllers
             {
                 Heading = model.Heading,
                 Content = model.Content,
-                Category = Enum.Parse<Category>(model.Category),
+                CategoryId = 2,
                 AuthorId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
                 PictureUrl = model.PictureUrl,
                 PublishedOn = DateTime.UtcNow

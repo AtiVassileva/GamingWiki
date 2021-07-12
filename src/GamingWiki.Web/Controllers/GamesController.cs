@@ -111,8 +111,8 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl,
                     TrailerUrl = g.TrailerUrl,
                     Description = g.Description,
-                    Place = $"{g.Place.Name} ({g.Place.PlaceType})",
-                    Class = g.Class.ToString(),
+                    Place = g.Area.Name,
+                    Class = g.Genre.Name,
                     Ratings = this.helper.GetRatings(g.Id),
                     Rating = this.helper.GetRatings(g.Id).Values.Average(),
                     Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList()
@@ -132,8 +132,8 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl,
                     TrailerUrl = g.TrailerUrl,
                     Description = g.Description,
-                    Place = g.Place.Name,
-                    Class = g.Class.ToString()
+                    Place = g.Area.Name,
+                    Class = g.Genre.Name
                 }).FirstOrDefault();
 
             ViewBag.PlaceTypes = GetPlaceTypes();
@@ -157,7 +157,7 @@ namespace GamingWiki.Web.Controllers
 
             game.Description = model.Description;
             game.PictureUrl = model.PictureUrl;
-            game.PlaceId = this.helper.ParsePlace(model.PlaceName, model.PlaceType).Id;
+            game.AreaId = 2;
             game.TrailerUrl = model.TrailerUrl;
 
             this.dbContext.SaveChanges();

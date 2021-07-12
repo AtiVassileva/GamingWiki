@@ -9,7 +9,7 @@ namespace GamingWiki.Web.Models.Articles
 
         public string Content { get; set; }
 
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
 
         public DateTime PublishedOn { get; set; }
 

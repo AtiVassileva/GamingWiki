@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Identity;
 namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
-
+    using static Common.DataConstants;
     public class Comment
     {
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(CommentContentMaxLength)]
         public string Content { get; set; }
 
         public DateTime AddedOn { get; set; }
