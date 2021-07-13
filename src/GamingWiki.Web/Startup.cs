@@ -9,12 +9,13 @@ using System.Reflection;
 using GamingWiki.Data;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
+using GamingWiki.Web.Infrastructure;
 
 namespace GamingWiki.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) 
+        public Startup(IConfiguration configuration)
             => this.Configuration = configuration;
 
         public IConfiguration Configuration { get; }
@@ -29,6 +30,7 @@ namespace GamingWiki.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -39,6 +41,8 @@ namespace GamingWiki.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.PrepareDatabase();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -47,22 +51,20 @@ namespace GamingWiki.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection()
+            app
+                .UseHttpsRedirection()
                 .UseStaticFiles()
                 .UseRouting()
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
-            });
+                {
+                    endpoints.MapDefaultControllerRoute();
+                    endpoints.MapRazorPages();
+                });
         }
     }
 }
