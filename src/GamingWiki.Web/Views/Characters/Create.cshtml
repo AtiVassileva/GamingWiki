@@ -1,4 +1,4 @@
-﻿@model CharacterCollectionsModel
+﻿@model CharacterFormModel
 
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/4.jpg">
     <div class="page-info">
@@ -15,33 +15,44 @@
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
                     <form action="/Characters/Create" method="post">
-                        <div class="form-group"> <label>Type</label> <input type="text" name="name" class="form-control"> </div>
-                        <div class="form-group"> <label>PictureUrl</label> <input type="url" name="pictureUrl" class="form-control"> </div>
+                        <div class="form-group"> 
+                            <label asp-for="Name"></label> 
+                            <input asp-for="Name" class="form-control"> 
+                            <span asp-validation-for="Name" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group"> 
+                            <label asp-for="PictureUrl"></label> 
+                            <input asp-for="PictureUrl" class="form-control"> 
+                            <span asp-validation-for="PictureUrl" class="small text-danger"></span>
+                            </div>
                         <br />
                         <div class="form-group" style="display: inline-block;">
-                            <label>Game: </label>
-                            <select name="game">
+                            <label asp-for="GameId"></label>
+                            <select asp-for="GameId">
                                 <option style="display:none">Select a game...</option>
-                                @foreach (var gameName in Model.GameNames)
+                                @foreach (var game in Model.Games)
                                 {
-                                    <option>@gameName</option>
+                                    <option value="@game.Id">@game.Name</option>
                                 }
                             </select>
+                            <span asp-validation-for="GameId" class="small text-danger"></span>
                         </div>
                         <div class="form-group" style="display: inline-block;">
-                            <label>Character class: </label>
-                            <select name="class">
+                            <label asp-for="ClassId"></label>
+                            <select asp-for="ClassId">
                                 <option style="display:none">Select a class...</option>
-                                @foreach (var characterClass in Model.CharacterClasses)
+                                @foreach (var characterClass in Model.Classes)
                                 {
-                                    <option>@characterClass</option>
+                                    <option value="@characterClass.Id">@characterClass.Name</option>
                                 }
                             </select>
+                            <span asp-validation-for="ClassId" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="description" msg cols="100" rows="5" class="form-control"
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;"></textarea>
+                            <span asp-validation-for="Description" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">

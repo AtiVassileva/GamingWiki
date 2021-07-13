@@ -30,7 +30,7 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult All() 
             => this.View(this.dbContext.Games
-                .Select(g => new GameSimpleModel
+                .Select(g => new GameViewModel
                 {
                     Id = g.Id,
                     Name = g.Name,
@@ -128,7 +128,6 @@ namespace GamingWiki.Web.Controllers
                 PictureUrl = dbModel.PictureUrl,
                 TrailerUrl = dbModel.TrailerUrl,
                 Description = dbModel.Description,
-                AreaId = dbModel.AreaId,
                 Areas = this.GetAreas(),
             };
 
@@ -178,7 +177,7 @@ namespace GamingWiki.Web.Controllers
                     .Games
                     .Where(g => g.Name.ToUpper()
                     .StartsWith(letter))
-                    .Select(g => new GameSimpleModel
+                    .Select(g => new GameViewModel
                     {
                     Id = g.Id,
                     Name = g.Name,

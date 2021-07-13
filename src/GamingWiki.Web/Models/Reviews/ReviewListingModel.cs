@@ -6,7 +6,7 @@ namespace GamingWiki.Web.Models.Reviews
     {
         public int Id { get; set; }
 
-        public GameSimpleModel Game { get; set; }
+        public GameViewModel Game { get; set; }
 
         public string Author { get; set; }
 

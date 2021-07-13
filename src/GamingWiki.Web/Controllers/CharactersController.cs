@@ -8,6 +8,7 @@ using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
+using GamingWiki.Web.Models.Games;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -25,43 +26,41 @@ namespace GamingWiki.Web.Controllers
             this.helper = new CharacterHelper(dbContext);
         }
 
-        public IActionResult All()
-        {
-            var characterModels = this.dbContext
+        public IActionResult All() =>
+            this.View(this.dbContext
                 .Characters.Select(c => new CharacterSimpleModel
                 {
                     Id = c.Id,
                     Name = c.Name,
                     PictureUrl = c.PictureUrl,
-                }).ToList();
+                }).ToList());
 
-            return this.View(characterModels);
-        }
-
-        public IActionResult Create()
-        {
-            var gameNames = GetGameNames();
-
-            var characterClasses = GetCharacterClasses();
-
-            var collectionModel = new CharacterCollectionsModel
+        public IActionResult Create() =>
+            this.View(new CharacterFormModel
             {
-                GameNames = gameNames,
-                CharacterClasses = characterClasses
-            };
-
-            return this.View(collectionModel);
-        }
+                Classes = this.GetClasses(),
+                Games = this.GetGames()
+            });
 
         [HttpPost]
         public IActionResult Create(CharacterFormModel model)
         {
+            if (!this.dbContext.Games.Any(g => g.Id == model.GameId))
+            {
+                this.ModelState.AddModelError(nameof(model.GameId), "Game does not exist.");
+            }
+
+            if (!this.dbContext.Classes.Any(c => c.Id == model.ClassId))
+            {
+                this.ModelState.AddModelError(nameof(model.ClassId), "Class does not exist.");
+            }
+
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                model.Games = this.GetGames();
+                model.Classes = this.GetClasses();
+
+                return this.View(model);
             }
 
             var characterDto = new CharacterDtoModel
@@ -69,8 +68,8 @@ namespace GamingWiki.Web.Controllers
                 Name = model.Name,
                 PictureUrl = model.PictureUrl,
                 Description = model.Description,
-                ClassId = 2,
-                GameId = this.helper.ParseGame(model.Game).Id
+                ClassId = model.ClassId,
+                GameId = model.GameId
             };
 
             var character = this.mapper.Map<Character>(characterDto);
@@ -91,7 +90,7 @@ namespace GamingWiki.Web.Controllers
                     Name = c.Name,
                     PictureUrl = c.PictureUrl,
                     Description = c.Description,
-                    Class = c.Class.ToString(),
+                    Class = c.Class.Name,
                     Game = c.Game.Name,
                     GameId = c.Game.Id
                 }).FirstOrDefault();
@@ -101,29 +100,34 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Edit(int characterId)
         {
-            var characterModel = this.dbContext.Characters
-                .Where(c => c.Id == characterId)
-                .Select(c => new CharacterEditModel
+            var dbModel = this.dbContext.Characters
+                .First(c => c.Id == characterId);
+
+                var characterModel = new CharacterEditModel
                 {
-                    Id = c.Id,
-                    Name = c.Name,
-                    PictureUrl = c.PictureUrl,
-                    Description = c.Description
-                }).FirstOrDefault();
+                    Id = dbModel.Id,
+                    Name = dbModel.Name,
+                    PictureUrl = dbModel.PictureUrl,
+                    Description = dbModel.Description,
+                    Classes = this.GetClasses()
+                };
 
-
-            return this.View(characterModel);
+                return this.View(characterModel);
         }
 
         [HttpPost]
         public IActionResult Edit(CharacterEditModel model, int characterId)
         {
+            if (!this.dbContext.Classes.Any(c => c.Id == model.ClassId))
+            {
+                this.ModelState.AddModelError(nameof(model.ClassId), "Class does not exist.");
+            }
+
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                model.Classes = this.GetClasses();
+
+                return this.View(model);
             }
 
             var character = this.dbContext.Characters
@@ -131,6 +135,7 @@ namespace GamingWiki.Web.Controllers
 
             character.PictureUrl = model.PictureUrl;
             character.Description = model.Description;
+            character.ClassId = model.ClassId;
 
             this.dbContext.SaveChanges();
 
@@ -163,15 +168,20 @@ namespace GamingWiki.Web.Controllers
             return this.View("All", characterModels);
         }
 
-        private static IEnumerable<string> GetCharacterClasses()
-        {
-            return null;
-        }
+        private IEnumerable<ClassViewModel> GetClasses() =>
+            this.dbContext.Classes
+                .Select(c => new ClassViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList();
 
-        private IEnumerable<string> GetGameNames()
-        {
-            return this.dbContext.Games
-                .Select(g => g.Name).ToList();
-        }
+        private IEnumerable<GameSimpleModel> GetGames() =>
+            this.dbContext.Games
+                .Select(g => new GameSimpleModel
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList();
     }
 }

@@ -31,7 +31,7 @@ namespace GamingWiki.Web.Controllers
                 {
                     Id = r.Id,
                     Author = r.Author.UserName,
-                    Game = new GameSimpleModel
+                    Game = new GameViewModel
                     {
                         Id = r.GameId,
                         Name = r.Game.Name,
@@ -47,7 +47,7 @@ namespace GamingWiki.Web.Controllers
         {
             var gameModel = this.dbContext
                 .Games.Where(g => g.Id == gameId)
-                .Select(g => new GameSimpleModel
+                .Select(g => new GameViewModel
                 {
                     Id = g.Id,
                     Name = g.Name,
@@ -95,7 +95,7 @@ namespace GamingWiki.Web.Controllers
                 {
                     Id = r.Id,
                     Author = r.Author.UserName,
-                    Game = new GameSimpleModel
+                    Game = new GameViewModel
                     {
                         Id = r.GameId,
                         Name = r.Game.Name,
@@ -152,7 +152,7 @@ namespace GamingWiki.Web.Controllers
                 {
                     Id = r.Id,
                     Author = r.Author.UserName,
-                    Game = new GameSimpleModel
+                    Game = new GameViewModel
                     {
                         Id = r.GameId,
                         Name = r.Game.Name,
