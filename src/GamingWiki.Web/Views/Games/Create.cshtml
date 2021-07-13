@@ -1,5 +1,4 @@
-﻿@model GameCollectionsModel
-
+﻿@model GameFormModel
 
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
     <div class="page-info">
@@ -16,36 +15,51 @@
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
                     <form action="/Games/Create" method="post">
-                        <div class="form-group"> <label>Type</label> <input type="text" name="name" class="form-control"> </div>
-                        <div class="form-group"> <label>PictureUrl</label> <input type="url" name="pictureUrl" class="form-control"> </div>
-                        <div class="form-group"> <label>TrailerUrl</label> <input type="url" name="trailerUrl" class="form-control"> </div>
-                        <div class="form-group"> <label>Creators (separated by: ", ")</label> <input type="text" name="creatorsTypes" class="form-control"> </div>
-                        <div class="form-group"> <label>Gaming area</label> <input type="text" name="placeType" class="form-control"> </div>
-                        <br/>
+                        <div class="form-group">
+                            <label asp-for="Name"></label>
+                            <input asp-for="Name" class="form-control">
+                            <span asp-validation-for="Name" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PictureUrl"></label>
+                            <input asp-for="PictureUrl" class="form-control">
+                            <span asp-validation-for="PictureUrl" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TrailerUrl"></label>
+                            <input asp-for="TrailerUrl" class="form-control">
+                            <span asp-validation-for="TrailerUrl" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CreatorsNames"></label>
+                            <input asp-for="CreatorsNames" class="form-control">
+                            <span asp-validation-for="CreatorsNames" class="small text-danger"></span>
+                        </div>
                         <div class="form-group" style="display: inline-block;">
-                            <label>Gaming area type: </label>
-                            <select name="placeType">
-                                <option style="display:none">Select a type...</option>
-                                @foreach (var @placeType in Model.PlaceTypes)
+                            <label asp-for="AreaId"></label> 
+                            <select asp-for="AreaId">
+                                <option style="display:none">Select an area...</option>
+                                @foreach (var area in Model.Areas)
                                 {
-                                    <option>@placeType</option>
+                                    <option value="@area.Id">@area.Name</option>
                                 }
                             </select>
                         </div>
                         <div class="form-group" style="display: inline-block;">
-                            <label>Game class: </label>
-                            <select name="class">
-                                <option style="display:none">Select a class...</option>
-                                @foreach (var gameClass in Model.GameClasses)
+                            <label asp-for="GenreId"></label>
+                            <select asp-for="GenreId">
+                                <option style="display:none">Select a genre...</option>
+                                @foreach (var genre in Model.Genres)
                                 {
-                                    <option>@gameClass</option>
+                                    <option value="@genre.Id">@genre.Name</option>
                                 }
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="description" msg cols="100" rows="5" class="form-control"
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;"></textarea>
+                            <span asp-validation-for="Description" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using GamingWiki.Web.Models.Areas;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Games
@@ -6,6 +8,8 @@ namespace GamingWiki.Web.Models.Games
     public class GameEditModel
     {
         public int Id { get; set; }
+
+        public string Name { get; set; }
 
         [Url]
         [Required]
@@ -19,13 +23,9 @@ namespace GamingWiki.Web.Models.Games
         [MinLength(DescriptionMinLength)]
         public string Description { get; set; }
 
-        [Required]
-        [MinLength(DefaultMinLength)]
-        [RegularExpression(ValidPlaceNameRegex)]
-        public string PlaceName { get; set; }
+        public int AreaId { get; set; }
 
-        [Required]
-        public string PlaceType { get; set; }
+        public IEnumerable<AreaViewModel> Areas { get; set; }
     }
 
 }

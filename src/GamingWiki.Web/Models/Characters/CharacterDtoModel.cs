@@ -1,6 +1,4 @@
-﻿using GamingWiki.Models.Enums;
-
-namespace GamingWiki.Web.Models.Characters
+﻿namespace GamingWiki.Web.Models.Characters
 {
     public class CharacterDtoModel
     {
@@ -10,7 +8,7 @@ namespace GamingWiki.Web.Models.Characters
 
         public int GameId { get; set; }
 
-        public CharacterClass Class { get; set; }
+        public int ClassId { get; set; }
 
         public string Description { get; set; }
     }

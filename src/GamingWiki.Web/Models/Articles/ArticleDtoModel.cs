@@ -1,5 +1,4 @@
 ﻿using System;
-using GamingWiki.Models.Enums;
 
 namespace GamingWiki.Web.Models.Articles
 {

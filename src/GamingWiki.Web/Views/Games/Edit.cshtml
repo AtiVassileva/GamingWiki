@@ -1,4 +1,4 @@
-﻿@model GameListingModel
+﻿@model GameEditModel
 
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
     <div class="page-info">
@@ -15,26 +15,33 @@
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
                     <form action="/Games/Edit?gameId=@Model.Id" method="post">
-                        <div class="form-group"> <label>Picture Url</label> <input type="url" name="pictureUrl" class="form-control" value="@Model.PictureUrl"> </div>
-                        <div class="form-group"> <label>Trailer Url</label> <input type="url" name="trailerUrl" class="form-control" value="@Model.TrailerUrl"> </div>
-                        <div class="form-group"> <label>Gaming area</label> <input type="text" name="placeType" class="form-control" value="@Model.Place"> </div>
-                        <br />
+                        <div class="form-group">
+                            <label asp-for="PictureUrl"></label>
+                            <input asp-for="PictureUrl" class="form-control" value="@Model.PictureUrl">
+                            <span asp-validation-for="PictureUrl" class="small text-danger"></span>
+                            </div>
+                        <div class="form-group">
+                            <label asp-for="TrailerUrl"></label>
+                            <input asp-for="TrailerUrl" class="form-control" value="@Model.TrailerUrl">
+                            <span asp-validation-for="TrailerUrl" class="small text-danger"></span>
+                            </div>
                         
                         <div class="form-group" style="display: inline-block;">
-                            <label>Gaming area type:</label>
-                            <select name="placeType">
-                                <option style="display:none">Select a place...</option>
-                                @foreach (var @placeType in @ViewBag.PlaceTypes)
+                            <label asp-for="AreaId"></label>
+                            <select asp-for="AreaId">
+                                @foreach (var area in Model.Areas)
                                 {
-                                    <option>@placeType</option>
+                                    <option value="@area.Id">@area.Name</option>
                                 }
                             </select>
+                            <span asp-validation-for="AreaId" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="description" msg cols="100" rows="5" class="form-control"
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;">@Model.Description</textarea>
-                        </div>
+                            <span asp-validation-for="Description" class="small text-danger"></span>
+                            </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">
                                 Edit Game
@@ -47,51 +54,3 @@
         </div>
     </div>
 </section>
-
-<form action="/Games/Edit?gameId=@Model.Id" method="post">
-
-    <div class="card">
-        <h2>Edit @Model.Name</h2>
-        <img src="@Model.PictureUrl" width="250" height="300" />
-        <div class="row">
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>PictureUrl: </label>
-                    <input type="url" name="pictureUrl" value="@Model.PictureUrl">
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>Place name: </label>
-                    <input type="text" name="placeType" value="@Model.Place" />
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>Place type:</label>
-                    <select name="placeType">
-                        <option style="display:none">Select a place...</option>
-                        @foreach (var @placeType in @ViewBag.PlaceTypes)
-                        {
-                            <option>@placeType</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <div class="form-group">
-                    <label>Description: </label>
-                    <textarea name="description">@Model.Description</textarea>
-                </div>
-            </div>
-            <br />
-            <div class="col">
-                <input type="submit" value="Submit">
-            </div>
-        </div>
-    </div>
-</form>

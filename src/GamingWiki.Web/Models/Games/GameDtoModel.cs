@@ -1,6 +1,4 @@
-﻿using GamingWiki.Models.Enums;
-
-namespace GamingWiki.Web.Models.Games
+﻿namespace GamingWiki.Web.Models.Games
 {
     public class GameDtoModel
     {
@@ -10,10 +8,10 @@ namespace GamingWiki.Web.Models.Games
 
         public string TrailerUrl { get; set; }
 
-        public GameClass Class { get; set; }
+        public int GenreId { get; set; }
 
         public string Description { get; set; }
 
-        public int PlaceId { get; set; }
+        public int AreaId { get; set; }
     }
 }

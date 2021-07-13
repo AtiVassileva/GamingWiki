@@ -4,7 +4,6 @@ using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
-using GamingWiki.Models.Enums;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;
@@ -70,7 +69,7 @@ namespace GamingWiki.Web.Controllers
                 Name = model.Name,
                 PictureUrl = model.PictureUrl,
                 Description = model.Description,
-                Class = Enum.Parse<CharacterClass>(model.Class),
+                ClassId = 2,
                 GameId = this.helper.ParseGame(model.Game).Id
             };
 
@@ -166,8 +165,7 @@ namespace GamingWiki.Web.Controllers
 
         private static IEnumerable<string> GetCharacterClasses()
         {
-            return Enum.GetValues<CharacterClass>()
-                .Select(cc => new string(cc.ToString())).ToList();
+            return null;
         }
 
         private IEnumerable<string> GetGameNames()

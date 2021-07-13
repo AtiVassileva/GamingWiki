@@ -4,11 +4,12 @@ using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
-using GamingWiki.Models.Enums;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;
+using GamingWiki.Web.Models.Areas;
 using GamingWiki.Web.Models.Games;
+using GamingWiki.Web.Models.Genres;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -27,44 +28,43 @@ namespace GamingWiki.Web.Controllers
             this.helper = new GameHelper(dbContext);
         }
 
-        public IActionResult All()
-        {
-            var gameModels = this.dbContext.Games
+        public IActionResult All() 
+            => this.View(this.dbContext.Games
                 .Select(g => new GameSimpleModel
                 {
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
-                }).ToList();
+                }).ToList());
 
-            return this.View(gameModels);
-        }
-
-        public IActionResult Create()
-        {
-            var placeTypes = GetPlaceTypes();
-            var gamesClasses = GetGamesClasses();
-
-            var collectionsModel = new GameCollectionsModel
+        public IActionResult Create() 
+            => this.View(new GameFormModel
             {
-                PlaceTypes = placeTypes,
-                GameClasses = gamesClasses
-            };
-            return this.View(collectionsModel);
-        }
+                Areas = this.GetAreas(),
+                Genres = this.GetGenres(),
+            });
 
+        
         [HttpPost]
         public IActionResult Create(GameFormModel model)
         {
-            if (!this.ModelState.IsValid)
+            if (!this.dbContext.Areas.Any(a => a.Id == model.AreaId))
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
             }
 
-            var place = this.helper.ParsePlace(model.PlaceName, model.PlaceType);
+            if (!this.dbContext.Genres.Any(g => g.Id == model.GenreId))
+            {
+                this.ModelState.AddModelError(nameof(model.GenreId), "Genre does not exist.");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                model.Areas = this.GetAreas();
+                model.Genres = this.GetGenres();
+
+                return this.View(model);
+            }
 
             var gameDto = new GameDtoModel
             {
@@ -72,8 +72,8 @@ namespace GamingWiki.Web.Controllers
                 Description = model.Description,
                 PictureUrl = model.PictureUrl,
                 TrailerUrl = model.TrailerUrl,
-                PlaceId = place.Id,
-                Class = Enum.Parse<GameClass>(model.Class)
+                AreaId = model.AreaId,
+                GenreId= model.GenreId
             };
 
             var game = mapper.Map<Game>(gameDto);
@@ -100,9 +100,8 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect($"/Games/Details?gameId={game.Id}");
         }
 
-        public IActionResult Details(int gameId)
-        {
-            var gameModel = this.dbContext.Games
+        public IActionResult Details(int gameId) 
+            => this.View(this.dbContext.Games
                 .Where(g => g.Id == gameId)
                 .Select(g => new GameListingModel
                 {
@@ -111,45 +110,43 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl,
                     TrailerUrl = g.TrailerUrl,
                     Description = g.Description,
-                    Place = g.Area.Name,
-                    Class = g.Genre.Name,
+                    Area = g.Area.Name,
+                    Genre = g.Genre.Name,
                     Ratings = this.helper.GetRatings(g.Id),
                     Rating = this.helper.GetRatings(g.Id).Values.Average(),
                     Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList()
-                }).FirstOrDefault();
-
-            return this.View(gameModel);
-        }
+                }).FirstOrDefault());
 
         public IActionResult Edit(int gameId)
         {
-            var game = this.dbContext.Games
-                .Where(g => g.Id == gameId)
-                .Select(g => new GameListingModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl,
-                    TrailerUrl = g.TrailerUrl,
-                    Description = g.Description,
-                    Place = g.Area.Name,
-                    Class = g.Genre.Name
-                }).FirstOrDefault();
+            var dbModel = this.dbContext.Games.First(g => g.Id == gameId);
 
-            ViewBag.PlaceTypes = GetPlaceTypes();
+            var viewModel = new GameEditModel
+            {
+                Id = dbModel.Id,
+                Name = dbModel.Name,
+                PictureUrl = dbModel.PictureUrl,
+                TrailerUrl = dbModel.TrailerUrl,
+                Description = dbModel.Description,
+                AreaId = dbModel.AreaId,
+                Areas = this.GetAreas(),
+            };
 
-            return this.View(game);
+            return this.View(viewModel);
         }
 
         [HttpPost]
         public IActionResult Edit(GameEditModel model, int gameId)
         {
+            if (!this.dbContext.Areas.Any(a => a.Id == model.AreaId))
+            {
+                this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
+            }
+
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                model.Areas = this.GetAreas();
+                return this.View(model);
             }
 
             var game = this.dbContext.Games
@@ -157,7 +154,7 @@ namespace GamingWiki.Web.Controllers
 
             game.Description = model.Description;
             game.PictureUrl = model.PictureUrl;
-            game.AreaId = 2;
+            game.AreaId = model.AreaId;
             game.TrailerUrl = model.TrailerUrl;
 
             this.dbContext.SaveChanges();
@@ -176,33 +173,37 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect("/Games/All");
         }
 
-        public IActionResult Search(string letter)
-        {
-            var gameModels = this.dbContext.Games
-                .Where(g => g.Name.ToUpper()
+        public IActionResult Search(string letter) 
+            => this.View("All", this.dbContext
+                    .Games
+                    .Where(g => g.Name.ToUpper()
                     .StartsWith(letter))
-                .Select(g => new GameSimpleModel
-                {
+                    .Select(g => new GameSimpleModel
+                    {
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
+                    })
+                    .ToList());
+
+        private IEnumerable<GenreViewModel> GetGenres()
+            => this.dbContext
+                .Genres
+                .Select(g => 
+                    new GenreViewModel
+                {
+                Id = g.Id,
+                Name = g.Name
                 }).ToList();
 
-            return this.View("All", gameModels);
-        }
-
-        private static IEnumerable<string> GetPlaceTypes()
-        {
-            return Enum.GetValues<PlaceType>()
-                .Select(en =>
-                   new string(en.ToString())).ToList();
-        }
-
-        private static IEnumerable<string> GetGamesClasses()
-        {
-            return Enum.GetValues<GameClass>()
-                .Select(gc =>
-                    new string(gc.ToString())).ToList();
-        }
+        private IEnumerable<AreaViewModel> GetAreas()
+            => this.dbContext
+                .Areas
+                .Select(a => 
+                    new AreaViewModel
+                {
+                    Id = a.Id,
+                    Name = a.Name
+                }).ToList();
     }
 }

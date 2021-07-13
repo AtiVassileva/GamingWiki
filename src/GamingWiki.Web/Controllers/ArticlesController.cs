@@ -4,7 +4,6 @@ using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
-using GamingWiki.Models.Enums;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
-    using Enums;
     using static DataConstants;
 
     public class Article

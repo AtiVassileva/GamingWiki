@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GamingWiki.Data;
 using GamingWiki.Models;
-using GamingWiki.Models.Enums;
 using GamingWiki.Services.Contracts;
 
 namespace GamingWiki.Services
@@ -15,26 +14,6 @@ namespace GamingWiki.Services
         public GameHelper(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-        }
-
-        public Area ParsePlace(string placeName, string placeType)
-        {
-            var place = this.dbContext.Areas
-                .FirstOrDefault
-                    (p => p.Name == placeName);
-
-            if (place == null)
-            {
-                place = new Area
-                {
-                    Name = placeName,
-                };
-
-                this.dbContext.Areas.Add(place);
-                this.dbContext.SaveChanges();
-            }
-
-            return place;
         }
 
         public IEnumerable<Creator> ParseCreators(string creatorsNames)

@@ -1,4 +1,5 @@
-﻿using GamingWiki.Data;
+﻿using System.Linq;
+using GamingWiki.Data;
 using GamingWiki.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,11 @@ namespace GamingWiki.Web.Infrastructure
 
         private static void SeedAreas(ApplicationDbContext dbContext)
         {
+            if (dbContext.Areas.Any())
+            {
+                return;
+            }
+
             dbContext.Areas.AddRange(new []
             {
                 new Area {Name = "City"},
@@ -43,6 +49,11 @@ namespace GamingWiki.Web.Infrastructure
         
         private static void SeedClasses(ApplicationDbContext dbContext)
         {
+            if (dbContext.Classes.Any())
+            {
+                return;
+            }
+
             dbContext.Classes.AddRange(new []
             {
                 new Class {Name = "Fighter"}, 
@@ -64,6 +75,11 @@ namespace GamingWiki.Web.Infrastructure
 
         private static void SeedGenres(ApplicationDbContext dbContext)
         {
+            if (dbContext.Genres.Any())
+            {
+                return;
+            }
+
             dbContext.Genres.AddRange(new []
             {
                 new Genre{Name = "Action"}, 
@@ -82,6 +98,11 @@ namespace GamingWiki.Web.Infrastructure
         
         private static void SeedCategories(ApplicationDbContext dbContext)
         {
+            if (dbContext.Categories.Any())
+            {
+                return;
+            }
+
             dbContext.Categories.AddRange(new []
             {
                 new Category {Name = "Games"}, 

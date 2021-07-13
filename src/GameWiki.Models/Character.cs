@@ -1,5 +1,4 @@
 ﻿using GamingWiki.Models.Common;
-using GamingWiki.Models.Enums;
 
 namespace GamingWiki.Models
 {
