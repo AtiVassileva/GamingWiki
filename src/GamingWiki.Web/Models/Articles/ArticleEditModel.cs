@@ -17,6 +17,7 @@ namespace GamingWiki.Web.Models.Articles
 
         [Url]
         [Required]
+        [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
     }
 }

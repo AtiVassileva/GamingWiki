@@ -4,7 +4,7 @@
     <div class="page-info">
         <h2>@Model.Heading</h2>
         <div class="site-breadcrumb">
-            <a href="/">Home</a>  / <a href="/Articles/All">Articles</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Articles" asp-action="All">Blog</a>
         </div>
     </div>
 </section>
@@ -19,8 +19,8 @@
                 <h2 class="gs-title">@Model.Heading</h2>
                 <h4>By: @Model.Author</h4>
                 <p>@Model.Content</p>
-                <a href="/Articles/Edit?articleId=@Model.Id" class="btn btn-outline-success">Edit</a>
-                <a href="/Articles/Delete?articleId=@Model.Id" class="btn btn-outline-danger">Delete</a>
+                <a asp-controller="Articles" asp-action="Edit" asp-route-articleId="@Model.Id" class="btn btn-outline-success">Edit</a>
+                <a asp-controller="Articles" asp-action="Delete" asp-route-articleId="@Model.Id" class="btn btn-outline-danger">Delete</a>
                 <br />
                 <br />
                 <h4 style="color: white;">Comments (@Model.Comments.Count())</h4>
@@ -46,7 +46,7 @@
                     </div>
                 }
                 <br />
-                <form class="algin-form" action="/Comments/Add?articleId=@Model.Id" method="post">
+                <form class="algin-form" asp-controller="Comments" asp-action="Add" asp-route-articleId="@Model.Id" method="post">
                     <div class="form-group">
                         <h4>Leave a comment</h4>
                         <textarea name="content" placeholder="Write your comment here..." msg cols="30" rows="5" class="form-control" style="background-color: black;"></textarea>
@@ -69,20 +69,6 @@
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">
-                    <div class="widget-item">
-                        <div class="rating-widget">
-                            <h4 class="widget-title">Ratings</h4>
-                            <ul>
-                                <li>Price<span>3.5/5</span></li>
-                                <li>Graphics<span>4.5/5</span></li>
-                                <li>Levels<span>3.5/5</span></li>
-                                <li>Difficulty<span>4.5/5</span></li>
-                            </ul>
-                            <div class="rating">
-                                <h5><i>Rating</i><span>4.5</span> / 5</h5>
-                            </div>
-                        </div>
-                    </div>
                     <div class="widget-item">
                         <div class="testimonials-widget">
                             <h4 class="widget-title">Quotes</h4>

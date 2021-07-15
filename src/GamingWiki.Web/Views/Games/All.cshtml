@@ -9,35 +9,16 @@
     </div>
 </section>
 
+@{
+    var letters = Enumerable.Range(65, 26);
+}
 <section class="games-section">
     <div class="container">
         <ul class="game-filter">
-            <li><a href="/Games/Search?letter=A">A</a></li>
-            <li><a href="/Games/Search?letter=B">B</a></li>
-            <li><a href="/Games/Search?letter=C">C</a></li>
-            <li><a href="/Games/Search?letter=D">D</a></li>
-            <li><a href="/Games/Search?letter=E">E</a></li>
-            <li><a href="/Games/Search?letter=F">F</a></li>
-            <li><a href="/Games/Search?letter=G">G</a></li>
-            <li><a href="/Games/Search?letter=H">H</a></li>
-            <li><a href="/Games/Search?letter=I">I</a></li>
-            <li><a href="/Games/Search?letter=J">J</a></li>
-            <li><a href="/Games/Search?letter=K">K</a></li>
-            <li><a href="/Games/Search?letter=L">L</a></li>
-            <li><a href="/Games/Search?letter=M">M</a></li>
-            <li><a href="/Games/Search?letter=N">N</a></li>
-            <li><a href="/Games/Search?letter=O">O</a></li>
-            <li><a href="/Games/Search?letter=P">P</a></li>
-            <li><a href="/Games/Search?letter=Q">Q</a></li>
-            <li><a href="/Games/Search?letter=R">R</a></li>
-            <li><a href="/Games/Search?letter=S">S</a></li>
-            <li><a href="/Games/Search?letter=T">T</a></li>
-            <li><a href="/Games/Search?letter=U">U</a></li>
-            <li><a href="/Games/Search?letter=V">V</a></li>
-            <li><a href="/Games/Search?letter=W">W</a></li>
-            <li><a href="/Games/Search?letter=X">X</a></li>
-            <li><a href="/Games/Search?letter=Y">Y</a></li>
-            <li><a href="/Games/Search?letter=Z">Z</a></li>
+            @foreach (var letter in letters)
+            {
+                <li><a asp-controller="Games" asp-action="Search" asp-route-letter="@((char)letter)">@((char)letter)</a></li>
+            }
         </ul>
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
@@ -63,18 +44,16 @@
                 <div id="stickySidebar">
                     <div class="widget-item">
                         <div class="categories-widget">
-                            <h4 class="widget-title">categories</h4>
+                            <h4 class="widget-title">Navigation</h4>
                             <ul>
-                                <li><a asp-controller="Games" asp-action="All">Games</a></li>
+                                <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
                                 <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
-                                <li><a href="">Online Games</a></li>
-                                <li><a href="">Team Games</a></li>
-                                <li><a href="">Community</a></li>
-                                <li><a href="">Uncategorized</a></li>
+                                <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="widget-item">
+                    @*<div class="widget-item">
                         <div class="categories-widget">
                             <h4 class="widget-title">platform</h4>
                             <ul>
@@ -99,7 +78,7 @@
                                 <li><a href="">Shooter</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>

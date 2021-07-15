@@ -38,7 +38,9 @@ namespace GamingWiki.Web.Controllers
                         PictureUrl = r.Game.PictureUrl
                     },
                     Description = r.Description,
-                }).ToList();
+                })
+                .OrderByDescending(r => r.Id)
+                .ToList();
 
             return this.View(reviewModels);
         }
@@ -54,8 +56,10 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl
                 }).FirstOrDefault();
 
-
-            return this.View(gameModel);
+            return this.View(new ReviewFormModel
+            {
+                Game = gameModel
+            });
         }
 
         [HttpPost]
@@ -63,10 +67,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                return this.View(model);
             }
 
             var reviewDto = new ReviewDtoModel
@@ -85,7 +86,7 @@ namespace GamingWiki.Web.Controllers
             this.dbContext.Reviews.Add(review);
             this.dbContext.SaveChanges();
 
-            return this.Redirect("/Reviews/All");
+            return this.Redirect($"/Games/Details?gameId={gameId}");
         }
 
         public IActionResult Edit(int reviewId)
@@ -147,7 +148,7 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Search(string searchCriteria)
         {
             var reviewModel = this.dbContext.Reviews
-                .Where(r => r.Game.Name.ToLower().Contains(searchCriteria.ToLower().Trim()))
+                .Where(r => r.Game.Name.ToLower().Contains(searchCriteria.ToLower().Trim()) && r.Description != null)
                 .Select(r => new ReviewListingModel
                 {
                     Id = r.Id,

@@ -13,10 +13,13 @@ namespace GamingWiki.Web.Models.Characters
 
         [Url]
         [Required]
+        [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
 
+        [Display(Name = "Game")]
         public int GameId { get; set; }
 
+        [Display(Name = "Class")]
         public int ClassId { get; set; }
 
         [Required]

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using GamingWiki.Web.Models.Categories;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Articles
@@ -7,10 +9,11 @@ namespace GamingWiki.Web.Models.Articles
     {
         [Required]
         [StringLength(DefaultMaxLength, MinimumLength = DefaultMinLength)]
-        public string Heading { get; set; }
 
-        [Required]
-        public string Category { get; set; }
+        public string Heading { get; set; }
+        
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
 
         [Required]
         [MinLength(ContentMinLength)]
@@ -18,6 +21,9 @@ namespace GamingWiki.Web.Models.Articles
 
         [Url]
         [Required]
+        [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
+
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }

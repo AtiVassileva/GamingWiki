@@ -12,12 +12,14 @@ namespace GamingWiki.Web.Models.Characters
 
         [Url]
         [Required]
+        [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
 
         [Required]
         [MinLength(DescriptionMinLength)]
         public string Description { get; set; }
 
+        [Display(Name = "Class")]
         public int ClassId { get; set; }
 
         public IEnumerable<ClassViewModel> Classes { get; set; }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
-using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Areas;
 using GamingWiki.Web.Models.Games;
 using GamingWiki.Web.Models.Genres;
@@ -35,7 +33,9 @@ namespace GamingWiki.Web.Controllers
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
-                }).ToList());
+                })
+                .OrderBy(g => g.Name)
+                .ToList());
 
         public IActionResult Create() 
             => this.View(new GameFormModel

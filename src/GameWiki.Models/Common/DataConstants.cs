@@ -6,8 +6,6 @@
         public const int DescriptionMinLength = 10;
         public const int DefaultMaxLength = 100;
 
-        public const string ValidPlaceNameRegex = @"[A-Za-z\s\.0-9]+";
-
         public const int ContentMinLength = 20;
         public const int HeadingMaxLength = 30;
         public const int CategoryNameMaxLength = 25;
@@ -21,5 +19,8 @@
         public const int GameNameMaxLength = 30;
         public const int AreaNameMaxLength = 25;
         public const int GenreNameMaxLength = 40;
+
+        public const int MinimumRate = 1;
+        public const int MaximumRate = 5;
     }
 }

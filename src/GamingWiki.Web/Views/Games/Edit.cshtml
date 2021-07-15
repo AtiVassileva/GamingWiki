@@ -4,7 +4,7 @@
     <div class="page-info">
         <h2>@Model.Name / Edit</h2>
         <div class="site-breadcrumb">
-            <a href="/">Home</a>  / <a href="/Games/All">Games</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Games" asp-action="All">Games</a>
         </div>
     </div>
 </section>
@@ -15,7 +15,7 @@
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
                     <form asp-controller="Games"
-                          asp-action="Edit" asp-route-gameId="@Model.Id"method="post">
+                          asp-action="Edit" asp-route-gameId="@Model.Id" method="post">
                         <div class="form-group">
                             <label asp-for="PictureUrl"></label>
                             <input asp-for="PictureUrl" class="form-control" value="@Model.PictureUrl">
@@ -30,6 +30,7 @@
                         <div class="form-group" style="display: inline-block;">
                             <label asp-for="AreaId"></label>
                             <select asp-for="AreaId">
+                                <option style="display:none">Select an area...</option>
                                 @foreach (var area in Model.Areas)
                                 {
                                     <option value="@area.Id">@area.Name</option>
@@ -51,7 +52,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </section>

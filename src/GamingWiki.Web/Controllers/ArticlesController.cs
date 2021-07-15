@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
-using GamingWiki.Services;
-using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
+using GamingWiki.Web.Models.Categories;
 using GamingWiki.Web.Models.Comments;
 using GamingWiki.Web.Models.Replies;
 using Microsoft.AspNetCore.Mvc;
@@ -34,35 +34,39 @@ namespace GamingWiki.Web.Controllers
                     Heading = a.Heading,
                     PictureUrl = a.PictureUrl,
                     PublishedOn = a.PublishedOn.ToString("D")
-                }).ToList();
+                })
+                .OrderByDescending(c => c.Id)
+                .ToList();
 
             return this.View(articleModels);
         }
 
-        public IActionResult Create()
-        {
-            var categories = this.dbContext.Categories
-                .Select(c => new string(c.ToString()));
-
-            return this.View(categories);
-        }
+        public IActionResult Create() 
+            => this.View(new ArticleFormModel
+            {
+                Categories = this.GetCategories()
+            });
 
         [HttpPost]
         public IActionResult Create(ArticleFormModel model)
         {
+            if (!this.dbContext.Categories.Any(c => c.Id == model.CategoryId))
+            {
+                this.ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist.");
+            }
+
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                model.Categories = this.GetCategories();
+
+                return this.View(model);
             }
 
             var articleDto = new ArticleDtoModel
             {
                 Heading = model.Heading,
                 Content = model.Content,
-                CategoryId = 2,
+                CategoryId = model.CategoryId,
                 AuthorId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
                 PictureUrl = model.PictureUrl,
                 PublishedOn = DateTime.UtcNow
@@ -131,10 +135,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                return this.View(model);
             }
 
             var article = this.dbContext.Articles
@@ -175,5 +176,13 @@ namespace GamingWiki.Web.Controllers
 
             return View("All", articleModels);
         }
+
+        private IEnumerable<CategoryViewModel> GetCategories()
+            => this.dbContext.Categories
+                .Select(c => new CategoryViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList();
     }
 }

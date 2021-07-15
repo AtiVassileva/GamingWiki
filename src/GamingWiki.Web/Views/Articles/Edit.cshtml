@@ -4,7 +4,7 @@
     <div class="page-info">
         <h2>@Model.Heading / Edit</h2>
         <div class="site-breadcrumb">
-            <a href="/">Home</a>  / <a href="/Articles/All">Articles</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Articles" asp-action="All">Articles</a>
         </div>
     </div>
 </section>
@@ -14,14 +14,23 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    <form action="/Articles/Edit?articleId=@Model.Id" method="post">
-                        <div class="form-group"> <label>Heading</label> <input type="text" name="heading" value="@Model.Heading" class="form-control"> </div>
-                        <div class="form-group"> <label>Picture Url</label> <input type="url" name="pictureUrl" value="@Model.PictureUrl" class="form-control"> </div>
+                    <form asp-controller="Articles" asp-action="Edit" asp-route-articleId="@Model.Id" method="post">
+                        <div class="form-group">
+                            <label asp-for="Heading"></label>
+                            <input asp-for="Heading" value="@Model.Heading" class="form-control">
+                            <span asp-validation-for="Heading" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PictureUrl"></label>
+                            <input asp-for="PictureUrl" value="@Model.PictureUrl" class="form-control">
+                            <span asp-validation-for="PictureUrl" class="small text-danger"></span>
+                        </div>
                         <br />
                         <div class="form-group">
-                            <label>Content</label>
-                            <textarea name="content" msg cols="100" rows="5" class="form-control"
+                            <label asp-for="Content"></label>
+                            <textarea asp-for="Content" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;">@Model.Content</textarea>
+                            <span asp-validation-for="Content" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">
@@ -34,23 +43,3 @@
         </div>
     </div>
 </section>
-
-@*<form action="/Articles/Edit?articleId=@Model.Id" method="post">
-    <h2>Edit @Model.Heading</h2>
-    <img src="@Model.PictureUrl" />
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="heading">Heading</label>
-            <input type="text" class="form-control" id="heading" name="heading" value="@Model.Heading">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="content">Picture url</label>
-            <input type="url" class="form-control" id="pictureUrl" name="pictureUrl" value="@Model.PictureUrl">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="content">Content</label>
-        <textarea class="form-control" id="content" name="content">@Model.Content</textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Done</button>
-</form>*@

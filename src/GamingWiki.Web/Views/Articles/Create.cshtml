@@ -1,10 +1,10 @@
-﻿@model IEnumerable<string>
+﻿@model ArticleFormModel
 
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
     <div class="page-info">
         <h2>New article</h2>
         <div class="site-breadcrumb">
-            <a href="/">Home</a>  / <a href="/Articles/All">Articles</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Articles" asp-action="All">Blog</a>
         </div>
     </div>
 </section>
@@ -14,25 +14,35 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    <form action="/Articles/Create" method="post">
-                        <div class="form-group"> <label>Heading</label> <input type="text" name="heading" class="form-control"> </div>
-                        <div class="form-group"> <label>Picture Url</label> <input type="url" name="pictureUrl" class="form-control"> </div>
+                    <form asp-controller="Articles" asp-action="Create" method="post">
+                        <div class="form-group">
+                            <label asp-for="Heading"></label> 
+                            <input asp-for="Heading" class="form-control">
+                            <span asp-validation-for="Heading" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PictureUrl"></label> 
+                            <input asp-for="PictureUrl" class="form-control">
+                            <span asp-validation-for="PictureUrl" class="small text-danger"></span>
+                        </div>
                         <br />
                         <div class="form-group" style="display: inline-block;">
-                            <label>Category: </label>
-                            <select name="category">
-                                <option style="display:none">Select a category...</option>
-                                @foreach (var category in Model)
+                            <label asp-for="CategoryId"></label>
+                            <select asp-for="CategoryId">
+                                <option style="display: none">Select a category...</option>
+                                @foreach (var category in Model.Categories)
                                 {
-                                    <option>@category</option>
+                                    <option value="@category.Id">@category.Name</option>
                                 }
                             </select>
+                            <span asp-validation-for="CategoryId" class="small text-danger"></span>
                         </div>
                         
                         <div class="form-group">
-                            <label>Content</label>
-                            <textarea name="content" msg cols="100" rows="5" class="form-control"
+                            <label asp-for="Content"></label>
+                            <textarea asp-for="Content" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;"></textarea>
+                            <span asp-validation-for="Content" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">

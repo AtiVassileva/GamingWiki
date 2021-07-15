@@ -8,7 +8,7 @@
     <div class="page-info">
         <h2>@Model.Name</h2>
         <div class="site-breadcrumb">
-            <a href="/">Home</a>  / <a href="/Characters/All">Characters</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Characters" asp-action="All">Characters</a>
         </div>
     </div>
 </section>
@@ -20,43 +20,31 @@
         </div>
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
-                <div class="gs-meta">Game: <a href="/Games/Details?gameId=@Model.GameId">@Model.Game</a></div>
+                <div class="gs-meta">Game: <a asp-controller="Games" asp-action="Details" asp-route-gameId="@Model.GameId">@Model.Game</a></div>
                 <h2 class="gs-title">@Model.Name</h2>
                 <h4>Category: @Model.Class</h4>
                 <p>@Model.Description</p>
-                <a href="/Characters/Edit?characterId=@Model.Id" class="btn btn-outline-success">Edit</a>
-                <a href="/Characters/Delete?characterId=@Model.Id" class="btn btn-outline-danger">Delete</a>
+                <a asp-controller="Characters" asp-action="Edit" asp-route-characterId="@Model.Id" class="btn btn-outline-success">Edit</a>
+                <a asp-controller="Characters" asp-action="Delete" asp-route-characterId="@Model.Id" class="btn btn-outline-danger">Delete</a>
                 <div class="geme-social-share pt-5 d-flex">
                     <p>Share:</p>
-                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-dribbble"></i></a>
-                    <a href="#"><i class="fa fa-behance"></i></a>
+                    <a href="https://www.pinterest.com/"><i class="fa fa-pinterest"></i></a>
+                    <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
+                    <a href="https://twitter.com/"><i class="fa fa-twitter"></i></a>
+                    <a href="https://dribbble.com/"><i class="fa fa-dribbble"></i></a>
+                    <a href="https://www.behance.net/"><i class="fa fa-behance"></i></a>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">
                     <div class="widget-item">
-                        <div class="rating-widget">
-                            <h4 class="widget-title">Ratings</h4>
-                            <ul>
-                                <li>Price<span>3.5/5</span></li>
-                                <li>Graphics<span>4.5/5</span></li>
-                                <li>Levels<span>3.5/5</span></li>
-                                <li>Difficulty<span>4.5/5</span></li>
-                            </ul>
-                            <div class="rating">
-                                <h5><i>Rating</i><span>4.5</span> / 5</h5>
-                            </div>
-                        </div>
                     </div>
                     <div class="widget-item">
                         <div class="testimonials-widget">
-                            <h4 class="widget-title">Testimonials</h4>
+                            <h4 class="widget-title">Quotes</h4>
                             <div class="testim-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolo re magna aliqua. Quis ipsum suspend isse ultrices.</p>
-                                <h6><span>James Smith,</span>Gamer</h6>
+                                <p>"Everyone thinks they’re the hero of their own story." </p>
+                                <h6><span>Handsome Jack, </span>Borderlands</h6>
                             </div>
                         </div>
                     </div>
@@ -66,7 +54,7 @@
     </div>
 </section>
 
-<section class="game-author-section">
+@*<section class="game-author-section">
     <div class="container">
         <div class="game-author-pic set-bg" data-setbg="/img/author.jpg"></div>
         <div class="game-author-info">
@@ -74,4 +62,4 @@
             <p>Vivamus volutpat nibh ac sollicitudin imperdiet. Donec scelerisque lorem sodales odio ultricies, nec rhoncus ex lobortis. Vivamus tincid-unt sit amet sem id varius. Donec elementum aliquet tortor. Curabitur justo mi, efficitur sed eros alique.</p>
         </div>
     </div>
-</section>
+</section>*@

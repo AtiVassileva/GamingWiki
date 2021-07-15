@@ -4,10 +4,21 @@
     <div class="page-info">
         <h2>@Model.Game.Name Review / Edit</h2>
         <div class="site-breadcrumb">
-            <a href="/">Home</a>  / <a href="/Reviews/All">Reviews</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Home" asp-action="Index">Reviews</a>
         </div>
     </div>
 </section>
+
+@{
+    var numbersColorsPairs = new Dictionary<int, string>
+{
+        {1, "btn btn-danger" },
+        {2, "btn btn-warning" },
+        {3, "btn btn-primary" },
+        {4, "btn btn-info" },
+        {5, "btn btn-success" },
+    };
+}
 
 <section class="games-section">
     <div class="container">
@@ -15,76 +26,38 @@
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
                     <img src="@Model.Game.PictureUrl" alt="" style="padding: 15px; object-fit: cover">
-                    <form action="/Reviews/Edit?reviewId=@Model.Id" method="post">
+                    <form asp-controller="Reviews" asp-action="Edit" asp-route-reviewId="@Model.Id" method="post">
                         <div class="form-group">
                             <label>Price rate:</label>
-                            <input type="radio" class="btn btn-danger" name="priceRate" autocomplete="off" checked value="1">
-                            <label class="btn btn-danger">1</label>
-
-                            <input type="radio" class="btn btn-warning" name="priceRate" autocomplete="off" value="2">
-                            <label class="btn btn-warning">2</label>
-
-                            <input type="radio" class="btn btn-primary" name="priceRate" autocomplete="off" value="3">
-                            <label class="btn btn-primary">3</label>
-
-                            <input type="radio" class="btn btn-info" name="priceRate" autocomplete="off" value="4">
-                            <label class="btn btn-info">4</label>
-
-                            <input type="radio" class="btn btn-success" name="priceRate" autocomplete="off" value="5">
-                            <label class="btn btn-success">5</label>
+                            @foreach (var (number, btnColor) in numbersColorsPairs)
+                            {
+                                <input type="radio" class="@btnColor" name="priceRate" autocomplete="off" value="@number" />
+                                <label class="@btnColor">@number</label>
+                            }
                             <br />
                             <br />
-
                             <label>Levels rate:</label>
-                            <input type="radio" class="btn btn-danger" name="levelsRate" autocomplete="off" checked value="1">
-                            <label class="btn btn-danger">1</label>
-
-                            <input type="radio" class="btn btn-warning" name="levelsRate" autocomplete="off" value="2">
-                            <label class="btn btn-warning">2</label>
-
-                            <input type="radio" class="btn btn-primary" name="levelsRate" autocomplete="off" value="3">
-                            <label class="btn btn-primary">3</label>
-
-                            <input type="radio" class="btn btn-info" name="levelsRate" autocomplete="off" value="4">
-                            <label class="btn btn-info">4</label>
-
-                            <input type="radio" class="btn btn-success" name="levelsRate" autocomplete="off" value="5">
-                            <label class="btn btn-success">5</label>
+                            @foreach (var (number, btnColor) in numbersColorsPairs)
+                            {
+                                <input type="radio" class="@btnColor" name="levelsRate" autocomplete="off" value="@number" />
+                                <label class="@btnColor">@number</label>
+                            }
                             <br />
                             <br />
                             <label>Graphics rate:</label>
-                            <input type="radio" class="btn btn-danger" name="graphicsRate" autocomplete="off" checked value="1">
-                            <label class="btn btn-danger">1</label>
-
-                            <input type="radio" class="btn btn-warning" name="graphicsRate" autocomplete="off" value="2">
-                            <label class="btn btn-warning">2</label>
-
-                            <input type="radio" class="btn btn-primary" name="graphicsRate" autocomplete="off" value="3">
-                            <label class="btn btn-primary">3</label>
-
-                            <input type="radio" class="btn btn-info" name="graphicsRate" autocomplete="off" value="4">
-                            <label class="btn btn-info">4</label>
-
-                            <input type="radio" class="btn btn-success" name="graphicsRate" autocomplete="off" value="5">
-                            <label class="btn btn-success">5</label>
+                            @foreach (var (number, btnColor) in numbersColorsPairs)
+                            {
+                                <input type="radio" class="@btnColor" name="graphicsRate" autocomplete="off" value="@number" />
+                                <label class="@btnColor">@number</label>
+                            }
                             <br />
                             <br />
-
                             <label>Difficulty rate:</label>
-                            <input type="radio" class="btn btn-danger" name="difficultyRate" autocomplete="off" checked value="1">
-                            <label class="btn btn-danger">1</label>
-
-                            <input type="radio" class="btn btn-warning" name="difficultyRate" autocomplete="off" value="2">
-                            <label class="btn btn-warning">2</label>
-
-                            <input type="radio" class="btn btn-primary" name="difficultyRate" autocomplete="off" value="3">
-                            <label class="btn btn-primary">3</label>
-
-                            <input type="radio" class="btn btn-info" name="difficultyRate" autocomplete="off" value="4">
-                            <label class="btn btn-info">4</label>
-
-                            <input type="radio" class="btn btn-success" name="difficultyRate" autocomplete="off" value="5">
-                            <label class="btn btn-success">5</label>
+                            @foreach (var (number, btnColor) in numbersColorsPairs)
+                            {
+                                <input type="radio" class="@btnColor" name="difficultyRate" autocomplete="off" value="@number" />
+                                <label class="@btnColor">@number</label>
+                            }
                         </div>
                         <div class="form-group">
                             <label>Description</label>
@@ -99,7 +72,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </section>

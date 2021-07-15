@@ -42,6 +42,7 @@ namespace GamingWiki.Web.Infrastructure
                 new Area {Name = "Forest"},
                 new Area {Name = "Jungle"},
                 new Area {Name = "Playground"},
+                new Area {Name = "Battlefield"},
             });
 
             dbContext.SaveChanges();

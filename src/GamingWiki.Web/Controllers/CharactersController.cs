@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
@@ -16,24 +15,25 @@ namespace GamingWiki.Web.Controllers
     public class CharactersController : Controller
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly ICharacterHelper helper;
         private readonly IMapper mapper;
 
         public CharactersController(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            this.helper = new CharacterHelper(dbContext);
         }
 
         public IActionResult All() =>
             this.View(this.dbContext
-                .Characters.Select(c => new CharacterSimpleModel
+                .Characters
+                .Select(c => new CharacterSimpleModel
                 {
                     Id = c.Id,
                     Name = c.Name,
                     PictureUrl = c.PictureUrl,
-                }).ToList());
+                })
+                .OrderBy(c => c.Name)
+                .ToList());
 
         public IActionResult Create() =>
             this.View(new CharacterFormModel
@@ -126,7 +126,6 @@ namespace GamingWiki.Web.Controllers
             if (!this.ModelState.IsValid)
             {
                 model.Classes = this.GetClasses();
-
                 return this.View(model);
             }
 
