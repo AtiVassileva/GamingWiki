@@ -66,17 +66,7 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            var gameDto = new GameDtoModel
-            {
-                Name = model.Name,
-                Description = model.Description,
-                PictureUrl = model.PictureUrl,
-                TrailerUrl = model.TrailerUrl,
-                AreaId = model.AreaId,
-                GenreId= model.GenreId
-            };
-
-            var game = mapper.Map<Game>(gameDto);
+            var game = mapper.Map<Game>(model);
 
             this.dbContext.Games.Add(game);
             this.dbContext.SaveChanges();
@@ -119,15 +109,16 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Edit(int gameId)
         {
-            var dbModel = this.dbContext.Games.First(g => g.Id == gameId);
+            var entity = this.dbContext.Games
+                .First(g => g.Id == gameId);
 
             var viewModel = new GameEditModel
             {
-                Id = dbModel.Id,
-                Name = dbModel.Name,
-                PictureUrl = dbModel.PictureUrl,
-                TrailerUrl = dbModel.TrailerUrl,
-                Description = dbModel.Description,
+                Id = entity.Id,
+                Name = entity.Name,
+                PictureUrl = entity.PictureUrl,
+                TrailerUrl = entity.TrailerUrl,
+                Description = entity.Description,
                 Areas = this.GetAreas(),
             };
 
@@ -182,8 +173,7 @@ namespace GamingWiki.Web.Controllers
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
-                    })
-                    .ToList());
+                    }).ToList());
 
         private IEnumerable<GenreViewModel> GetGenres()
             => this.dbContext

@@ -14,7 +14,8 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    <form action="/Games/Edit?gameId=@Model.Id" method="post">
+                    <form asp-controller="Games"
+                          asp-action="Edit" asp-route-gameId="@Model.Id"method="post">
                         <div class="form-group">
                             <label asp-for="PictureUrl"></label>
                             <input asp-for="PictureUrl" class="form-control" value="@Model.PictureUrl">
