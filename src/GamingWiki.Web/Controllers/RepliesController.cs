@@ -52,5 +52,21 @@ namespace GamingWiki.Web.Controllers
 
            return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
+
+        public IActionResult Delete(int replyId)
+        {
+            var reply = this.dbContext.Replies
+                .First(r => r.Id == replyId);
+
+            var articleId = this.dbContext.Replies
+                .Where(r => r.Id == replyId)
+                .Select(r => r.Comment.ArticleId)
+                .FirstOrDefault();
+
+            this.dbContext.Replies.Remove(reply);
+            this.dbContext.SaveChanges();
+
+            return this.Redirect($"/Articles/Details?articleId={articleId}");
+        }
     }
 }

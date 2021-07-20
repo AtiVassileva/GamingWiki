@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
@@ -42,6 +43,22 @@ namespace GamingWiki.Web.Controllers
             var comment = this.mapper.Map<Comment>(commentDto);
 
             this.dbContext.Comments.Add(comment);
+            this.dbContext.SaveChanges();
+
+            return this.Redirect($"/Articles/Details?articleId={articleId}");
+        }
+
+        public IActionResult Delete(int commentId)
+        {
+            var comment = this.dbContext.Comments
+                .First(c => c.Id == commentId);
+
+            var articleId = this.dbContext.Comments
+                .Where(c => c.Id == commentId)
+                .Select(c => c.ArticleId)
+                .FirstOrDefault();
+
+            this.dbContext.Comments.Remove(comment);
             this.dbContext.SaveChanges();
 
             return this.Redirect($"/Articles/Details?articleId={articleId}");

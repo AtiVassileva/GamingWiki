@@ -24,6 +24,7 @@
                 <br />
                 <br />
                 <h4 style="color: white;">Comments (@Model.Comments.Count())</h4>
+
                 @if (!Model.Comments.Any())
                 {
                     <p>No comments yet.</p>
@@ -31,16 +32,29 @@
                 else
                 {
                     <div class="row">
-                        <div class="col-sm-5 col-md-6 col-12 pb-4 darker">
-                            
+                        <div class="col-sm-11 col-md-11 col-8 pb-4 darker">
+
                             @foreach (var comment in Model.Comments)
                             {
                                 <div class="text-justify mt-4 float-left">
-                                    <h4><i class="fa fa-user-o"></i> @comment.Commenter</h4>
+                                    <h4><i class="fa fa-user-o"></i> @comment.Commenter <a asp-controller="Comments" asp-action="Delete" asp-route-commentId="@comment.Id"><i class="fa fa-trash-o"></i></a></h4>
                                     <br />
                                     <span> <i class="fa fa-clock-o"></i> @comment.AddedOn</span>
-                                    <p>@comment.Content</p>
+                                    <p style="margin-bottom: 15px;">@comment.Content</p>
+                                    @foreach (var reply in comment.Replies)
+                                    {
+                                        <h5 style="color: #b01ba5;"><i class="fa fa-user-o"></i> @reply.Replier replied: <a asp-controller="Replies" asp-action="Delete" asp-route-replyId="@reply.Id"><i class="fa fa-trash-o"></i></a></h5>
+                                        <p style="margin: 8px;">@reply.Content</p>
+                                    }
                                 </div>
+                                <form asp-controller="Replies" asp-action="Add" asp-route-commentId="@comment.Id" method="post">
+                                    <div class="input-group mb-2 float-right">
+                                        <input name="replyContent" class="form-control" placeholder="Reply to @comment.Commenter" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-secondary" type="submit">Reply</button>
+                                        </div>
+                                    </div>
+                                </form>
                             }
                         </div>
                     </div>
@@ -52,7 +66,7 @@
                         <textarea name="content" placeholder="Write your comment here..." msg cols="30" rows="5" class="form-control" style="background-color: black;"></textarea>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="post" class="btn btn-success btn-block">
+                        <button type="submit" class="btn btn-success btn-block">
                             Post Comment
                         </button>
                     </div>
