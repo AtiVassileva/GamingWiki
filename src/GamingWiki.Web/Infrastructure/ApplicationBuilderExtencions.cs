@@ -84,9 +84,9 @@ namespace GamingWiki.Web.Infrastructure
             dbContext.Genres.AddRange(new []
             {
                 new Genre{Name = "Action"}, 
-                new Genre{Name = "ActionAdventure"}, 
+                new Genre{Name = "Action Adventure"}, 
                 new Genre{Name = "Adventure"}, 
-                new Genre{Name = "RolePlaying"}, 
+                new Genre{Name = "Role Playing"}, 
                 new Genre{Name = "Simulation"}, 
                 new Genre{Name = "Strategy"}, 
                 new Genre{Name = "Sports"}, 
