@@ -1,2 +1,2 @@
-# GamingWiki
+# Gaming Wiki
 ASP.NET Project
