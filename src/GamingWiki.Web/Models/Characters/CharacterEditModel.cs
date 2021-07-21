@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using GamingWiki.Web.Models.Classes;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Characters

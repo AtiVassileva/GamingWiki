@@ -7,6 +7,7 @@ using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
+using GamingWiki.Web.Models.Classes;
 using GamingWiki.Web.Models.Games;
 using Microsoft.AspNetCore.Mvc;
 

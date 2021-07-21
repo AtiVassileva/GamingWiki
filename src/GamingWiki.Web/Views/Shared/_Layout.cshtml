@@ -21,110 +21,63 @@
 
     <link rel="stylesheet" href="/css/style.css" />
 
-    @*<link rel="stylesheet" href="~/css/site.css" />*@
-
     @RenderSection("Styles", required: false)
 
 </head>
 <body>
     <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GamingWiki</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="All">All Games</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="Create">New game</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Characters" asp-action="All">All Characters</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Characters" asp-action="Create">New character</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="All">All Articles</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="Create">New article</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Reviews" asp-action="All">All Reviews</a>
-                            </li>
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                </div>
-            </nav>
-        </header>
-    @*<header class="header-section">
         <div class="header-warp">
             <div class="header-bar-warp d-flex">
                 site logo
-                <a href="/" class="site-logo">
+                <a asp-controller="Home" asp-action="Index" class="site-logo">
                     <img src="/img/logo.png" alt="">
                 </a>
                 <nav class="top-nav-area w-100">
-                    @if (User == null)
-                    {
-                        <div class="user-panel">
-                            <a href="/Identity/Account/Login">Login</a> / <a href="/Identity/Account/Register">Register</a>
-                        </div>
-                    }
-                    <div class="user-panel">
-                        <button onclick="User."></button>
-                        <a href="/Identity/Account/Logout">Logout</a>
-                    </div>
                     <ul class="main-menu primary-menu">
                         <li>
                             <a href="/">Home</a>
                             <ul class="sub-menu">
-                                <li><a href="/Home/Privacy">Privacy</a></li>
+                                <li>
+                                    <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="/Games/All">Games</a>
+                            <a asp-controller="Games" asp-action="All">Games</a>
                             <ul class="sub-menu">
-                                <li><a href="/Games/Create">New Game</a></li>
+                                <li><a asp-controller="Games" asp-action="Create">New Game</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="/Characters/All">Characters</a>
+                            <a asp-controller="Characters" asp-action="All">Characters</a>
                             <ul class="sub-menu">
-                                <li><a href="/Characters/Create">New Character</a></li>
+                                <li><a asp-controller="Characters" asp-action="Create">New Character</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="/Articles/All">Articles</a>
+                            <a asp-controller="Articles" asp-action="All">Articles</a>
                             <ul class="sub-menu">
-                                <li><a href="/Articles/Create">New Article</a></li>
+                                <li><a asp-controller="Articles" asp-action="All">New Article</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="/Home/Privacy">Reviews</a>
+                            <a asp-controller="Reviews" asp-action="All">Reviews</a>
                             <ul class="sub-menu">
-                                <li><a href="/Articles/Create">New Review</a></li>
+                                <li><a asp-controller="Reviews" asp-action="All">All</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a asp-controller="Reviews" asp-action="All">Account</a>
+                            <ul class="sub-menu">
+                                <li><partial name="_LoginPartial" /></li>
                             </ul>
                         </li>
                     </ul>
                 </nav>
             </div>
         </div>
-    </header>*@
-
+    </header>
+    
     <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -143,11 +96,11 @@
                 <img src="/img/logo.png" alt="">
             </a>
             <ul class="main-menu footer-menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/Games/All">Games</a></li>
-                <li><a href="/Characters/All">Characters</a></li>
-                <li><a href="/Articles/All">Articles</a></li>
-                <li><a href="/Reviews/All">Reviews</a></li>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Games" asp-action="All">Games</a></li>
+                <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
+                <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
+                <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
             </ul>
             <div class="footer-social d-flex justify-content-center">
                 <a href="#"><i class="fa fa-pinterest"></i></a>

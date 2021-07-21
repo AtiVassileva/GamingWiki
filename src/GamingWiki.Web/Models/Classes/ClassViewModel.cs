@@ -1,4 +1,4 @@
-﻿namespace GamingWiki.Web.Models
+﻿namespace GamingWiki.Web.Models.Classes
 {
     public class ClassViewModel
     {
