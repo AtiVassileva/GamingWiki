@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using GamingWiki.Web.Models.Areas;
 
 namespace GamingWiki.Web.Models.Games

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ArticleSimpleModel>
+﻿@model HomeViewModel
 
 <div id="preloder">
     <div class="loader"></div>
@@ -11,16 +11,16 @@
                 <div class="section-title text-white">
                     <h2>Latest News</h2>
                 </div>
-                @foreach (var article in Model)
+                @foreach (var article in Model.LatestArticles)
                 {
                     <div class="blog-item">
                         <div class="blog-thumb">
                             <img src="@article.PictureUrl" alt="">
                         </div>
                         <div class="blog-text text-box text-white">
-                            <div class="top-meta">11.11.18  /  in <a href="">Games</a></div>
+                            <div class="top-meta">Latest news  /  in <a asp-controller="Articles" asp-action="All">Articles</a></div>
                             <h3>@article.Heading</h3>
-                            <p>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p>@article.ShortContent</p>
                             <a asp-controller="Articles" asp-action="Details" asp-route-articleId="@article.Id" class="read-more">Read More  <img src="/img/icons/double-arrow.png" alt="#" /></a>
                         </div>
                     </div>
@@ -31,53 +31,18 @@
                     <div class="widget-item">
                         <h4 class="widget-title">Trending</h4>
                         <div class="trending-widget">
-                            <div class="tw-item">
-                                <div class="tw-thumb">
-                                    <img src="./img/blog-widget/1.jpg" alt="#">
+                            @foreach (var game in Model.BestGames)
+                            {
+                                <div class="tw-item">
+                                    <div class="tw-thumb">
+                                        <img src="@game.PictureUrl" alt="#">
+                                    </div>
+                                    <div class="tw-text">
+                                        <div class="tw-meta">Trending / in <a asp-controller="Games" asp-action="All">Games</a></div>
+                                        <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id"><h5>@game.Name</h5></a>
+                                    </div>
                                 </div>
-                                <div class="tw-text">
-                                    <div class="tw-meta">11.11.18  /  in <a href="">Games</a></div>
-                                    <h5>The best online game is out now!</h5>
-                                </div>
-                            </div>
-                            <div class="tw-item">
-                                <div class="tw-thumb">
-                                    <img src="./img/blog-widget/2.jpg" alt="#">
-                                </div>
-                                <div class="tw-text">
-                                    <div class="tw-meta">11.11.18  /  in <a href="">Games</a></div>
-                                    <h5>The best online game is out now!</h5>
-                                </div>
-                            </div>
-                            <div class="tw-item">
-                                <div class="tw-thumb">
-                                    <img src="./img/blog-widget/3.jpg" alt="#">
-                                </div>
-                                <div class="tw-text">
-                                    <div class="tw-meta">11.11.18  /  in <a href="">Games</a></div>
-                                    <h5>The best online game is out now!</h5>
-                                </div>
-                            </div>
-                            <div class="tw-item">
-                                <div class="tw-thumb">
-                                    <img src="./img/blog-widget/4.jpg" alt="#">
-                                </div>
-                                <div class="tw-text">
-                                    <div class="tw-meta">11.11.18  /  in <a href="">Games</a></div>
-                                    <h5>The best online game is out now!</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget-item">
-                        <div class="categories-widget">
-                            <h4 class="widget-title">Navigation</h4>
-                            <ul>
-                                <li><a asp-controller="Games" asp-action="All">Games</a></li>
-                                <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
-                                <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
-                                <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
-                            </ul>
+                            }
                         </div>
                     </div>
                 </div>

@@ -4,14 +4,16 @@ using GamingWiki.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GamingWiki.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210722061303_AddedRatingInGameEntity")]
+    partial class AddedRatingInGameEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,8 +58,8 @@ namespace GamingWiki.Data.Migrations
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("PictureUrl")
                         .IsRequired()
@@ -744,7 +746,7 @@ namespace GamingWiki.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("GamingWiki.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -851,6 +853,8 @@ namespace GamingWiki.Data.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("GamesCreators");
+
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

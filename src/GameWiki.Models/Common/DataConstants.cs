@@ -7,7 +7,7 @@
         public const int DefaultMaxLength = 100;
 
         public const int ContentMinLength = 20;
-        public const int HeadingMaxLength = 30;
+        public const int HeadingMaxLength = 100;
         public const int CategoryNameMaxLength = 25;
 
         public const int CharacterNameMaxLength = 30;

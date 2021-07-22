@@ -1,22 +1,25 @@
 ﻿using GamingWiki.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using GamingWiki.Data;
+using GamingWiki.Services;
+using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models.Articles;
+using GamingWiki.Web.Models.Games;
+using GamingWiki.Web.Models.Home;
 
 namespace GamingWiki.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IGameHelper gameHelper;
 
-        public HomeController(ApplicationDbContext dbContext)
+        public HomeController(ApplicationDbContext dbContext, IGameHelper gameHelper)
         {
             this.dbContext = dbContext;
+            this.gameHelper = new GameHelper(this.dbContext);
         }
 
         public IActionResult Index()
@@ -29,15 +32,31 @@ namespace GamingWiki.Web.Controllers
             var latestArticles = this.dbContext
                 .Articles
                 .OrderByDescending(a => a.Id)
-                .Select(a => new ArticleSimpleModel
+                .Select(a => new ArticleHomeModel
                 {
                     Id = a.Id,
                     Heading = a.Heading,
                     PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString("d")
+                    ShortContent = a.Content.Substring(0, 200)
                 }).Take(3).ToList();
 
-            return this.View(latestArticles);
+            var bestGames = this.dbContext.Games
+                .Select(g => new GameHomeModel
+                {
+                    Id = g.Id,
+                    Name = g.Name.ToUpper(),
+                    PictureUrl = g.PictureUrl,
+                    Rating = this.gameHelper.GetRatings(g.Id).Values.Average()
+                })
+                .ToList()
+                .OrderByDescending(g => g.Rating)
+                .Take(3).ToList();
+
+            return this.View(new HomeViewModel
+            {
+                LatestArticles = latestArticles,
+                BestGames = bestGames
+            });
         }
 
         public IActionResult Privacy() => this.View();

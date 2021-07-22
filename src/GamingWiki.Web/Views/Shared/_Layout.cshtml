@@ -35,7 +35,7 @@
                 <nav class="top-nav-area w-100">
                     <ul class="main-menu primary-menu">
                         <li>
-                            <a href="/">Home</a>
+                            <a asp-controller="Home" asp-action="Index">Home</a>
                             <ul class="sub-menu">
                                 <li>
                                     <a asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -78,20 +78,22 @@
         </div>
     </header>
 
-    <div>
-        <main role="main">
-            @RenderBody()
-        </main>
+<div>
+    <main role="main">
+        @RenderBody()
+    </main>
+</div>
+
+<section class="newsletter-section">
+    <div class="container">
+        <h2>Subscribe to our newsletter</h2>
+        <form class="newsletter-form">
+            <input type="text" placeholder="ENTER YOUR E-MAIL">
+            <button class="site-btn">subscribe  <img src="/img/icons/double-arrow.png" alt="#" /></button>
+        </form>
     </div>
-    <section class="newsletter-section">
-        <div class="container">
-            <h2>Subscribe to our newsletter</h2>
-            <form class="newsletter-form">
-                <input type="text" placeholder="ENTER YOUR E-MAIL">
-                <button class="site-btn">subscribe  <img src="/img/icons/double-arrow.png" alt="#" /></button>
-            </form>
-        </div>
-    </section>
+</section>
+
     <footer class="footer-section">
         <div class="container">
             <div class="footer-left-pic">
