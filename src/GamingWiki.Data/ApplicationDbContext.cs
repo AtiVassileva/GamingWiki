@@ -14,6 +14,7 @@ namespace GamingWiki.Data
         public DbSet<Area> Areas { get; set; }
 
         public DbSet<Article> Articles { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Character> Characters { get; set; }

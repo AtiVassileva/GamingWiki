@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameWiki.Models\GamingWiki.Models.csproj" />
+    <ProjectReference Include="..\GamingWiki.Models\GamingWiki.Models.csproj" />
   </ItemGroup>
 
 </Project>
