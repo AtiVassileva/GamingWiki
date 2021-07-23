@@ -28,7 +28,6 @@
     <header>
         <div class="header-warp">
             <div class="header-bar-warp d-flex">
-                site logo
                 <a asp-controller="Home" asp-action="Index" class="site-logo">
                     <img src="/img/logo.png" alt="">
                 </a>
@@ -38,7 +37,7 @@
                             <a asp-controller="Home" asp-action="Index">Home</a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                    <a asp-controller="Home" asp-action="Privacy">About us</a>
                                 </li>
                             </ul>
                         </li>
@@ -67,7 +66,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a asp-controller="Reviews" asp-action="All">Account</a>
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a>
                             <ul class="sub-menu">
                                 <li><partial name="_LoginPartial" /></li>
                             </ul>

@@ -22,7 +22,7 @@
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
                 <div class="gs-meta">Game: <a asp-controller="Games" asp-action="Details" asp-route-gameId="@Model.GameId">@Model.Game</a></div>
                 <h2 class="gs-title">@Model.Name</h2>
-                <h4>Category: @Model.Class</h4>
+                <h4>Class: @Model.Class</h4>
                 <p>@Model.Description</p>
                 <a asp-controller="Characters" asp-action="Edit" asp-route-characterId="@Model.Id" class="btn btn-outline-success">Edit</a>
                 <a asp-controller="Characters" asp-action="Delete" asp-route-characterId="@Model.Id" class="btn btn-outline-danger">Delete</a>

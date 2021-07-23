@@ -24,11 +24,19 @@
                 <h2 class="gs-title">@Model.Name.ToUpper()</h2>
                 <h4>Category: @Model.Genre</h4>
                 <p>@Model.Description</p>
-                <a href="/Games/Edit?gameId=@Model.Id" class="btn btn-outline-success">Edit</a>
-                <a href="/Games/Delete?gameId=@Model.Id" class="btn btn-outline-danger">Delete</a>
-                <a href="/Reviews/Create?gameId=@Model.Id" class="btn btn-outline-info">Add review</a>
+                <a asp-controller="Games" asp-action="Edit" asp-route-gameId="@Model.Id" class="btn btn-outline-success">Edit</a>
+                <a asp-controller="Games" asp-action="Delete" asp-route-gameId="@Model.Id" class="btn btn-outline-danger">Delete</a>
+                <a asp-controller="Reviews" asp-action="Create" asp-route-gameId="@Model.Id" class="btn btn-outline-info">Add review</a>
                 <br /> 
                 <br /> 
+                <h4>Characters: </h4>
+                <ul class="blog-filter">
+                    @foreach (var character in Model.Characters)
+                    {
+                        <li><a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id">@character.Name</a></li>
+                    }
+                </ul>
+                <br />
                 <section class="intro-video-section set-bg d-flex align-items-end " data-setbg="@Model.PictureUrl">
                     <a href="@Model.TrailerUrl" class="video-play-btn video-popup"><img src="/img/icons/solid-right-arrow.png" alt="#"></a>
                     <div class="container">

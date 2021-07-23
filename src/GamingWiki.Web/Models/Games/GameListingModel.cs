@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GamingWiki.Web.Models.Areas;
+using GamingWiki.Web.Models.Characters;
 
 namespace GamingWiki.Web.Models.Games
 {
@@ -26,5 +27,7 @@ namespace GamingWiki.Web.Models.Games
         public IDictionary<string, double> Ratings { get; set; }
 
         public IEnumerable<AreaViewModel> Areas { get; set; }
+
+        public IEnumerable<CharacterGameModel> Characters { get; set; }
     }
 }

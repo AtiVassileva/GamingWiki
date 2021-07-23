@@ -6,6 +6,7 @@ using GamingWiki.Models;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models.Areas;
+using GamingWiki.Web.Models.Characters;
 using GamingWiki.Web.Models.Games;
 using GamingWiki.Web.Models.Genres;
 using Microsoft.AspNetCore.Mvc;
@@ -98,8 +99,9 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect($"/Games/Details?gameId={game.Id}");
         }
 
-        public IActionResult Details(int gameId) 
-            => this.View(this.dbContext.Games
+        public IActionResult Details(int gameId)
+        {
+            var gameModel = this.dbContext.Games
                 .Where(g => g.Id == gameId)
                 .Select(g => new GameListingModel
                 {
@@ -112,8 +114,20 @@ namespace GamingWiki.Web.Controllers
                     Genre = g.Genre.Name,
                     Ratings = this.helper.GetRatings(g.Id),
                     Rating = this.helper.GetRatings(g.Id).Values.Average(),
-                    Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList()
-                }).FirstOrDefault());
+                    Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList(),
+                    Characters = this.dbContext.Characters
+                        .Where(c => c.GameId == gameId)
+                        .Select(c => new CharacterGameModel
+                        {
+                            Id = c.Id,
+                            Name = c.Name
+                        })
+                        .OrderBy(c => c.Name)
+                        .ToList()
+                }).FirstOrDefault();
+
+            return this.View(gameModel);
+        }
 
         public IActionResult Edit(int gameId)
         {
@@ -229,5 +243,16 @@ namespace GamingWiki.Web.Controllers
                     Id = a.Id,
                     Name = a.Name
                 }).ToList();
+
+        private IEnumerable<CharacterGameModel> GetCharacters(int gameId)
+            => this.dbContext.Characters
+                .Where(c => c.GameId == gameId)
+                .Select(c => new CharacterGameModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .OrderBy(c => c.Name)
+                .ToList();
     }
 }
