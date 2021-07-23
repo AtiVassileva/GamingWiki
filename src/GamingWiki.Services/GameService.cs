@@ -7,11 +7,11 @@ using GamingWiki.Services.Contracts;
 
 namespace GamingWiki.Services
 {
-    public class GameHelper : IGameHelper
+    public class GameService : IGameService
     {
         private readonly ApplicationDbContext dbContext;
 
-        public GameHelper(ApplicationDbContext dbContext)
+        public GameService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -61,5 +61,23 @@ namespace GamingWiki.Services
 
             return ratings;
         }
+
+        public bool AreaExists(int areaId)
+            => this.dbContext.Areas.Any(a => a.Id == areaId);
+
+        public bool GenreExists(int genreId)
+            => this.dbContext.Genres.Any(g => g.Id == genreId);
+
+
+        //public IEnumerable<CharacterGameModel> GetCharacters(int gameId)
+        //    => this.dbContext.Characters
+        //        .Where(c => c.GameId == gameId)
+        //        .Select(c => new CharacterGameModel
+        //        {
+        //            Id = c.Id,
+        //            Name = c.Name
+        //        })
+        //        .OrderBy(c => c.Name)
+        //        .ToList();
     }
 }

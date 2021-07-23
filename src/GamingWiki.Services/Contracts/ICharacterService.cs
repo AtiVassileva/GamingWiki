@@ -2,8 +2,12 @@
 
 namespace GamingWiki.Services.Contracts
 {
-    public interface ICharacterHelper
+    public interface ICharacterService
     {
         Game ParseGame(string gameName);
+
+        bool GameExists(int gameId);
+
+        bool ClassExists(int classId);
     }
 }

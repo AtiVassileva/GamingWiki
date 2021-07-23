@@ -22,8 +22,8 @@ namespace GamingWiki.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IGameHelper, GameHelper>();
-            services.AddTransient<ICharacterHelper, CharacterHelper>();
+            services.AddTransient<IGameService, GameService>();
+            services.AddTransient<ICharacterService, CharacterService>();
 
             services.AddAutoMapper(Assembly.GetEntryAssembly());
 

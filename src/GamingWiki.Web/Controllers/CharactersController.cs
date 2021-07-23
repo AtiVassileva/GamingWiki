@@ -17,11 +17,13 @@ namespace GamingWiki.Web.Controllers
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly ICharacterService helper;
 
-        public CharactersController(ApplicationDbContext dbContext, IMapper mapper)
+        public CharactersController(ApplicationDbContext dbContext, IMapper mapper, ICharacterService helper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.helper = new CharacterService(this.dbContext);
         }
 
         public IActionResult All()
@@ -54,12 +56,12 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Create(CharacterFormModel model)
         {
-            if (!this.dbContext.Games.Any(g => g.Id == model.GameId))
+            if (!this.helper.GameExists(model.GameId))
             {
                 this.ModelState.AddModelError(nameof(model.GameId), "Game does not exist.");
             }
 
-            if (!this.dbContext.Classes.Any(c => c.Id == model.ClassId))
+            if (!this.helper.ClassExists(model.ClassId))
             {
                 this.ModelState.AddModelError(nameof(model.ClassId), "Class does not exist.");
             }
@@ -127,7 +129,7 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Edit(CharacterEditModel model, int characterId)
         {
-            if (!this.dbContext.Classes.Any(c => c.Id == model.ClassId))
+            if (!this.helper.ClassExists(model.ClassId))
             {
                 this.ModelState.AddModelError(nameof(model.ClassId), "Class does not exist.");
             }

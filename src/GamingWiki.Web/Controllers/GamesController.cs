@@ -9,6 +9,7 @@ using GamingWiki.Web.Models.Areas;
 using GamingWiki.Web.Models.Characters;
 using GamingWiki.Web.Models.Games;
 using GamingWiki.Web.Models.Genres;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -16,7 +17,7 @@ namespace GamingWiki.Web.Controllers
     public class GamesController : Controller
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IGameHelper helper;
+        private readonly IGameService helper;
         private readonly IMapper mapper;
 
         public GamesController
@@ -24,9 +25,10 @@ namespace GamingWiki.Web.Controllers
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            this.helper = new GameHelper(dbContext);
+            this.helper = new GameService(dbContext);
         }
 
+        [Authorize]
         public IActionResult All()
         {
             var gamesModels = this.dbContext.Games
@@ -35,8 +37,7 @@ namespace GamingWiki.Web.Controllers
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
-                })
-                .OrderBy(g => g.Name)
+                }).OrderBy(g => g.Name)
                 .ToList();
 
             return this.View(new GameFullModel
@@ -46,6 +47,7 @@ namespace GamingWiki.Web.Controllers
             });
         }
 
+        [Authorize]
         public IActionResult Create() 
             => this.View(new GameFormModel
             {
@@ -53,16 +55,16 @@ namespace GamingWiki.Web.Controllers
                 Genres = this.GetGenres(),
             });
 
-        
+        [Authorize]
         [HttpPost]
         public IActionResult Create(GameFormModel model)
         {
-            if (!this.dbContext.Areas.Any(a => a.Id == model.AreaId))
+            if (!this.helper.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
             }
 
-            if (!this.dbContext.Genres.Any(g => g.Id == model.GenreId))
+            if (!this.helper.GenreExists(model.GenreId))
             {
                 this.ModelState.AddModelError(nameof(model.GenreId), "Genre does not exist.");
             }
@@ -141,7 +143,7 @@ namespace GamingWiki.Web.Controllers
                 PictureUrl = entity.PictureUrl,
                 TrailerUrl = entity.TrailerUrl,
                 Description = entity.Description,
-                Areas = this.GetAreas(),
+                Areas = this.GetAreas()
             };
 
             return this.View(viewModel);
@@ -150,7 +152,7 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Edit(GameEditModel model, int gameId)
         {
-            if (!this.dbContext.Areas.Any(a => a.Id == model.AreaId))
+            if (!this.helper.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
             }
@@ -244,15 +246,6 @@ namespace GamingWiki.Web.Controllers
                     Name = a.Name
                 }).ToList();
 
-        private IEnumerable<CharacterGameModel> GetCharacters(int gameId)
-            => this.dbContext.Characters
-                .Where(c => c.GameId == gameId)
-                .Select(c => new CharacterGameModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .OrderBy(c => c.Name)
-                .ToList();
+        
     }
 }

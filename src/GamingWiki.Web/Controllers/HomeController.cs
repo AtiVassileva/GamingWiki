@@ -14,12 +14,12 @@ namespace GamingWiki.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IGameHelper gameHelper;
+        private readonly IGameService gameHelper;
 
-        public HomeController(ApplicationDbContext dbContext, IGameHelper gameHelper)
+        public HomeController(ApplicationDbContext dbContext, IGameService gameHelper)
         {
             this.dbContext = dbContext;
-            this.gameHelper = new GameHelper(this.dbContext);
+            this.gameHelper = new GameService(this.dbContext);
         }
 
         public IActionResult Index()
