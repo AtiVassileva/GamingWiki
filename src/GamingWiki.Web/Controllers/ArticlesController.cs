@@ -34,11 +34,14 @@ namespace GamingWiki.Web.Controllers
                     Heading = a.Heading,
                     PictureUrl = a.PictureUrl,
                     PublishedOn = a.PublishedOn.ToString("D")
-                })
-                .OrderByDescending(c => c.Id)
+                }).OrderByDescending(c => c.Id)
                 .ToList();
 
-            return this.View(articleModels);
+            return this.View(new ArticleFullModel
+            {
+                Articles = articleModels,
+                Categories = this.GetCategories()
+            });
         }
 
         public IActionResult Create() 
@@ -174,15 +177,40 @@ namespace GamingWiki.Web.Controllers
                     PublishedOn = a.PublishedOn.ToString("D")
                 }).ToList();
 
-            return View("All", articleModels);
+            return View("All", new ArticleFullModel
+            {
+                Articles = articleModels,
+                Categories = this.GetCategories()
+            });
         }
 
+        public IActionResult Filter(int categoryId)
+        {
+            var matchingArticles = this.dbContext
+                .Articles.Where(a => a.CategoryId == categoryId)
+                .Select(a => new ArticleSimpleModel
+                {
+                    Id = a.Id,
+                    Heading = a.Heading,
+                    PictureUrl = a.PictureUrl,
+                    PublishedOn = a.PublishedOn.ToString("D")
+                }).OrderByDescending(c => c.Id)
+                .ToList();
+
+            return this.View("All", new ArticleFullModel
+            {
+                Articles = matchingArticles,
+                Categories = this.GetCategories()
+            });
+        }
         private IEnumerable<CategoryViewModel> GetCategories()
             => this.dbContext.Categories
                 .Select(c => new CategoryViewModel
                 {
                     Id = c.Id,
                     Name = c.Name
-                }).ToList();
+                })
+                .OrderByDescending(c => c.Id)
+                .ToList();
     }
 }

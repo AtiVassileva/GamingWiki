@@ -26,8 +26,9 @@ namespace GamingWiki.Web.Controllers
             this.helper = new GameHelper(dbContext);
         }
 
-        public IActionResult All() 
-            => this.View(this.dbContext.Games
+        public IActionResult All()
+        {
+            var gamesModels = this.dbContext.Games
                 .Select(g => new GameViewModel
                 {
                     Id = g.Id,
@@ -35,7 +36,14 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = g.PictureUrl,
                 })
                 .OrderBy(g => g.Name)
-                .ToList());
+                .ToList();
+
+            return this.View(new GameFullModel
+            {
+                Games = gamesModels,
+                Genres = this.GetGenres()
+            });
+        }
 
         public IActionResult Create() 
             => this.View(new GameFormModel
@@ -163,18 +171,43 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect("/Games/All");
         }
 
-        public IActionResult Search(string letter) 
-            => this.View("All", this.dbContext
-                    .Games
-                    .Where(g => g.Name.ToUpper()
+        public IActionResult Search(string letter)
+        {
+            var gamesModels =  this.dbContext
+                .Games
+                .Where(g => g.Name.ToUpper()
                     .StartsWith(letter))
-                    .Select(g => new GameViewModel
-                    {
+                .Select(g => new GameViewModel
+                {
                     Id = g.Id,
                     Name = g.Name,
                     PictureUrl = g.PictureUrl,
-                    }).ToList());
+                }).ToList();
 
+            return this.View("All", new GameFullModel
+            {
+                Games = gamesModels,
+                Genres = this.GetGenres()
+            });
+        }
+
+        public IActionResult Filter(int genreId)
+        {
+            var matchingGames = this.dbContext
+                .Games.Where(g => g.GenreId == genreId)
+                .Select(g => new GameViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    PictureUrl = g.PictureUrl
+                }).ToList();
+
+            return this.View("All", new GameFullModel
+            {
+                Games = matchingGames,
+                Genres = this.GetGenres()
+            });
+        }
         private IEnumerable<GenreViewModel> GetGenres()
             => this.dbContext
                 .Genres
@@ -183,7 +216,9 @@ namespace GamingWiki.Web.Controllers
                 {
                 Id = g.Id,
                 Name = g.Name
-                }).ToList();
+                })
+                .OrderBy(g => g.Name)
+                .ToList();
 
         private IEnumerable<AreaViewModel> GetAreas()
             => this.dbContext

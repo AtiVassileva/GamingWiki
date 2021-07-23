@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ArticleSimpleModel>
+﻿@using GamingWiki.Models
+@model ArticleFullModel
 
 <div id="preloder">
     <div class="loader"></div>
@@ -18,12 +19,12 @@
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7">
                 <ul class="blog-filter">
-                    <li><a href="#">Racing</a></li>
-                    <li><a href="#">Shooters</a></li>
-                    <li><a href="#">Strategy</a></li>
-                    <li><a href="#">Online</a></li>
+                    @foreach (var category in Model.Categories)
+                    {
+                    <li><a asp-controller="Articles" asp-action="Filter" asp-route-categoryId="@category.Id">@category.Name</a></li>
+                    }
                 </ul>
-                @foreach (var article in Model)
+                @foreach (var article in Model.Articles)
                 {
                     <div class="big-blog-item">
                         <img src="@article.PictureUrl" alt="#" class="blog-thumbnail" style="width: 700px; height: 350px; object-fit: cover">

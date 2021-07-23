@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GameViewModel>
+﻿@model GameFullModel
 
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
     <div class="page-info">
@@ -14,24 +14,31 @@
 }
 <section class="games-section">
     <div class="container">
+        <ul class="blog-filter">
+            @foreach (var genre in Model.Genres)
+            {
+                <li><a asp-controller="Games" asp-action="Filter" asp-route-genreId="@genre.Id">@genre.Name</a></li>
+            }
+        </ul>
+        <br />
         <ul class="game-filter">
             @foreach (var letter in letters)
             {
-                <li><a asp-controller="Games" asp-action="Search" asp-route-letter="@((char)letter)">@((char)letter)</a></li>
+                <li><a asp-controller="Games" asp-action="Search" asp-route-letter="@((char) letter)">@((char) letter)</a></li>
             }
         </ul>
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    @foreach (var game in Model)
+                    @foreach (var game in Model.Games)
                     {
                         <div class="col-lg-4 col-md-6">
                             <div class="game-item">
                                 <img src="@game.PictureUrl" alt="#">
                                 <h5>@game.Name</h5>
-                                <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id" class="read-more">Read More <img src="/img/icons/double-arrow.png" alt="#"/></a>
+                                <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id" class="read-more">Read More <img src="/img/icons/double-arrow.png" alt="#" /></a>
                             </div>
-                        </div>   
+                        </div>
                     }
                 </div>
                 <div class="site-pagination">

@@ -24,8 +24,9 @@ namespace GamingWiki.Web.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult All() =>
-            this.View(this.dbContext
+        public IActionResult All()
+        {
+            var charactersModels = this.dbContext
                 .Characters
                 .Select(c => new CharacterSimpleModel
                 {
@@ -34,7 +35,14 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = c.PictureUrl,
                 })
                 .OrderBy(c => c.Name)
-                .ToList());
+                .ToList();
+
+            return this.View(new CharacterFullModel
+            {
+                Characters = charactersModels,
+                Classes = this.GetClasses()
+            });
+        }
 
         public IActionResult Create() =>
             this.View(new CharacterFormModel
@@ -165,9 +173,30 @@ namespace GamingWiki.Web.Controllers
                     PictureUrl = c.PictureUrl,
                 }).ToList();
 
-            return this.View("All", characterModels);
+            return this.View("All", new CharacterFullModel
+            {
+                Characters = characterModels,
+                Classes = this.GetClasses()
+            });
         }
 
+        public IActionResult Filter(int classId)
+        {
+            var matchingCharacters = this.dbContext
+                .Characters.Where(c => c.ClassId == classId)
+                .Select(c => new CharacterSimpleModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    PictureUrl = c.PictureUrl
+                }).ToList();
+
+            return this.View("All", new CharacterFullModel
+            {
+                Characters = matchingCharacters,
+                Classes = this.GetClasses()
+            });
+        }
         private IEnumerable<ClassViewModel> GetClasses() =>
             this.dbContext.Classes
                 .Select(c => new ClassViewModel
