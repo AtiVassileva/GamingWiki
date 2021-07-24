@@ -10,6 +10,7 @@ using GamingWiki.Data;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web
 {
@@ -22,11 +23,6 @@ namespace GamingWiki.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IGameService, GameService>();
-            services.AddTransient<ICharacterService, CharacterService>();
-
-            services.AddAutoMapper(Assembly.GetEntryAssembly());
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -36,7 +32,13 @@ namespace GamingWiki.Web
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options => options.Filters
+                .Add<AutoValidateAntiforgeryTokenAttribute>());
+
+            services.AddTransient<IGameService, GameService>();
+            services.AddTransient<ICharacterService, CharacterService>();
+
+            services.AddAutoMapper(Assembly.GetEntryAssembly());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

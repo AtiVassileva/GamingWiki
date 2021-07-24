@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
 using GamingWiki.Web.Models.Reviews;
@@ -73,7 +73,7 @@ namespace GamingWiki.Web.Controllers
             var reviewDto = new ReviewDtoModel
             {
                 GameId = gameId,
-                AuthorId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                AuthorId = this.User.GetId(),
                 PriceRate = model.PriceRate,
                 LevelsRate = model.LevelsRate,
                 GraphicsRate = model.GraphicsRate,

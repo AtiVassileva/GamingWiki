@@ -13,7 +13,8 @@ namespace GamingWiki.Web.Infrastructure
         {
             using var scopedServices = app.ApplicationServices.CreateScope();
 
-            var dbContext = scopedServices.ServiceProvider.GetService<ApplicationDbContext>();
+            var dbContext = scopedServices.ServiceProvider
+                .GetService<ApplicationDbContext>();
 
             dbContext.Database.Migrate();
 

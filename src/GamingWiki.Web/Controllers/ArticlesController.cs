@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using GamingWiki.Web.Models.Categories;
@@ -70,7 +70,7 @@ namespace GamingWiki.Web.Controllers
                 Heading = model.Heading,
                 Content = model.Content,
                 CategoryId = model.CategoryId,
-                AuthorId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                AuthorId = this.User.GetId(),
                 PictureUrl = model.PictureUrl,
                 PublishedOn = DateTime.UtcNow
             };

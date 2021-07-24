@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Comments;
 using Microsoft.AspNetCore.Mvc;
+using static GamingWiki.Web.Infrastructure.ClaimsPrincipalExtensions;
 
 namespace GamingWiki.Web.Controllers
 {
@@ -36,7 +36,7 @@ namespace GamingWiki.Web.Controllers
             {
                 Content = model.Content,
                 ArticleId = articleId,
-                CommenterId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                CommenterId = this.User.GetId(),
                 AddedOn = DateTime.UtcNow
             };
 

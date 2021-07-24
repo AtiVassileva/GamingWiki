@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Replies;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +36,7 @@ namespace GamingWiki.Web.Controllers
             {
                 Content = model.ReplyContent,
                 CommentId = commentId,
-                ReplierId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                ReplierId = this.User.GetId(),
                 AddedOn = DateTime.UtcNow
             };
 
