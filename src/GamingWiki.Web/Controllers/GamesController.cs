@@ -4,6 +4,7 @@ using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Areas;
 using GamingWiki.Web.Models.Characters;
 using GamingWiki.Web.Models.Games;
@@ -54,8 +55,8 @@ namespace GamingWiki.Web.Controllers
                 Genres = this.GetGenres(),
             });
 
-        [Authorize]
         [HttpPost]
+        [Authorize]
         public IActionResult Create(GameFormModel model)
         {
             if (!this.helper.AreaExists(model.AreaId))
@@ -82,6 +83,7 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect($"/Games/Details?gameId={id}");
         }
 
+        [Authorize]
         public IActionResult Details(int gameId)
         {
             var gameModel = this.dbContext.Games
@@ -112,8 +114,14 @@ namespace GamingWiki.Web.Controllers
             return this.View(gameModel);
         }
 
+        [Authorize]
         public IActionResult Edit(int gameId)
         {
+            if (!this.User.IsAdmin())
+            {
+                return this.Unauthorized();
+            }
+
             var entity = this.dbContext.Games
                 .First(g => g.Id == gameId);
 
@@ -131,8 +139,14 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(GameEditModel model, int gameId)
         {
+            if (!this.User.IsAdmin())
+            {
+                return this.Unauthorized();
+            }
+
             if (!this.helper.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
@@ -157,8 +171,14 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect($"/Games/Details?gameId={game.Id}");
         }
 
+        [Authorize]
         public IActionResult Delete(int gameId)
         {
+            if (!this.User.IsAdmin())
+            {
+                return this.Unauthorized();
+            }
+
             var game = this.dbContext.Games
                 .First(g => g.Id == gameId);
 
@@ -168,6 +188,7 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect("/Games/All");
         }
 
+        [Authorize]
         public IActionResult Search(string letter)
         {
             var gamesModels =  this.dbContext
@@ -188,6 +209,7 @@ namespace GamingWiki.Web.Controllers
             });
         }
 
+        [Authorize]
         public IActionResult Filter(int genreId)
         {
             var matchingGames = this.dbContext
@@ -227,6 +249,5 @@ namespace GamingWiki.Web.Controllers
                     Name = a.Name
                 }).ToList();
 
-        
     }
 }

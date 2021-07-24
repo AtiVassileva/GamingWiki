@@ -1,4 +1,5 @@
-﻿@model GameListingModel
+﻿@using GamingWiki.Web.Infrastructure
+@model GameListingModel
 
 <div id="preloder">
     <div class="loader"></div>
@@ -24,8 +25,13 @@
                 <h2 class="gs-title">@Model.Name.ToUpper()</h2>
                 <h4>Genre: @Model.Genre</h4>
                 <p>@Model.Description</p>
-                <a asp-controller="Games" asp-action="Edit" asp-route-gameId="@Model.Id" class="btn btn-outline-success">Edit</a>
-                <a asp-controller="Games" asp-action="Delete" asp-route-gameId="@Model.Id" class="btn btn-outline-danger">Delete</a>
+
+                @if (this.User.IsAdmin())
+                {
+                    <a asp-controller="Games" asp-action="Edit" asp-route-gameId="@Model.Id" class="btn btn-outline-success">Edit</a>
+                    <a asp-controller="Games" asp-action="Delete" asp-route-gameId="@Model.Id" class="btn btn-outline-danger">Delete</a>
+                }
+                
                 <a asp-controller="Reviews" asp-action="Create" asp-route-gameId="@Model.Id" class="btn btn-outline-info">Add review</a>
                 <br /> 
                 <br /> 
