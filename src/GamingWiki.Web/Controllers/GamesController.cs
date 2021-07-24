@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
-using GamingWiki.Models;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models.Areas;
@@ -77,28 +76,10 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            var game = mapper.Map<Game>(model);
+            var id = this.helper.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
+                model.GenreId, model.CreatorsNames);
 
-            this.dbContext.Games.Add(game);
-            this.dbContext.SaveChanges();
-
-            var creators = this.helper.ParseCreators(model.CreatorsNames);
-
-            foreach (var creator in creators)
-            {
-                var gameCreatorDto = new GameCreatorDto
-                {
-                    GameId = game.Id,
-                    CreatorId = creator.Id
-                };
-
-                var gameCreator = this.mapper.Map<GameCreator>(gameCreatorDto);
-
-                this.dbContext.GamesCreators.Add(gameCreator);
-                this.dbContext.SaveChanges();
-            }
-
-            return this.Redirect($"/Games/Details?gameId={game.Id}");
+            return this.Redirect($"/Games/Details?gameId={id}");
         }
 
         public IActionResult Details(int gameId)

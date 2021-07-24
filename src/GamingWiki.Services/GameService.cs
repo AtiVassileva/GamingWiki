@@ -68,6 +68,36 @@ namespace GamingWiki.Services
         public bool GenreExists(int genreId)
             => this.dbContext.Genres.Any(g => g.Id == genreId);
 
+        
+        public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames)
+        {
+            var game = new Game
+            {
+                Name = name,
+                PictureUrl = pictureUrl,
+                TrailerUrl = trailerUrl,
+                Description = description,
+                AreaId = areaId,
+                GenreId = genreId
+            };
+
+            this.dbContext.Games.Add(game);
+            this.dbContext.SaveChanges();
+
+            var creators = this.ParseCreators(creatorsNames);
+
+            this.dbContext.GamesCreators.AddRange(this.ParseGamesCreators(creators, game.Id));
+            this.dbContext.SaveChanges();
+
+            return game.Id;
+        }
+
+        private IEnumerable<GameCreator> ParseGamesCreators(IEnumerable<Creator> creators, int gameId) 
+            => creators.Select(c => new GameCreator
+            {
+                GameId = gameId,
+                CreatorId = c.Id
+            });
 
         //public IEnumerable<CharacterGameModel> GetCharacters(int gameId)
         //    => this.dbContext.Characters

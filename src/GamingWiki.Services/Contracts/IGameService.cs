@@ -12,5 +12,8 @@ namespace GamingWiki.Services.Contracts
         bool AreaExists(int areaId);
 
         bool GenreExists(int genreId);
+
+        int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames);
+
     }
 }
