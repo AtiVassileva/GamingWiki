@@ -54,10 +54,11 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            var id = this.helper.Create(model.Name, model.PictureUrl,
+            var characterId = this.helper.Create(model.Name, model.PictureUrl,
                 model.Description, model.ClassId, model.GameId);
 
-            return this.Redirect($"/Characters/Details?characterId={id}");
+            return this.RedirectToAction(nameof(this.Details),
+                new { characterId = $"{characterId}" });
         }
 
         [Authorize]
@@ -98,7 +99,8 @@ namespace GamingWiki.Web.Controllers
 
             this.helper.Edit(characterId, model);
 
-            return this.Redirect($"/Characters/Details?characterId={characterId}");
+            return this.RedirectToAction(nameof(this.Details), 
+                new {characterId = $"{characterId}"});
         }
 
 
