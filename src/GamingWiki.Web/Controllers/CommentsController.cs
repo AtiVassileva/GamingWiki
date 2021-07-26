@@ -19,7 +19,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest();
+                return this.View("Error");
             }
 
             var commenterId = this.User.GetId();

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GamingWiki.Data;
+using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Replies;
 
@@ -25,5 +27,47 @@ namespace GamingWiki.Services
                         Content = r.Content,
                         Replier = r.Replier.UserName
                     }).ToList();
+
+        public int Add(string content, int commentId, string replierId)
+        {
+            var reply = new Reply
+            {
+                Content = content,
+                CommentId = commentId,
+                ReplierId = replierId,
+                AddedOn = DateTime.UtcNow
+            };
+
+            this.dbContext.Replies.Add(reply);
+            this.dbContext.SaveChanges();
+
+            var articleId = this.dbContext.Comments
+                .Where(c => c.Id == commentId)
+                .Select(c => c.ArticleId)
+                .FirstOrDefault();
+
+            return articleId;
+        }
+
+        public int Delete(int replyId)
+        {
+            var reply = this.dbContext.Replies
+                .FirstOrDefault(r => r.Id == replyId);
+
+            if (reply == null)
+            {
+                return 0;
+            }
+
+            var articleId = this.dbContext.Replies
+                .Where(r => r.Id == replyId)
+                .Select(r => r.Comment.ArticleId)
+                .FirstOrDefault();
+
+            this.dbContext.Replies.Remove(reply);
+            this.dbContext.SaveChanges();
+
+            return articleId;
+        }
     }
 }

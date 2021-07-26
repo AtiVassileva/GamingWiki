@@ -1,10 +1,5 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
-using GamingWiki.Data;
-using GamingWiki.Models;
+﻿using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Infrastructure;
-using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Replies;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,60 +7,28 @@ namespace GamingWiki.Web.Controllers
 {
     public class RepliesController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly IMapper mapper;
+        private readonly IReplyService helper;
 
-        public RepliesController(ApplicationDbContext dbContext, IMapper mapper)
-        {
-            this.dbContext = dbContext;
-            this.mapper = mapper;
-        }
+        public RepliesController(IReplyService helper)
+        => this.helper = helper;
 
         [HttpPost]
         public IActionResult Add(ReplyFormModel model, int commentId)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error", new ErrorViewModel
-                {
-                    RequestId = Guid.NewGuid().ToString()
-                });
+                return this.View("Error");
             }
 
-            var replyDto = new ReplyDtoModel
-            {
-                Content = model.ReplyContent,
-                CommentId = commentId,
-                ReplierId = this.User.GetId(),
-                AddedOn = DateTime.UtcNow
-            };
-
-            var reply = this.mapper.Map<Reply>(replyDto);
-
-            this.dbContext.Replies.Add(reply);
-            this.dbContext.SaveChanges();
-
-            var articleId = this.dbContext.Comments
-                .Where(c => c.Id == commentId)
-                .Select(c => c.ArticleId)
-                .FirstOrDefault();
+            var replierId = this.User.GetId();
+            var articleId = this.helper.Add(model.ReplyContent, commentId, replierId);
 
            return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
 
         public IActionResult Delete(int replyId)
         {
-            var reply = this.dbContext.Replies
-                .First(r => r.Id == replyId);
-
-            var articleId = this.dbContext.Replies
-                .Where(r => r.Id == replyId)
-                .Select(r => r.Comment.ArticleId)
-                .FirstOrDefault();
-
-            this.dbContext.Replies.Remove(reply);
-            this.dbContext.SaveChanges();
-
+            var articleId = this.helper.Delete(replyId);
             return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
     }
