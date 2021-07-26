@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Web.Models.Classes;
+using GamingWiki.Services.Models.Characters;
+using GamingWiki.Services.Models.Classes;
 
 namespace GamingWiki.Web.Models.Characters
 {
     public class CharacterFullModel
     {
-        public IEnumerable<CharacterSimpleModel> Characters { get; set; }
+        public IEnumerable<CharacterAllServiceModel> Characters { get; set; }
 
-        public IEnumerable<ClassViewModel> Classes { get; set; }
+        public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }
 }

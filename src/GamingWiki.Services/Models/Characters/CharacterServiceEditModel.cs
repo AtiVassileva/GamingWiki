@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GamingWiki.Web.Models.Classes;
+using GamingWiki.Services.Models.Classes;
 using static GamingWiki.Models.Common.DataConstants;
 
-namespace GamingWiki.Web.Models.Characters
+namespace GamingWiki.Services.Models.Characters
 {
-    public class CharacterEditModel
+    public class CharacterServiceEditModel
     {
         public int Id { get; set; }
 
@@ -23,6 +23,6 @@ namespace GamingWiki.Web.Models.Characters
         [Display(Name = "Class")]
         public int ClassId { get; set; }
 
-        public IEnumerable<ClassViewModel> Classes { get; set; }
+        public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }
 }

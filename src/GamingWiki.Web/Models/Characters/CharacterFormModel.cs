@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GamingWiki.Web.Models.Classes;
-using GamingWiki.Web.Models.Games;
+using GamingWiki.Services.Models.Classes;
+using GamingWiki.Services.Models.Games;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Characters
@@ -27,8 +27,8 @@ namespace GamingWiki.Web.Models.Characters
         [MinLength(DescriptionMinLength)]
         public string Description { get; set; }
 
-        public IEnumerable<GameSimpleModel> Games { get; set; }
+        public IEnumerable<GameSimpleServiceModel> Games { get; set; }
 
-        public IEnumerable<ClassViewModel> Classes { get; set; }
+        public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }
 }

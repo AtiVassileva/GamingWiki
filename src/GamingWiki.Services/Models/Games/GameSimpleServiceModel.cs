@@ -1,6 +1,6 @@
-﻿namespace GamingWiki.Web.Models.Games
+﻿namespace GamingWiki.Services.Models.Games
 {
-    public class GameSimpleModel
+    public class GameSimpleServiceModel
     {
         public int Id { get; set; }
 

@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using static GamingWiki.Web.Common.WebConstants;
 
 namespace GamingWiki.Web.Infrastructure
 {
@@ -13,21 +17,28 @@ namespace GamingWiki.Web.Infrastructure
         {
             using var scopedServices = app.ApplicationServices.CreateScope();
 
-            var dbContext = scopedServices.ServiceProvider
-                .GetService<ApplicationDbContext>();
+            var serviceProvider = scopedServices.ServiceProvider;
 
-            dbContext.Database.Migrate();
+            MigrateDatabase(serviceProvider);
 
-            SeedAreas(dbContext);
-            SeedClasses(dbContext);
-            SeedGenres(dbContext);
-            SeedCategories(dbContext);
+            SeedAreas(serviceProvider);
+            SeedClasses(serviceProvider);
+            SeedGenres(serviceProvider);
+            SeedCategories(serviceProvider);
+            SeedAdministrator(serviceProvider);
 
             return app;
         }
 
-        private static void SeedAreas(ApplicationDbContext dbContext)
+        private static void MigrateDatabase(IServiceProvider serviceProvider)
         {
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.Migrate();
+        }
+        private static void SeedAreas(IServiceProvider serviceProvider)
+        {
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
             if (dbContext.Areas.Any())
             {
                 return;
@@ -49,8 +60,10 @@ namespace GamingWiki.Web.Infrastructure
             dbContext.SaveChanges();
         }
         
-        private static void SeedClasses(ApplicationDbContext dbContext)
+        private static void SeedClasses(IServiceProvider serviceProvider)
         {
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
             if (dbContext.Classes.Any())
             {
                 return;
@@ -75,8 +88,10 @@ namespace GamingWiki.Web.Infrastructure
             dbContext.SaveChanges();
         }
 
-        private static void SeedGenres(ApplicationDbContext dbContext)
+        private static void SeedGenres(IServiceProvider serviceProvider)
         {
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
             if (dbContext.Genres.Any())
             {
                 return;
@@ -98,8 +113,10 @@ namespace GamingWiki.Web.Infrastructure
             dbContext.SaveChanges();
         }
         
-        private static void SeedCategories(ApplicationDbContext dbContext)
+        private static void SeedCategories(IServiceProvider serviceProvider)
         {
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
             if (dbContext.Categories.Any())
             {
                 return;
@@ -116,6 +133,39 @@ namespace GamingWiki.Web.Infrastructure
             });
 
             dbContext.SaveChanges();
+        }
+
+        private static void SeedAdministrator(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task.Run(async () =>
+                {
+                    if (await roleManager.RoleExistsAsync(AdministratorRoleName))
+                    {
+                        return;
+                    }
+
+                    var role = new IdentityRole { Name = AdministratorRoleName };
+
+                    await roleManager.CreateAsync(role);
+
+                    const string adminEmail = "admin@gwk.com";
+                    const string adminPassword = "admin123";
+
+                    var user = new IdentityUser
+                    {
+                        Email = adminEmail,
+                        UserName = adminEmail,
+                    };
+
+                    await userManager.CreateAsync(user, adminPassword);
+                    await userManager.AddToRoleAsync(user, role.Name);
+
+                })
+                .GetAwaiter()
+                .GetResult();
         }
     }
 }
