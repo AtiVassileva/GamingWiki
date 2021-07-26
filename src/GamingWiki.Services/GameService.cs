@@ -12,6 +12,8 @@ namespace GamingWiki.Services
 {
     public class GameService : IGameService
     {
+        private const int HomePageEntityCount = 3;
+
         private readonly ApplicationDbContext dbContext;
 
         public GameService(ApplicationDbContext dbContext)
@@ -193,6 +195,22 @@ namespace GamingWiki.Services
                     })
                 .OrderBy(g => g.Name)
                 .ToList();
+
+        public IEnumerable<GameServiceHomeModel> GetBest()
+        {
+            return this.dbContext.Games
+                .Select(g => new GameServiceHomeModel
+                {
+                    Id = g.Id,
+                    Name = g.Name.ToUpper(),
+                    PictureUrl = g.PictureUrl,
+                    Rating = this.GetRatings(g.Id).Values.Average()
+                })
+                .ToList()
+                .OrderByDescending(g => g.Rating)
+                .Take(HomePageEntityCount)
+                .ToList();
+        }
 
         public IDictionary<string, double> GetRatings(int gameId)
         {

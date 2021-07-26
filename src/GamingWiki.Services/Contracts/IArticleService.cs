@@ -24,5 +24,7 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<ArticleAllServiceModel> Filter(int categoryId);
 
         IEnumerable<CategoryServiceModel> GetCategories();
+
+        IEnumerable<ArticleServiceHomeModel> GetLatest();
     }
 }

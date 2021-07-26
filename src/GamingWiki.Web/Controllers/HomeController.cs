@@ -1,25 +1,20 @@
 ﻿using GamingWiki.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Linq;
-using GamingWiki.Data;
-using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
-using GamingWiki.Web.Models.Articles;
-using GamingWiki.Web.Models.Games;
 using GamingWiki.Web.Models.Home;
 
 namespace GamingWiki.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly IGameService gameHelper;
+        private readonly IGameService gameService;
+        private readonly IArticleService articleService;
 
-        public HomeController(ApplicationDbContext dbContext, IGameService gameHelper)
+        public HomeController(IGameService gameService, IArticleService articleService)
         {
-            this.dbContext = dbContext;
-            this.gameHelper = new GameService(this.dbContext);
+            this.articleService = articleService;
+            this.gameService = gameService;
         }
 
         public IActionResult Index()
@@ -28,38 +23,15 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.View("GuestPage");
             }
-
-            var latestArticles = this.dbContext
-                .Articles
-                .OrderByDescending(a => a.Id)
-                .Select(a => new ArticleHomeModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    PictureUrl = a.PictureUrl,
-                    ShortContent = a.Content.Substring(0, 200)
-                }).Take(3).ToList();
-
-            var bestGames = this.dbContext.Games
-                .Select(g => new GameHomeModel
-                {
-                    Id = g.Id,
-                    Name = g.Name.ToUpper(),
-                    PictureUrl = g.PictureUrl,
-                    Rating = this.gameHelper.GetRatings(g.Id).Values.Average()
-                })
-                .ToList()
-                .OrderByDescending(g => g.Rating)
-                .Take(3).ToList();
-
+            
             return this.View(new HomeViewModel
             {
-                LatestArticles = latestArticles,
-                BestGames = bestGames
+                LatestArticles = this.articleService.GetLatest(),
+                BestGames = this.gameService.GetBest()
             });
         }
 
-        public IActionResult Privacy() => this.View();
+        public IActionResult About() => this.View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -31,5 +31,7 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<AreaServiceModel> GetAreas();
 
         IEnumerable<GenreServiceModel> GetGenres();
+
+        IEnumerable<GameServiceHomeModel> GetBest();
     }
 }

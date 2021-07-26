@@ -14,6 +14,8 @@ namespace GamingWiki.Services
         private const string AllDateFormat = "D";
         private const string DetailsDateFormat = "f";
 
+        private const int HomePageEntityCount = 3;
+
         private readonly ApplicationDbContext dbContext;
         private readonly ICommentService commentService;
 
@@ -111,6 +113,19 @@ namespace GamingWiki.Services
                 Name = c.Name
             })
             .OrderByDescending(c => c.Id)
+            .ToList();
+
+        public IEnumerable<ArticleServiceHomeModel> GetLatest()
+        => this.dbContext.Articles
+            .OrderByDescending(a => a.Id)
+            .Select(a => new ArticleServiceHomeModel
+            {
+                Id = a.Id,
+                Heading = a.Heading,
+                PictureUrl = a.PictureUrl,
+                ShortContent = a.Content.Substring(0, 200)
+            })
+            .Take(HomePageEntityCount)
             .ToList();
 
 
