@@ -6,5 +6,9 @@ namespace GamingWiki.Services.Contracts
     public interface ICommentService
     {
         IEnumerable<CommentServiceModel>AllByArticle(int articleId);
+
+        int Add(int articleId, string content, string commenterId);
+
+        int Delete(int commentId);
     }
 }
