@@ -17,6 +17,8 @@ namespace GamingWiki.Services.Contracts
 
         void Delete(int articleId);
 
+        bool CategoryExists(int categoryId);
+
         IEnumerable<ArticleAllServiceModel> Search(string searchCriteria);
 
         IEnumerable<ArticleAllServiceModel> Filter(int categoryId);

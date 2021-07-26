@@ -19,12 +19,6 @@ namespace GamingWiki.Web.MappingConfiguration
         {
             this.CreateMap<GameFormModel, Game>();
 
-            this.CreateMap<ArticleDtoModel, Article>();
-
-            this.CreateMap<CommentDtoModel, Comment>();
-
-            this.CreateMap<ReplyDtoModel, Reply>();
-
             this.CreateMap<ReviewDtoModel, Review>();
         }
     }

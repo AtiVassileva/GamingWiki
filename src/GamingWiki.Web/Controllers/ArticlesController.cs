@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using GamingWiki.Data;
-using GamingWiki.Models;
-using GamingWiki.Services.Contracts;
+﻿using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
-using GamingWiki.Services.Models.Categories;
-using GamingWiki.Services.Models.Comments;
-using GamingWiki.Services.Models.Replies;
 using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Articles;
-using GamingWiki.Web.Models.Comments;
-using GamingWiki.Web.Models.Replies;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,16 +10,10 @@ namespace GamingWiki.Web.Controllers
 {
     public class ArticlesController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
         private readonly IArticleService helper;
-        private readonly IMapper mapper;
 
-        public ArticlesController(ApplicationDbContext dbContext, IMapper mapper, IArticleService helper)
-        {
-            this.dbContext = dbContext;
-            this.mapper = mapper;
-            this.helper = helper;
-        }
+        public ArticlesController(IArticleService helper) 
+            => this.helper = helper;
 
         [Authorize]
         public IActionResult All() 
@@ -51,7 +34,7 @@ namespace GamingWiki.Web.Controllers
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create(ArticleFormModel model)
         {
-            if (!this.dbContext.Categories.Any(c => c.Id == model.CategoryId))
+            if (!this.helper.CategoryExists(model.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist.");
             }

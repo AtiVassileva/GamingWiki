@@ -91,6 +91,10 @@ namespace GamingWiki.Services
             this.dbContext.SaveChanges();
         }
 
+        public bool CategoryExists(int categoryId)
+            => this.dbContext.Categories
+                .Any(c => c.Id == categoryId);
+
         public IEnumerable<ArticleAllServiceModel> Search(string searchCriteria)
             => GetArticles(this.dbContext.Articles
                 .Where(a => a.Heading.ToLower().Contains(searchCriteria.ToLower().Trim())));
