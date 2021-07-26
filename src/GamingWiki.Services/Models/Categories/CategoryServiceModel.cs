@@ -1,6 +1,6 @@
-﻿namespace GamingWiki.Web.Models.Categories
+﻿namespace GamingWiki.Services.Models.Categories
 {
-    public class CategoryViewModel
+    public class CategoryServiceModel
     {
         public int Id { get; set; }
 

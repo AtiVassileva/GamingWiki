@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Web.Models.Comments;
+using GamingWiki.Services.Models.Comments;
 
-namespace GamingWiki.Web.Models.Articles
+namespace GamingWiki.Services.Models.Articles
 {
-    public class ArticleListingModel
+    public class ArticleServiceDetailsModel
     {
         public int Id { get; set; }
 
@@ -19,6 +19,6 @@ namespace GamingWiki.Web.Models.Articles
 
         public string PictureUrl { get; set; }
 
-        public IEnumerable<CommentListingModel> Comments { get; set; }
+        public IEnumerable<CommentServiceModel> Comments { get; set; }
     }
 }

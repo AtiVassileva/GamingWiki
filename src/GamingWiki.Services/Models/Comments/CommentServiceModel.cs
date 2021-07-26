@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Web.Models.Replies;
+using GamingWiki.Services.Models.Replies;
 
-namespace GamingWiki.Web.Models.Comments
+namespace GamingWiki.Services.Models.Comments
 {
-    public class CommentListingModel
+    public class CommentServiceModel
     {
         public int Id { get; set; }
 
@@ -12,6 +12,6 @@ namespace GamingWiki.Web.Models.Comments
         public string Commenter { get; set; }
 
         public string AddedOn { get; set; }
-        public IEnumerable<ReplyListingModel> Replies { get; set; }
+        public IEnumerable<ReplyServiceModel> Replies { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static GamingWiki.Models.Common.DataConstants;
 
-namespace GamingWiki.Web.Models.Articles
+namespace GamingWiki.Services.Models.Articles
 {
-    public class ArticleEditModel
+    public class ArticleServiceEditModel
     {
         public int Id { get; set; }
 

@@ -1,6 +1,6 @@
-﻿namespace GamingWiki.Web.Models.Replies
+﻿namespace GamingWiki.Services.Models.Replies
 {
-    public class ReplyListingModel
+    public class ReplyServiceModel
     {
         public int Id { get; set; }
 

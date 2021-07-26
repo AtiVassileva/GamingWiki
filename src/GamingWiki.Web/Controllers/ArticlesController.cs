@@ -4,12 +4,17 @@ using System.Linq;
 using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
+using GamingWiki.Services.Contracts;
+using GamingWiki.Services.Models.Articles;
+using GamingWiki.Services.Models.Categories;
+using GamingWiki.Services.Models.Comments;
+using GamingWiki.Services.Models.Replies;
 using GamingWiki.Web.Infrastructure;
-using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
-using GamingWiki.Web.Models.Categories;
 using GamingWiki.Web.Models.Comments;
 using GamingWiki.Web.Models.Replies;
+using static GamingWiki.Web.Common.WebConstants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -17,40 +22,33 @@ namespace GamingWiki.Web.Controllers
     public class ArticlesController : Controller
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IArticleService helper;
         private readonly IMapper mapper;
 
-        public ArticlesController(ApplicationDbContext dbContext, IMapper mapper)
+        public ArticlesController(ApplicationDbContext dbContext, IMapper mapper, IArticleService helper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.helper = helper;
         }
 
-        public IActionResult All()
-        {
-            var articleModels = this.dbContext.Articles
-                .Select(a => new ArticleSimpleModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString("D")
-                }).OrderByDescending(c => c.Id)
-                .ToList();
-
-            return this.View(new ArticleFullModel
+        [Authorize]
+        public IActionResult All() 
+            => this.View(new ArticleFullModel
             {
-                Articles = articleModels,
-                Categories = this.GetCategories()
+                Articles = this.helper.All(),
+                Categories = this.helper.GetCategories()
             });
-        }
 
+        [Authorize]
         public IActionResult Create() 
             => this.View(new ArticleFormModel
             {
-                Categories = this.GetCategories()
+                Categories = this.helper.GetCategories()
             });
 
         [HttpPost]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create(ArticleFormModel model)
         {
             if (!this.dbContext.Categories.Any(c => c.Id == model.CategoryId))
@@ -60,157 +58,76 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                model.Categories = this.GetCategories();
+                model.Categories = this.helper.GetCategories();
 
                 return this.View(model);
             }
 
-            var articleDto = new ArticleDtoModel
-            {
-                Heading = model.Heading,
-                Content = model.Content,
-                CategoryId = model.CategoryId,
-                AuthorId = this.User.GetId(),
-                PictureUrl = model.PictureUrl,
-                PublishedOn = DateTime.UtcNow
-            };
+            var authorId = this.User.GetId();
 
-            var article = this.mapper.Map<Article>(articleDto);
+            var articleId = this.helper.Create(model.Heading, model.Content, model.CategoryId, model.PictureUrl,
+                authorId);
 
-            this.dbContext.Articles.Add(article);
-            this.dbContext.SaveChanges();
-
-            return this.Redirect($"/Articles/Details?articleId={article.Id}");
+            return this.RedirectToAction(nameof(this.Details),
+                new { articleId = $"{articleId}" });
         }
 
-        public IActionResult Details(int articleId)
-        {
-            var articleModel = this.dbContext.Articles
-                .Where(a => a.Id == articleId)
-                .Select(a => new ArticleListingModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    Category = a.Category.ToString(),
-                    Content = a.Content,
-                    Author = a.Author.UserName,
-                    PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString("f"),
-                    Comments = a.Comments.Select(c =>
-                        new CommentListingModel
-                        {
-                            Id = c.Id,
-                            Content = c.Content,
-                            Commenter = c.Commenter.UserName,
-                            AddedOn = c.AddedOn.ToString("dd/MM/yyyy"),
-                            Replies = c.Replies.Select(r => 
-                                new ReplyListingModel
-                            {
-                                    Id = r.Id,
-                                    Content = r.Content,
-                                    Replier = r.Replier.UserName
-                            }).ToList()
-                        }).ToList()
-                }).FirstOrDefault();
+        [Authorize]
+        public IActionResult Details(int articleId) 
+            => this.View(this.helper.Details(articleId));
 
-
-            return this.View(articleModel);
-        }
-
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int articleId)
         {
-            var articleModel = this.dbContext.Articles
-                .Where(a => a.Id == articleId)
-                .Select(a => new ArticleEditModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    PictureUrl = a.PictureUrl,
-                    Content = a.Content
+            var dbModel = this.helper.Details(articleId);
 
-                }).FirstOrDefault();
+            var articleModel =  new ArticleServiceEditModel
+                {
+                    Id = dbModel.Id,
+                    Heading = dbModel.Heading,
+                    PictureUrl = dbModel.PictureUrl,
+                    Content = dbModel.Content
+                };
 
             return this.View(articleModel);
         }
 
         [HttpPost]
-        public IActionResult Edit(ArticleEditModel model, int articleId)
+        [Authorize(Roles = AdministratorRoleName)]
+        public IActionResult Edit(ArticleServiceEditModel model, int articleId)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
 
-            var article = this.dbContext.Articles
-                .First(a => a.Id == articleId);
+            this.helper.Edit(articleId, model);
 
-            article.Heading = model.Heading;
-            article.PictureUrl = model.PictureUrl;
-            article.Content = model.Content;
-
-            this.dbContext.SaveChanges();
-
-            return this.Redirect($"/Articles/Details?articleId={article.Id}");
+            return this.RedirectToAction(nameof(this.Details),
+                new { articleId = $"{articleId}" });
         }
 
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int articleId)
         {
-            var article = this.dbContext.Articles
-                .First(a => a.Id == articleId);
-
-            this.dbContext.Articles.Remove(article);
-            this.dbContext.SaveChanges();
-
-            return this.Redirect("/Articles/All");
+            this.helper.Delete(articleId);
+            return this.RedirectToAction(nameof(this.All));
         }
 
         [HttpPost]
-        public IActionResult Search(string searchCriteria)
-        {
-            var articleModels = this.dbContext.Articles
-                .Where(a => a.Heading.ToLower().Contains(searchCriteria.ToLower().Trim()))
-                .Select(a => new ArticleSimpleModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString("D")
-                }).ToList();
-
-            return View("All", new ArticleFullModel
+        [Authorize]
+        public IActionResult Search(string searchCriteria) 
+            => View(nameof(this.All), new ArticleFullModel
             {
-                Articles = articleModels,
-                Categories = this.GetCategories()
+                Articles = this.helper.Search(searchCriteria),
+                Categories = this.helper.GetCategories()
             });
-        }
 
-        public IActionResult Filter(int categoryId)
-        {
-            var matchingArticles = this.dbContext
-                .Articles.Where(a => a.CategoryId == categoryId)
-                .Select(a => new ArticleSimpleModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString("D")
-                }).OrderByDescending(c => c.Id)
-                .ToList();
-
-            return this.View("All", new ArticleFullModel
+        public IActionResult Filter(int categoryId) 
+            => this.View(nameof(this.All), new ArticleFullModel
             {
-                Articles = matchingArticles,
-                Categories = this.GetCategories()
+                Articles = this.helper.Filter(categoryId),
+                Categories = this.helper.GetCategories()
             });
-        }
-        private IEnumerable<CategoryViewModel> GetCategories()
-            => this.dbContext.Categories
-                .Select(c => new CategoryViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .OrderByDescending(c => c.Id)
-                .ToList();
     }
 }

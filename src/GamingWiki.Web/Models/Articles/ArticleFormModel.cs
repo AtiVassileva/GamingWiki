@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GamingWiki.Web.Models.Categories;
+using GamingWiki.Services.Models.Categories;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Articles
@@ -24,6 +24,6 @@ namespace GamingWiki.Web.Models.Articles
         [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
 
-        public IEnumerable<CategoryViewModel> Categories { get; set; }
+        public IEnumerable<CategoryServiceModel> Categories { get; set; }
     }
 }

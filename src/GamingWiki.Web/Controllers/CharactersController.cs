@@ -126,6 +126,5 @@ namespace GamingWiki.Web.Controllers
                 Characters = this.helper.Filter(classId),
                 Classes = this.helper.GetClasses()
             });
-
     }
 }
