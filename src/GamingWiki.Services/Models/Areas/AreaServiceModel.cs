@@ -1,6 +1,6 @@
-﻿namespace GamingWiki.Web.Models.Areas
+﻿namespace GamingWiki.Services.Models.Areas
 {
-    public class AreaViewModel
+    public class AreaServiceModel
     {
         public int Id { get; set; }
 

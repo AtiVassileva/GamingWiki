@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using GamingWiki.Models;
+using GamingWiki.Services.Models.Areas;
+using GamingWiki.Services.Models.Games;
+using GamingWiki.Services.Models.Genres;
 
 namespace GamingWiki.Services.Contracts
 {
     public interface IGameService
     {
-        IEnumerable<Creator> ParseCreators(string creatorsNames);
-
         IDictionary<string, double> GetRatings(int gameId);
 
         bool AreaExists(int areaId);
@@ -15,5 +16,20 @@ namespace GamingWiki.Services.Contracts
 
         int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames);
 
+        IEnumerable<GameServiceListingModel> All();
+
+        GameServiceDetailsModel Details(int gameId);
+
+        void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl);
+
+        void Delete(int gameId);
+
+        IEnumerable<GameServiceListingModel> Search(string letter);
+
+        IEnumerable<GameServiceListingModel> Filter(int genreId);
+
+        IEnumerable<AreaServiceModel> GetAreas();
+
+        IEnumerable<GenreServiceModel> GetGenres();
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Web.Models.Areas;
-using GamingWiki.Web.Models.Characters;
+using GamingWiki.Services.Models.Areas;
+using GamingWiki.Services.Models.Characters;
 
-namespace GamingWiki.Web.Models.Games
+namespace GamingWiki.Services.Models.Games
 {
-    public class GameListingModel
+    public class GameServiceDetailsModel
     {
         public int Id { get; set; }
 
@@ -26,8 +26,8 @@ namespace GamingWiki.Web.Models.Games
 
         public IDictionary<string, double> Ratings { get; set; }
 
-        public IEnumerable<AreaViewModel> Areas { get; set; }
+        public IEnumerable<AreaServiceModel> Areas { get; set; }
 
-        public IEnumerable<CharacterGameModel> Characters { get; set; }
+        public IEnumerable<CharacterGameServiceModel> Characters { get; set; }
     }
 }

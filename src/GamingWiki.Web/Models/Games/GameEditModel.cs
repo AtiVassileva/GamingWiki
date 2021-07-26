@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GamingWiki.Web.Models.Areas;
+using GamingWiki.Services.Models.Areas;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Games
@@ -28,7 +28,7 @@ namespace GamingWiki.Web.Models.Games
         [Display(Name = "Area")]
         public int AreaId { get; set; }
 
-        public IEnumerable<AreaViewModel> Areas { get; set; }
+        public IEnumerable<AreaServiceModel> Areas { get; set; }
     }
 
 }

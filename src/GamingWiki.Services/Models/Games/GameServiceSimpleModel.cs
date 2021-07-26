@@ -1,6 +1,6 @@
-﻿namespace GamingWiki.Web.Models.Genres
+﻿namespace GamingWiki.Services.Models.Games
 {
-    public class GenreViewModel
+    public class GameServiceSimpleModel
     {
         public int Id { get; set; }
 

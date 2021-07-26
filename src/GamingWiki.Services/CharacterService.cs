@@ -136,9 +136,9 @@ namespace GamingWiki.Services
                 .OrderBy(c => c.Name)
                 .ToList();
 
-        public IEnumerable<GameSimpleServiceModel> GetGames()
+        public IEnumerable<GameServiceSimpleModel> GetGames()
         => this.dbContext.Games
-            .Select(g => new GameSimpleServiceModel
+            .Select(g => new GameServiceSimpleModel
             {
                 Id = g.Id,
                 Name = g.Name

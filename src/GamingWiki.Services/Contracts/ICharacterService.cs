@@ -31,6 +31,6 @@ namespace GamingWiki.Services.Contracts
 
         IEnumerable<ClassSimpleServiceModel> GetClasses();
 
-        IEnumerable<GameSimpleServiceModel> GetGames();
+        IEnumerable<GameServiceSimpleModel> GetGames();
     }
 }

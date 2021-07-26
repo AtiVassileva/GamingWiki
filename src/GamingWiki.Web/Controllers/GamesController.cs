@@ -1,14 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using GamingWiki.Data;
-using GamingWiki.Services;
-using GamingWiki.Services.Contracts;
-using GamingWiki.Web.Infrastructure;
-using GamingWiki.Web.Models.Areas;
-using GamingWiki.Web.Models.Characters;
+﻿using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Models.Games;
-using GamingWiki.Web.Models.Genres;
+using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,47 +8,29 @@ namespace GamingWiki.Web.Controllers
 {
     public class GamesController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
         private readonly IGameService helper;
-        private readonly IMapper mapper;
 
-        public GamesController
-            (ApplicationDbContext dbContext, IMapper mapper)
-        {
-            this.dbContext = dbContext;
-            this.mapper = mapper;
-            this.helper = new GameService(dbContext);
-        }
+        public GamesController(IGameService helper)
+            => this.helper = helper;
 
         [Authorize]
-        public IActionResult All()
-        {
-            var gamesModels = this.dbContext.Games
-                .Select(g => new GameViewModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl,
-                }).OrderBy(g => g.Name)
-                .ToList();
-
-            return this.View(new GameFullModel
+        public IActionResult All() 
+            => this.View(new GameFullModel
             {
-                Games = gamesModels,
-                Genres = this.GetGenres()
+                Games = this.helper.All(),
+                Genres = this.helper.GetGenres()
             });
-        }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create() 
             => this.View(new GameFormModel
             {
-                Areas = this.GetAreas(),
-                Genres = this.GetGenres(),
+                Areas = this.helper.GetAreas(),
+                Genres = this.helper.GetGenres(),
             });
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create(GameFormModel model)
         {
             if (!this.helper.AreaExists(model.AreaId))
@@ -71,82 +45,45 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                model.Areas = this.GetAreas();
-                model.Genres = this.GetGenres();
+                model.Areas = this.helper.GetAreas();
+                model.Genres = this.helper.GetGenres();
 
                 return this.View(model);
             }
 
-            var id = this.helper.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
+            var gameId = this.helper.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
                 model.GenreId, model.CreatorsNames);
 
-            return this.Redirect($"/Games/Details?gameId={id}");
+            return this.RedirectToAction(nameof(this.Details),
+                new { gameId = $"{gameId}" });
         }
 
         [Authorize]
-        public IActionResult Details(int gameId)
-        {
-            var gameModel = this.dbContext.Games
-                .Where(g => g.Id == gameId)
-                .Select(g => new GameListingModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl,
-                    TrailerUrl = g.TrailerUrl,
-                    Description = g.Description,
-                    Area = g.Area.Name,
-                    Genre = g.Genre.Name,
-                    Ratings = this.helper.GetRatings(g.Id),
-                    Rating = this.helper.GetRatings(g.Id).Values.Average(),
-                    Creators = g.GamesCreators.Where(gc => gc.GameId == g.Id).Select(gc => gc.Creator.Name).ToList(),
-                    Characters = this.dbContext.Characters
-                        .Where(c => c.GameId == gameId)
-                        .Select(c => new CharacterGameModel
-                        {
-                            Id = c.Id,
-                            Name = c.Name
-                        })
-                        .OrderBy(c => c.Name)
-                        .ToList()
-                }).FirstOrDefault();
+        public IActionResult Details(int gameId) 
+            => this.View(this.helper.Details(gameId));
 
-            return this.View(gameModel);
-        }
-
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int gameId)
         {
-            if (!this.User.IsAdmin())
-            {
-                return this.Unauthorized();
-            }
-
-            var entity = this.dbContext.Games
-                .First(g => g.Id == gameId);
+            var dbModel = this.helper.Details(gameId);
 
             var viewModel = new GameEditModel
             {
-                Id = entity.Id,
-                Name = entity.Name,
-                PictureUrl = entity.PictureUrl,
-                TrailerUrl = entity.TrailerUrl,
-                Description = entity.Description,
-                Areas = this.GetAreas()
+                Id = dbModel.Id,
+                Name = dbModel.Name,
+                PictureUrl = dbModel.PictureUrl,
+                TrailerUrl = dbModel.TrailerUrl,
+                Description = dbModel.Description,
+                Areas = this.helper.GetAreas()
             };
 
             return this.View(viewModel);
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(GameEditModel model, int gameId)
         {
-            if (!this.User.IsAdmin())
-            {
-                return this.Unauthorized();
-            }
-
             if (!this.helper.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
@@ -154,100 +91,39 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                model.Areas = this.GetAreas();
+                model.Areas = this.helper.GetAreas();
                 return this.View(model);
             }
 
-            var game = this.dbContext.Games
-                .First(g => g.Id == gameId);
+            this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl);
 
-            game.Description = model.Description;
-            game.PictureUrl = model.PictureUrl;
-            game.AreaId = model.AreaId;
-            game.TrailerUrl = model.TrailerUrl;
-
-            this.dbContext.SaveChanges();
-
-            return this.Redirect($"/Games/Details?gameId={game.Id}");
+            return this.RedirectToAction(nameof(this.Details),
+                new { gameId = $"{gameId}" });
         }
 
-        [Authorize]
+        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int gameId)
         {
-            if (!this.User.IsAdmin())
-            {
-                return this.Unauthorized();
-            }
-
-            var game = this.dbContext.Games
-                .First(g => g.Id == gameId);
-
-            this.dbContext.Games.Remove(game);
-            this.dbContext.SaveChanges();
-
-            return this.Redirect("/Games/All");
+            this.helper.Delete(gameId);
+            return this.Redirect(nameof(this.All));
         }
 
         [Authorize]
-        public IActionResult Search(string letter)
-        {
-            var gamesModels =  this.dbContext
-                .Games
-                .Where(g => g.Name.ToUpper()
-                    .StartsWith(letter))
-                .Select(g => new GameViewModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl,
-                }).ToList();
-
-            return this.View("All", new GameFullModel
+        public IActionResult Search(string letter) 
+            => this.View(nameof(this.All), new GameFullModel
             {
-                Games = gamesModels,
-                Genres = this.GetGenres()
+                Games = this.helper.Search(letter),
+                Genres = this.helper.GetGenres()
             });
-        }
 
         [Authorize]
-        public IActionResult Filter(int genreId)
-        {
-            var matchingGames = this.dbContext
-                .Games.Where(g => g.GenreId == genreId)
-                .Select(g => new GameViewModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl
-                }).ToList();
-
-            return this.View("All", new GameFullModel
+        public IActionResult Filter(int genreId) 
+            =>
+            this.View(nameof(this.All), new GameFullModel
             {
-                Games = matchingGames,
-                Genres = this.GetGenres()
+                Games = this.helper.Filter(genreId),
+                Genres = this.helper.GetGenres()
             });
-        }
-        private IEnumerable<GenreViewModel> GetGenres()
-            => this.dbContext
-                .Genres
-                .Select(g => 
-                    new GenreViewModel
-                {
-                Id = g.Id,
-                Name = g.Name
-                })
-                .OrderBy(g => g.Name)
-                .ToList();
-
-        private IEnumerable<AreaViewModel> GetAreas()
-            => this.dbContext
-                .Areas
-                .Select(a => 
-                    new AreaViewModel
-                {
-                    Id = a.Id,
-                    Name = a.Name
-                }).ToList();
 
     }
 }
