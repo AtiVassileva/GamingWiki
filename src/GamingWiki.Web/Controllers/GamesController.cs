@@ -69,11 +69,12 @@ namespace GamingWiki.Web.Controllers
 
             var viewModel = new GameEditModel
             {
-                Id = dbModel.Id,
                 Name = dbModel.Name,
                 PictureUrl = dbModel.PictureUrl,
                 TrailerUrl = dbModel.TrailerUrl,
                 Description = dbModel.Description,
+                AreaId = dbModel.AreaId,
+                Area = dbModel.Area,
                 Areas = this.helper.GetAreas()
             };
 
@@ -91,7 +92,17 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                model.Areas = this.helper.GetAreas();
+                var dbModel = this.helper.Details(gameId);
+
+                model = new GameEditModel
+                {
+                    Name = dbModel.Name,
+                    PictureUrl = dbModel.PictureUrl,
+                    TrailerUrl = dbModel.TrailerUrl,
+                    Description = dbModel.Description,
+                    Areas = this.helper.GetAreas()
+                };
+
                 return this.View(model);
             }
 

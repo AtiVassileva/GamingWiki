@@ -1,5 +1,5 @@
 ﻿@using GamingWiki.Web.Infrastructure
-@model GamingWiki.Services.Models.Games.GameServiceDetailsModel
+@model GameServiceDetailsModel
 
 <div id="preloder">
     <div class="loader"></div>
@@ -23,7 +23,7 @@
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
                 <div class="gs-meta">Developed by: <a href="">@string.Join(", ", Model.Creators)</a></div>
                 <h2 class="gs-title">@Model.Name.ToUpper()</h2>
-                <h4>Genre: @Model.Genre</h4>
+                <h4>Genre: @Model.Genre&nbsp;&nbsp;&nbsp;Area: @Model.Area</h4>
                 <p>@Model.Description</p>
 
                 @if (this.User.IsAdmin())
@@ -58,15 +58,23 @@
                     <div class="widget-item">
                         <div class="rating-widget">
                             <h4 class="widget-title">Ratings</h4>
-                            <ul>
-                                <li>Price<span>@Model.Ratings["Price"].ToString("F1")/5</</span></li>
-                                <li>Graphics<span>@Model.Ratings["Graphics"].ToString("F1")/5</span></li>
-                                <li>Levels<span>@Model.Ratings["Levels"].ToString("F1")/5</span></li>
-                                <li>Difficulty<span>@Model.Ratings["Difficulty"].ToString("F1")/5</span></li>
-                            </ul>
-                            <div class="rating">
-                                <h5><i>Rating</i><span>@Model.Rating.ToString("F1")</span> / 5</h5>
-                            </div>
+                            @if (Math.Abs(Model.Rating) <= 0)
+                            {
+                                <h4 class="widget-title">There are no currently added reviews to this game.</h4>
+                                <a asp-controller="Reviews" asp-action="Create" asp-route-gameId="@Model.Id" class="btn btn-outline-info">Be the first to add a review</a>
+                            }
+                            else
+                            {
+                                <ul>
+                                    <li>Price <span>@Model.Ratings["Price"].ToString("F1")/5</span></li>
+                                    <li>Graphics<span>@Model.Ratings["Graphics"].ToString("F1")/5</span></li>
+                                    <li>Levels<span>@Model.Ratings["Levels"].ToString("F1")/5</span></li>
+                                    <li>Difficulty<span>@Model.Ratings["Difficulty"].ToString("F1")/5</span></li>
+                                </ul>
+                                <div class="rating">
+                                    <h5><i>Rating</i><span>@Model.Rating.ToString("F1")</span> / 5</h5>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="widget-item">
@@ -83,13 +91,3 @@
         </div>
     </div>
 </section>
-
-@*<section class="game-author-section">
-    <div class="container">
-        <div class="game-author-pic set-bg" data-setbg="img/author.jpg"></div>
-        <div class="game-author-info">
-            <h4>Written by: Michael Williams</h4>
-            <p>Vivamus volutpat nibh ac sollicitudin imperdiet. Donec scelerisque lorem sodales odio ultricies, nec rhoncus ex lobortis. Vivamus tincid-unt sit amet sem id varius. Donec elementum aliquet tortor. Curabitur justo mi, efficitur sed eros alique.</p>
-        </div>
-    </div>
-</section>*@

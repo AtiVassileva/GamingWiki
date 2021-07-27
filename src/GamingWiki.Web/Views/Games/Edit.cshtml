@@ -14,8 +14,7 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    <form asp-controller="Games"
-                          asp-action="Edit" asp-route-gameId="@Model.Id" method="post">
+                    <form method="post">
                         <div class="form-group">
                             <label asp-for="PictureUrl"></label>
                             <input asp-for="PictureUrl" class="form-control" value="@Model.PictureUrl">
@@ -30,8 +29,8 @@
                         <div class="form-group" style="display: inline-block;">
                             <label asp-for="AreaId"></label>
                             <select asp-for="AreaId">
-                                <option style="display:none">Select an area...</option>
-                                @foreach (var area in Model.Areas)
+                                <option value="@Model.AreaId">@Model.Area</option>
+                                @foreach (var area in Model.Areas.Where(a => a.Id != Model.AreaId))
                                 {
                                     <option value="@area.Id">@area.Name</option>
                                 }

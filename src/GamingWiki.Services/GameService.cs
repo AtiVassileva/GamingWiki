@@ -16,10 +16,8 @@ namespace GamingWiki.Services
 
         private readonly ApplicationDbContext dbContext;
 
-        public GameService(ApplicationDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public GameService(ApplicationDbContext dbContext) 
+            => this.dbContext = dbContext;
 
         public IEnumerable<Creator> ParseCreators(string creatorsNames)
         {
@@ -29,8 +27,7 @@ namespace GamingWiki.Services
                 .Split(", "))
             {
                 var creator = this.dbContext.Creators
-                    .FirstOrDefault
-                        (c => c.Name == creatorName);
+                    .FirstOrDefault(c => c.Name == creatorName);
 
                 if (creator == null)
                 {
@@ -101,6 +98,7 @@ namespace GamingWiki.Services
                     TrailerUrl = g.TrailerUrl,
                     Description = g.Description,
                     Area = g.Area.Name,
+                    AreaId = g.AreaId,
                     Genre = g.Genre.Name,
                     Ratings = this.GetRatings(gameId),
                     Rating = this.GetRatings(gameId).Values.Average(),

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Models;
 using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
@@ -8,8 +7,6 @@ namespace GamingWiki.Services.Contracts
 {
     public interface IGameService
     {
-        IDictionary<string, double> GetRatings(int gameId);
-
         bool AreaExists(int areaId);
 
         bool GenreExists(int genreId);

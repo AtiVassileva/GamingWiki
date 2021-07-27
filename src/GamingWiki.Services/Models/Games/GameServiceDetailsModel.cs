@@ -22,6 +22,8 @@ namespace GamingWiki.Services.Models.Games
 
         public string Area { get; set; }
 
+        public int AreaId { get; set; }
+
         public IEnumerable<string> Creators { get; set; }
 
         public IDictionary<string, double> Ratings { get; set; }

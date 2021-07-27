@@ -7,8 +7,6 @@ namespace GamingWiki.Web.Models.Games
 {
     public class GameEditModel
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         [Url]
@@ -27,6 +25,8 @@ namespace GamingWiki.Web.Models.Games
 
         [Display(Name = "Area")]
         public int AreaId { get; set; }
+
+        public string Area { get; set; }
 
         public IEnumerable<AreaServiceModel> Areas { get; set; }
     }
