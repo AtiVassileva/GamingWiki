@@ -7,7 +7,5 @@
         public string Name { get; set; }
 
         public string PictureUrl { get; set; }
-
-        public double Rating { get; set; }
     }
 }

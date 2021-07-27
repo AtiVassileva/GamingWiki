@@ -196,30 +196,26 @@ namespace GamingWiki.Services
                 .OrderBy(g => g.Name)
                 .ToList();
 
-        public IEnumerable<GameServiceHomeModel> GetBest()
-        {
-            return this.dbContext.Games
+        public IEnumerable<GameServiceHomeModel> GetLatest() 
+            => this.dbContext.Games
                 .Select(g => new GameServiceHomeModel
                 {
                     Id = g.Id,
                     Name = g.Name.ToUpper(),
                     PictureUrl = g.PictureUrl,
-                    Rating = this.GetRatings(g.Id).Values.Average()
                 })
-                .ToList()
-                .OrderByDescending(g => g.Rating)
+                .OrderByDescending(g => g.Id)
                 .Take(HomePageEntityCount)
                 .ToList();
-        }
 
         public IDictionary<string, double> GetRatings(int gameId)
         {
             var reviews = this.dbContext.Reviews
                 .Where(r => r.GameId == gameId).ToList();
 
-            var ratings = new Dictionary<string, double>()
+            var ratings = new Dictionary<string, double>
             {
-                { "Price" ,  reviews.Count > 0 ?reviews.Select(r => r.PriceRate).Average() : 0.0},
+                { "Price" ,  reviews.Count > 0 ? reviews.Select(r => r.PriceRate).Average() : 0.0},
                 { "Graphics" , reviews.Count > 0 ? reviews.Select(r => r.GraphicsRate)
                     .Average() : 0.0},
                 { "Levels" , reviews.Count > 0 ? reviews.Select(r => r.LevelsRate).Average() : 0.0},

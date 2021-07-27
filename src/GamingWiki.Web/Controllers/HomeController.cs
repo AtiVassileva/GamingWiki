@@ -27,7 +27,7 @@ namespace GamingWiki.Web.Controllers
             return this.View(new HomeViewModel
             {
                 LatestArticles = this.articleService.GetLatest(),
-                BestGames = this.gameService.GetBest()
+                BestGames = this.gameService.GetLatest()
             });
         }
 

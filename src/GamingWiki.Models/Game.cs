@@ -36,5 +36,8 @@
         public ICollection<GameCreator> GamesCreators { get; set; }
             = new HashSet<GameCreator>();
 
+        public IEnumerable<Review> Reviews { get; set; }
+        = new HashSet<Review>();
+
     }
 }
