@@ -194,9 +194,9 @@ namespace GamingWiki.Services
                 .OrderBy(g => g.Name)
                 .ToList();
 
-        public IEnumerable<GameServiceHomeModel> GetLatest() 
+        public IEnumerable<GameServiceListingModel> GetLatest() 
             => this.dbContext.Games
-                .Select(g => new GameServiceHomeModel
+                .Select(g => new GameServiceListingModel
                 {
                     Id = g.Id,
                     Name = g.Name.ToUpper(),

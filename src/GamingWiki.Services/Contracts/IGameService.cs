@@ -29,6 +29,6 @@ namespace GamingWiki.Services.Contracts
 
         IEnumerable<GenreServiceModel> GetGenres();
 
-        IEnumerable<GameServiceHomeModel> GetLatest();
+        IEnumerable<GameServiceListingModel> GetLatest();
     }
 }

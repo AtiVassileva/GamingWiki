@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using GamingWiki.Services.Models.Games;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Models.Common.DataConstants;
 
@@ -24,6 +25,6 @@ namespace GamingWiki.Web.Models.Reviews
 
         public string Description { get; set; }
 
-        public GameViewModel Game { get; set; }
+        public GameServiceListingModel Game { get; set; }
     }
 }
