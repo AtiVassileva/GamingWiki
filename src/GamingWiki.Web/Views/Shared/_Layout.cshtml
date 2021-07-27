@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using GamingWiki.Web.Infrastructure
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Gaming Wiki</title>
@@ -37,34 +38,46 @@
                             <a asp-controller="Home" asp-action="Index">Home</a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a asp-controller="Home" asp-action="Privacy">About us</a>
+                                    <a asp-controller="Home" asp-action="About">About us</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a asp-controller="Games" asp-action="All">Games</a>
-                            <ul class="sub-menu">
-                                <li><a asp-controller="Games" asp-action="Create">New Game</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a asp-controller="Characters" asp-action="All">Characters</a>
-                            <ul class="sub-menu">
-                                <li><a asp-controller="Characters" asp-action="Create">New Character</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a asp-controller="Articles" asp-action="All">Articles</a>
-                            <ul class="sub-menu">
-                                <li><a asp-controller="Articles" asp-action="Create">New Article</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a asp-controller="Reviews" asp-action="All">Reviews</a>
-                            <ul class="sub-menu">
-                                <li><a asp-controller="Reviews" asp-action="All">All</a></li>
-                            </ul>
-                        </li>
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a asp-controller="Games" asp-action="All">Games</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-controller="Games" asp-action="All">List</a></li>
+                                    @if (this.User.IsAdmin())
+                                    {
+                                        <li><a asp-controller="Games" asp-action="Create">New Game</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            <li>
+                                <a asp-controller="Characters" asp-action="All">Characters</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-controller="Characters" asp-action="All">List</a></li>
+                                    @if (this.User.IsAdmin())
+                                    {
+                                        <li><a asp-controller="Characters" asp-action="Create">New Character</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            <li>
+                                <a asp-controller="Reviews" asp-action="All">Reviews</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-controller="Reviews" asp-action="All">List</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a asp-controller="Articles" asp-action="All">Articles</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-controller="Articles" asp-action="All">List</a></li>
+                                    <li><a asp-controller="Articles" asp-action="Create">New Article</a></li>
+                                </ul>
+                            </li>
+                        }
                         <li>
                             <a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a>
                             <ul class="sub-menu">
@@ -77,21 +90,21 @@
         </div>
     </header>
 
-<div>
-    <main role="main">
-        @RenderBody()
-    </main>
-</div>
-
-<section class="newsletter-section">
-    <div class="container">
-        <h2>Subscribe to our newsletter</h2>
-        <form class="newsletter-form">
-            <input type="text" placeholder="ENTER YOUR E-MAIL">
-            <button class="site-btn">subscribe  <img src="/img/icons/double-arrow.png" alt="#" /></button>
-        </form>
+    <div>
+        <main role="main">
+            @RenderBody()
+        </main>
     </div>
-</section>
+
+    <section class="newsletter-section">
+        <div class="container">
+            <h2>Subscribe to our newsletter</h2>
+            <form class="newsletter-form">
+                <input type="text" placeholder="ENTER YOUR E-MAIL">
+                <button class="site-btn">subscribe  <img src="/img/icons/double-arrow.png" alt="#" /></button>
+            </form>
+        </div>
+    </section>
 
     <footer class="footer-section">
         <div class="container">

@@ -8,6 +8,6 @@ namespace GamingWiki.Web.Models.Home
     {
         public IEnumerable<ArticleServiceHomeModel> LatestArticles { get; set; }
 
-        public IEnumerable<GameServiceHomeModel> BestGames { get; set; }
+        public IEnumerable<GameServiceListingModel> BestGames { get; set; }
     }
 }
