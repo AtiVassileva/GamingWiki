@@ -7,5 +7,7 @@
         public string Content { get; set; }
 
         public string Replier { get; set; }
+
+        public string  ReplierId { get; set; }
     }
 }

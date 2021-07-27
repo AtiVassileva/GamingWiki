@@ -11,6 +11,8 @@ namespace GamingWiki.Services.Models.Comments
 
         public string Commenter { get; set; }
 
+        public string CommenterId { get; set; }
+
         public string AddedOn { get; set; }
         public IEnumerable<ReplyServiceModel> Replies { get; set; }
     }

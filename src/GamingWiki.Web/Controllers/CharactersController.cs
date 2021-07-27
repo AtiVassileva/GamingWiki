@@ -93,7 +93,17 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                model.Classes = this.helper.GetClasses();
+                var dbModel = this.helper.Details(characterId);
+
+                model = new CharacterServiceEditModel
+                {
+                    Id = dbModel.Id,
+                    Name = dbModel.Name,
+                    PictureUrl = dbModel.PictureUrl,
+                    Description = dbModel.Description,
+                    Classes = this.helper.GetClasses()
+                };
+
                 return this.View(model);
             }
 

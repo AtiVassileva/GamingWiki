@@ -1,4 +1,5 @@
-﻿@model ArticleServiceDetailsModel
+﻿@using GamingWiki.Web.Infrastructure
+@model ArticleServiceDetailsModel
 
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
     <div class="page-info">
@@ -19,8 +20,11 @@
                 <h2 class="gs-title">@Model.Heading</h2>
                 <h4>By: @Model.Author</h4>
                 <p>@Model.Content</p>
-                <a asp-controller="Articles" asp-action="Edit" asp-route-articleId="@Model.Id" class="btn btn-outline-success">Edit</a>
-                <a asp-controller="Articles" asp-action="Delete" asp-route-articleId="@Model.Id" class="btn btn-outline-danger">Delete</a>
+                @if (this.User.IsAdmin())
+                {
+                    <a asp-controller="Articles" asp-action="Edit" asp-route-articleId="@Model.Id" class="btn btn-outline-success">Edit</a>
+                    <a asp-controller="Articles" asp-action="Delete" asp-route-articleId="@Model.Id" class="btn btn-outline-danger">Delete</a>
+                }
                 <br />
                 <br />
                 <h4 style="color: white;">Comments (@Model.Comments.Count())</h4>
@@ -37,14 +41,27 @@
                             @foreach (var comment in Model.Comments)
                             {
                                 <div class="text-justify mt-4 float-left">
-                                    <h4><i class="fa fa-user-o"></i> @comment.Commenter <a asp-controller="Comments" asp-action="Delete" asp-route-commentId="@comment.Id"><i class="fa fa-trash-o"></i></a></h4>
+                                    <h4>
+                                        <i class="fa fa-user-o"> @comment.Commenter </i>
+                                        @if (this.User.GetId() == comment.CommenterId)
+                                        {
+                                            <a asp-controller="Comments" asp-action="Delete" asp-route-commentId="@comment.Id"><i class="fa fa-trash-o"></i></a>
+                                        }
+                                    </h4>
                                     <br />
                                     <span> <i class="fa fa-clock-o"></i> @comment.AddedOn</span>
                                     <p style="margin-bottom: 15px;">@comment.Content</p>
+
                                     @foreach (var reply in comment.Replies)
                                     {
-                                        <h5 style="color: #b01ba5;"><i class="fa fa-user-o"></i> @reply.Replier replied: <a asp-controller="Replies" asp-action="Delete" asp-route-replyId="@reply.Id"><i class="fa fa-trash-o"></i></a></h5>
-                                        <p style="margin: 8px;">@reply.Content</p>
+                                        <h5 style="color: #b01ba5;">
+                                            <i class="fa fa-user-o"></i> @reply.Replier replied:
+                                            @if (this.User.GetId() == reply.ReplierId)
+                                            {
+                                                <a asp-controller="Replies" asp-action="Delete" asp-route-replyId="@reply.Id"><i class="fa fa-trash-o"></i></a>
+                                            }
+                                            <p style="margin: 8px;">@reply.Content</p>
+                                        </h5>
                                     }
                                 </div>
                                 <form asp-controller="Replies" asp-action="Add" asp-route-commentId="@comment.Id" method="post">
@@ -71,7 +88,7 @@
                         </button>
                     </div>
                 </form>
-                <partial name="_SharePartial"/>
+                <partial name="_SharePartial" />
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">

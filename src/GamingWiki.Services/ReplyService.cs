@@ -25,7 +25,8 @@ namespace GamingWiki.Services
                     {
                         Id = r.Id,
                         Content = r.Content,
-                        Replier = r.Replier.UserName
+                        Replier = r.Replier.UserName,
+                        ReplierId = r.ReplierId
                     }).ToList();
 
         public int Add(string content, int commentId, string replierId)

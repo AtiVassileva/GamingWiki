@@ -81,6 +81,16 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
+                var dbModel = this.helper.Details(articleId);
+
+                model = new ArticleServiceEditModel
+                {
+                    Id = dbModel.Id,
+                    Heading = dbModel.Heading,
+                    PictureUrl = dbModel.PictureUrl,
+                    Content = dbModel.Content
+                };
+
                 return this.View(model);
             }
 

@@ -30,6 +30,7 @@ namespace GamingWiki.Services
                         Id = c.Id,
                         Content = c.Content,
                         Commenter = c.Commenter.UserName,
+                        CommenterId = c.CommenterId,
                         AddedOn = c.AddedOn.ToString(DateFormat),
                         Replies = this.replyService.AllByComment(c.Id)
                     }).ToList();
