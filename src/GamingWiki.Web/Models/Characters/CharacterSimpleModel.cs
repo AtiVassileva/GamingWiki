@@ -1,11 +1,7 @@
 ﻿namespace GamingWiki.Web.Models.Characters
 {
-    public class CharacterSimpleModel
+    public class CharacterSimpleModel : CharacterGameModel
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
         public string PictureUrl { get; set; }
     }
 }

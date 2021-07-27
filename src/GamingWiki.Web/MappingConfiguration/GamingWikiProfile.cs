@@ -17,9 +17,6 @@ namespace GamingWiki.Web.MappingConfiguration
     {
         public GamingWikiProfile()
         {
-            this.CreateMap<GameFormModel, Game>();
-
-            this.CreateMap<ReviewDtoModel, Review>();
         }
     }
 }
