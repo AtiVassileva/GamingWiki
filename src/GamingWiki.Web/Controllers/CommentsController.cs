@@ -28,8 +28,21 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
 
+        [Authorize]
         public IActionResult Delete(int commentId)
         {
+            if (!this.helper.CommentExists(commentId))
+            {
+                return this.View("Error");
+            }
+
+            var authorId = this.helper.GetCommentAuthorId(commentId);
+
+            if (!this.User.IsAdmin() || this.User.GetId() != authorId)
+            {
+                return this.Unauthorized();
+            }
+
             var articleId = this.helper.Delete(commentId);
             return this.Redirect($"/Articles/Details?articleId={articleId}");
         }

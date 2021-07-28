@@ -42,7 +42,7 @@
                                 <div class="text-justify mt-4 float-left">
                                     <h4>
                                         <i class="fa fa-user-o"> @comment.Commenter </i>
-                                        @if (this.User.GetId() == comment.CommenterId)
+                                        @if (this.User.GetId() == comment.CommenterId || this.User.IsAdmin())
                                         {
                                             <a asp-controller="Comments" asp-action="Delete" asp-route-commentId="@comment.Id"><i class="fa fa-trash-o btn btn-sm btn-danger"></i></a>
                                         }
@@ -55,7 +55,7 @@
                                     {
                                         <h5 style="color: #b01ba5;">
                                             <i class="fa fa-user-o"></i> @reply.Replier replied:
-                                            @if (this.User.GetId() == reply.ReplierId)
+                                            @if (this.User.GetId() == reply.ReplierId || this.User.IsAdmin())
                                             {
                                                 <a asp-controller="Replies" asp-action="Delete" asp-route-replyId="@reply.Id"><i class="fa fa-trash-o btn btn-sm btn-danger"></i></a>
                                             }
