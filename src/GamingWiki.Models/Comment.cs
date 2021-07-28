@@ -11,7 +11,7 @@ namespace GamingWiki.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(CommentContentMaxLength)]
+        [MaxLength(ContentMaxLength)]
         public string Content { get; set; }
 
         public DateTime AddedOn { get; set; }

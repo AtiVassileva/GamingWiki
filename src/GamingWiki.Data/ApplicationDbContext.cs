@@ -39,6 +39,8 @@ namespace GamingWiki.Data
 
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<Trick> Tricks { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

@@ -376,6 +376,33 @@ namespace GamingWiki.Data.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("GamingWiki.Models.Trick", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Tricks");
+                });
+
             modelBuilder.Entity("GamingWiki.Models.UserDiscussion", b =>
                 {
                     b.Property<string>("UserId")
@@ -744,7 +771,7 @@ namespace GamingWiki.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("GamingWiki.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -752,6 +779,17 @@ namespace GamingWiki.Data.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GamingWiki.Models.Trick", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("GamingWiki.Models.UserDiscussion", b =>
@@ -851,6 +889,8 @@ namespace GamingWiki.Data.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("GamesCreators");
+
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }
