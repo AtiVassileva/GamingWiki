@@ -70,5 +70,12 @@ namespace GamingWiki.Services
 
             return articleId;
         }
+
+        public bool ReplyExists(int replyId)
+            => this.dbContext.Replies.Any(r => r.Id == replyId);
+
+        public string GetReplyAuthorId(int replyId)
+            => this.dbContext.Replies
+                .First(r => r.Id == replyId).ReplierId;
     }
 }
