@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GamingWiki.Services.Models.Reviews.ReviewDetailsServiceModel>
+﻿@using GamingWiki.Web.Infrastructure
+@model IEnumerable<ReviewDetailsServiceModel>
 
 <div id="preloder">
     <div class="loader"></div>
@@ -19,31 +20,33 @@
             <div class="col-xl-9 col-lg-8 col-md-7">
                 @if (!Model.Any())
                 {
-                    <div class="blog-content text-box text-white">
-                        <h5>No reviews match your search.
-                            <a class="btn btn-info" asp-controller="Reviews" asp-action="All">Check available reviews.</a>
-                        </h5>
-                    </div>
-                }
-                @foreach (var review in Model)
+    <div class="blog-content text-box text-white">
+        <h5>
+            No reviews match your search.
+            <a class="btn btn-info" asp-controller="Reviews" asp-action="All">Check available reviews.</a>
+        </h5>
+    </div> }
+                else
                 {
-    <div class="big-blog-item">
-        <img src="@review.Game.PictureUrl" alt="#" class="blog-thumbnail" style="width: 700px; height: 350px; object-fit: cover">
-        <div class="blog-content text-box text-white">
-            <h3><a asp-controller="Games" asp-action="Details" asp-route-gameId="@review.Game.Id">@review.Game.Name</a></h3>
-            <div class="top-meta">
-                <i class="fa fa-user-o"></i> @review.Author
-            </div>
-            <p>@review.Description</p>
-            <a asp-controller="Games" asp-action="Details" asp-route-gameId="@review.Game.Id" class="read-more">Learn More about @review.Game.Name <img src="/img/icons/double-arrow.png" alt="#"/></a>
-            <br/>
-            <br/>
-            <a asp-controller="Reviews" asp-action="Edit" asp-route-reviewId="@review.Id" class="btn btn-outline-success">Edit</a>
-            <a asp-controller="Reviews" asp-action="Delete" asp-route-reviewId="@review.Id" class="btn btn-outline-danger">Delete</a>
+    @foreach (var review in Model)
+    {
+<div class="big-blog-item">
+    <img src="@review.Game.PictureUrl" alt="#" class="blog-thumbnail" style="width: 700px; height: 350px; object-fit: cover">
+    <div class="blog-content text-box text-white">
+        <h3><a asp-controller="Games" asp-action="Details" asp-route-gameId="@review.Game.Id">@review.Game.Name</a></h3>
+        <div class="top-meta">
+            <i class="fa fa-user-o"></i> @review.Author
         </div>
+        <p>@review.Description</p>
+        <a asp-controller="Games" asp-action="Details" asp-route-gameId="@review.Game.Id" class="read-more">Learn More about @review.Game.Name <img src="/img/icons/double-arrow.png" alt="#" /></a>
+        <br />
+        <br />
+        @if (this.User.IsAdmin() || this.User.GetId() == review.AuthorId)
+        {
+<a asp-controller="Reviews" asp-action="Edit" asp-route-reviewId="@review.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Reviews" asp-action="Delete" asp-route-reviewId="@review.Id" class="btn btn-danger">Delete</a>}
     </div>
-                }
-
+</div>}}
                 <div class="site-pagination">
                     <a href="#" class="active">01.</a>
                     <a href="#">02.</a>

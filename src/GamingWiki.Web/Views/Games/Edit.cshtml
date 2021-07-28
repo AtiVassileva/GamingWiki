@@ -19,13 +19,13 @@
                             <label asp-for="PictureUrl"></label>
                             <input asp-for="PictureUrl" class="form-control" value="@Model.PictureUrl">
                             <span asp-validation-for="PictureUrl" class="small text-danger"></span>
-                            </div>
+                        </div>
                         <div class="form-group">
                             <label asp-for="TrailerUrl"></label>
                             <input asp-for="TrailerUrl" class="form-control" value="@Model.TrailerUrl">
                             <span asp-validation-for="TrailerUrl" class="small text-danger"></span>
-                            </div>
-                        
+                        </div>
+
                         <div class="form-group" style="display: inline-block;">
                             <label asp-for="AreaId"></label>
                             <select asp-for="AreaId">
@@ -42,7 +42,7 @@
                             <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;">@Model.Description</textarea>
                             <span asp-validation-for="Description" class="small text-danger"></span>
-                            </div>
+                        </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">
                                 Edit Game
@@ -54,3 +54,7 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

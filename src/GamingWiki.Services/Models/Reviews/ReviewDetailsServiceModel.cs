@@ -10,6 +10,8 @@ namespace GamingWiki.Services.Models.Reviews
 
         public string Author { get; set; }
 
+        public string AuthorId { get; set; }
+
         public string Description { get; set; }
     }
 }

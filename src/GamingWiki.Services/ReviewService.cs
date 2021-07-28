@@ -107,6 +107,7 @@ namespace GamingWiki.Services
             {
                 Id = r.Id,
                 Author = r.Author.UserName,
+                AuthorId = r.AuthorId,
                 Game = new GameServiceListingModel
                 {
                     Id = r.GameId,
