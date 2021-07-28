@@ -84,6 +84,16 @@ namespace GamingWiki.Services
             this.dbContext.SaveChanges();
         }
 
+        public bool GameExists(int gameId)
+            => this.dbContext.Games.Any(g => g.Id == gameId);
+
+        public bool ReviewExists(int reviewId)
+            => this.dbContext.Reviews.Any(r => r.Id == reviewId);
+
+        public string GetReviewAuthorId(int reviewId)
+            => this.dbContext.Reviews
+                .First(r => r.Id == reviewId).AuthorId;
+
         public IEnumerable<ReviewDetailsServiceModel> Search(string searchCriteria)
             => this.GetReviews(this.dbContext.Reviews
                 .Where(r => r.Game.Name.ToLower()

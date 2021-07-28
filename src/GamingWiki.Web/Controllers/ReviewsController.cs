@@ -27,6 +27,11 @@ namespace GamingWiki.Web.Controllers
         [Authorize]
         public IActionResult Create(ReviewFormModel model, int gameId)
         {
+            if (!this.helper.GameExists(gameId))
+            {
+                this.ModelState.AddModelError(nameof(gameId), "Game does not exist.");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
@@ -39,8 +44,22 @@ namespace GamingWiki.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Edit(int reviewId) 
-            => this.View(this.helper.GetReview(reviewId));
+        public IActionResult Edit(int reviewId)
+        {
+            if (!this.helper.ReviewExists(reviewId))
+            {
+                return this.View("Error");
+            }
+
+            var authorId = this.helper.GetReviewAuthorId(reviewId);
+
+            if (this.User.GetId() != authorId && !this.User.IsAdmin())
+            {
+                return this.Unauthorized();
+            }
+
+            return this.View(this.helper.GetReview(reviewId));
+        }
 
         [HttpPost]
         [Authorize]
@@ -59,6 +78,18 @@ namespace GamingWiki.Web.Controllers
         [Authorize]
         public IActionResult Delete(int reviewId)
         {
+            if (!this.helper.ReviewExists(reviewId))
+            {
+                return this.View("Error");
+            }
+
+            var authorId = this.helper.GetReviewAuthorId(reviewId);
+
+            if (this.User.GetId() != authorId && !this.User.IsAdmin())
+            {
+                return this.Unauthorized();
+            }
+
             this.helper.Delete(reviewId);
             return this.Redirect(nameof(this.All));
         }

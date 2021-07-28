@@ -18,6 +18,12 @@ namespace GamingWiki.Services.Contracts
 
         void Delete(int reviewId);
 
+        bool GameExists(int gameId);
+
+        bool ReviewExists(int reviewId);
+
+        string GetReviewAuthorId(int reviewId);
+
         IEnumerable<ReviewDetailsServiceModel> Search(string searchCriteria);
     }
 }
