@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    <form asp-controller="Articles" asp-action="Edit" asp-route-articleId="@Model.Id" method="post">
+                    <form method="post">
                         <div class="form-group">
                             <label asp-for="Heading"></label>
                             <input asp-for="Heading" value="@Model.Heading" class="form-control">

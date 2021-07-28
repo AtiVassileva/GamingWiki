@@ -2,7 +2,6 @@
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Articles;
-using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +30,7 @@ namespace GamingWiki.Web.Controllers
             });
 
         [HttpPost]
-        [Authorize(Roles = AdministratorRoleName)]
+        [Authorize]
         public IActionResult Create(ArticleFormModel model)
         {
             if (!this.helper.CategoryExists(model.CategoryId))
@@ -59,9 +58,21 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Details(int articleId) 
             => this.View(this.helper.Details(articleId));
 
-        [Authorize(Roles = AdministratorRoleName)]
+        [Authorize]
         public IActionResult Edit(int articleId)
         {
+            if (!this.helper.ArticleExists(articleId))
+            {
+                return this.View("Error");
+            }
+
+            var authorId = this.helper.GetAuthorId(articleId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != authorId)
+            {
+                return this.Unauthorized();
+            }
+
             var dbModel = this.helper.Details(articleId);
 
             var articleModel =  new ArticleServiceEditModel
@@ -76,7 +87,7 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = AdministratorRoleName)]
+        [Authorize]
         public IActionResult Edit(ArticleServiceEditModel model, int articleId)
         {
             if (!this.ModelState.IsValid)
@@ -100,9 +111,21 @@ namespace GamingWiki.Web.Controllers
                 new { articleId = $"{articleId}" });
         }
 
-        [Authorize(Roles = AdministratorRoleName)]
+        [Authorize]
         public IActionResult Delete(int articleId)
         {
+            if (!this.helper.ArticleExists(articleId))
+            {
+                return this.View("Error");
+            }
+
+            var authorId = this.helper.GetAuthorId(articleId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != authorId)
+            {
+                return this.Unauthorized();
+            }
+
             this.helper.Delete(articleId);
             return this.RedirectToAction(nameof(this.All));
         }
@@ -110,7 +133,7 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         [Authorize]
         public IActionResult Search(string searchCriteria) 
-            => View(nameof(this.All), new ArticleFullModel
+            => this.View(nameof(this.All), new ArticleFullModel
             {
                 Articles = this.helper.Search(searchCriteria),
                 Categories = this.helper.GetCategories()

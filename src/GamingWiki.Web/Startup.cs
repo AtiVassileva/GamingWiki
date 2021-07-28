@@ -49,6 +49,7 @@ namespace GamingWiki.Web
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IReplyService, ReplyService>();
+            services.AddTransient<IReviewService, ReviewService>();
 
             services.AddAutoMapper(Assembly.GetEntryAssembly());
         }

@@ -19,6 +19,10 @@ namespace GamingWiki.Services.Contracts
 
         bool CategoryExists(int categoryId);
 
+        string GetAuthorId(int articleId);
+
+        bool ArticleExists(int articleId);
+
         IEnumerable<ArticleAllServiceModel> Search(string searchCriteria);
 
         IEnumerable<ArticleAllServiceModel> Filter(int categoryId);

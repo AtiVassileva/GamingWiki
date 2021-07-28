@@ -57,9 +57,10 @@ namespace GamingWiki.Services
                     Category = a.Category.ToString(),
                     Content = a.Content,
                     Author = a.Author.UserName,
+                    AuthorId = a.AuthorId,
                     PictureUrl = a.PictureUrl,
                     PublishedOn = a.PublishedOn.ToString(DetailsDateFormat),
-                    Comments = this.commentService.AllByArticle(a.Id)
+                    Comments = this.commentService.AllByArticle(a.Id),
                 }).FirstOrDefault();
 
         public void Edit(int articleId, ArticleServiceEditModel model)
@@ -96,6 +97,13 @@ namespace GamingWiki.Services
         public bool CategoryExists(int categoryId)
             => this.dbContext.Categories
                 .Any(c => c.Id == categoryId);
+
+        public string GetAuthorId(int articleId)
+            => this.dbContext.Articles
+                .First(a => a.Id == articleId).AuthorId;
+
+        public bool ArticleExists(int articleId)
+            => this.dbContext.Articles.Any(a => a.Id == articleId);
 
         public IEnumerable<ArticleAllServiceModel> Search(string searchCriteria)
             => GetArticles(this.dbContext.Articles

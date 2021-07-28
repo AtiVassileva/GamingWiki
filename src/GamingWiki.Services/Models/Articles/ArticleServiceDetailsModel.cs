@@ -9,6 +9,8 @@ namespace GamingWiki.Services.Models.Articles
 
         public string Author { get; set; }
 
+        public string AuthorId { get; set; }
+
         public string Heading { get; set; }
 
         public string Category { get; set; }
