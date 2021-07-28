@@ -52,7 +52,10 @@ namespace GamingWiki.Services
         public bool GenreExists(int genreId)
             => this.dbContext.Genres.Any(g => g.Id == genreId);
 
-        
+        public bool GameExists(int gameId)
+            => this.dbContext.Games.Any(g => g.Id == gameId);
+
+
         public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames)
         {
             var game = new Game

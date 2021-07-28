@@ -11,6 +11,8 @@ namespace GamingWiki.Services.Contracts
 
         bool GenreExists(int genreId);
 
+        bool GameExists(int gameId);
+
         int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames);
 
         IEnumerable<GameServiceListingModel> All();

@@ -59,12 +59,19 @@ namespace GamingWiki.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Details(int gameId) 
-            => this.View(this.helper.Details(gameId));
+        public IActionResult Details(int gameId)
+            => this.helper.GameExists(gameId)
+                ? this.View(this.helper.Details(gameId))
+                : this.View("Error");
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int gameId)
         {
+            if (!this.helper.GameExists(gameId))
+            {
+                return this.View("Error");
+            }
+
             var dbModel = this.helper.Details(gameId);
 
             var viewModel = new GameEditModel
@@ -115,6 +122,11 @@ namespace GamingWiki.Web.Controllers
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int gameId)
         {
+            if (!this.helper.GameExists(gameId))
+            {
+                return this.View("Error");
+            }
+
             this.helper.Delete(gameId);
             return this.Redirect(nameof(this.All));
         }

@@ -38,15 +38,18 @@
                             <a class="btn btn btn-info" asp-controller="Characters" asp-action="All">See available characters</a>
                         </div>
                     }
-                    @foreach (var character in Model.Characters)
+                    else
                     {
-                        <div class="col-lg-4 col-md-6">
-                            <div class="game-item">
-                                <img src="@character.PictureUrl" alt="#" style="width: 370px; height: 345px; object-fit: cover">
-                                <h5>@character.Name</h5>
-                                <a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" class="read-more">See More <img src="/img/icons/double-arrow.png" alt="#"/></a>
+                        @foreach (var character in Model.Characters)
+                        {
+                            <div class="col-lg-4 col-md-6">
+                                <div class="game-item">
+                                    <img src="@character.PictureUrl" alt="#" style="width: 370px; height: 345px; object-fit: cover">
+                                    <h5>@character.Name</h5>
+                                    <a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" class="read-more">See More <img src="/img/icons/double-arrow.png" alt="#"/></a>
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                 </div>
                 <div class="site-pagination">
