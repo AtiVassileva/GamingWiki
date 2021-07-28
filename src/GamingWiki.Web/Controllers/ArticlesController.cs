@@ -55,8 +55,10 @@ namespace GamingWiki.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Details(int articleId) 
-            => this.View(this.helper.Details(articleId));
+        public IActionResult Details(int articleId)
+            => this.helper.ArticleExists(articleId) ? 
+                this.View(this.helper.Details(articleId)) 
+                : this.View("Error");
 
         [Authorize]
         public IActionResult Edit(int articleId)

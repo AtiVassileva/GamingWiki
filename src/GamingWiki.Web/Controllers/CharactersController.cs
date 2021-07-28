@@ -12,9 +12,7 @@ namespace GamingWiki.Web.Controllers
         private readonly ICharacterService helper;
 
         public CharactersController(ICharacterService helper)
-        {
-            this.helper = helper;
-        }
+            => this.helper = helper;
 
         [Authorize]
         public IActionResult All()
@@ -63,17 +61,26 @@ namespace GamingWiki.Web.Controllers
 
         [Authorize]
         public IActionResult Details(int characterId)
-            => this.View(this.helper.Details(characterId));
+            => this.helper.CharacterExists(characterId) ?
+                this.View(this.helper.Details(characterId)) :
+                 this.View("Error");
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int characterId)
         {
+            if (!this.helper.CharacterExists(characterId))
+            {
+                return this.View("Error");
+            }
+
             var dbModel = this.helper.Details(characterId);
 
             var characterModel = new CharacterServiceEditModel
             {
                 Id = dbModel.Id,
                 Name = dbModel.Name,
+                Class = dbModel.Class,
+                ClassId = dbModel.ClassId,
                 PictureUrl = dbModel.PictureUrl,
                 Description = dbModel.Description,
                 Classes = this.helper.GetClasses()
@@ -99,6 +106,8 @@ namespace GamingWiki.Web.Controllers
                 {
                     Id = dbModel.Id,
                     Name = dbModel.Name,
+                    Class = dbModel.Class,
+                    ClassId = dbModel.ClassId,
                     PictureUrl = dbModel.PictureUrl,
                     Description = dbModel.Description,
                     Classes = this.helper.GetClasses()
@@ -109,14 +118,18 @@ namespace GamingWiki.Web.Controllers
 
             this.helper.Edit(characterId, model);
 
-            return this.RedirectToAction(nameof(this.Details), 
-                new {characterId = $"{characterId}"});
+            return this.RedirectToAction(nameof(this.Details),
+                new { characterId = $"{characterId}" });
         }
-
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int characterId)
         {
+            if (!this.helper.CharacterExists(characterId))
+            {
+                return this.View("Error");
+            }
+
             this.helper.Delete(characterId);
             return this.RedirectToAction(nameof(this.All));
         }

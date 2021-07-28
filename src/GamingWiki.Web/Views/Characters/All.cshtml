@@ -30,6 +30,14 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
+                    @if (!Model.Characters.Any())
+                    {
+                        <div class="blog-content text-box text-white">
+                            <h5>No characters match your search.</h5>
+                            <br />
+                            <a class="btn btn btn-info" asp-controller="Characters" asp-action="All">See available characters</a>
+                        </div>
+                    }
                     @foreach (var character in Model.Characters)
                     {
                         <div class="col-lg-4 col-md-6">
@@ -51,7 +59,7 @@
                 <div id="stickySidebar">
                     <div class="widget-item">
                         <div class="categories-widget">
-                            <h4 class="widget-title">categories</h4>
+                            <h4 class="widget-title">Navigation</h4>
                             <ul>
                                 <li><a asp-controller="Games" asp-action="All">Games</a></li>
                                 <li><a asp-controller="Articles" asp-action="All">Articles</a></li>

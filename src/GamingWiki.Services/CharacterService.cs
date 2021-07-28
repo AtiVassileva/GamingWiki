@@ -27,6 +27,9 @@ namespace GamingWiki.Services
         public bool ClassExists(int classId)
             => this.dbContext.Classes.Any(c => c.Id == classId);
 
+        public bool CharacterExists(int characterId)
+            => this.dbContext.Characters.Any(c => c.Id == characterId);
+
         public int Create(string name, string pictureUrl,
             string description, int classId, int gameId)
         {
@@ -48,13 +51,14 @@ namespace GamingWiki.Services
         public CharacterServiceDetailsModel Details(int characterId)
             => this.dbContext.Characters
                 .Where(c => c.Id == characterId)
-                .Select(c => new CharacterServiceDetailsModel()
+                .Select(c => new CharacterServiceDetailsModel
                 {
                     Id = c.Id,
                     Name = c.Name,
                     PictureUrl = c.PictureUrl,
                     Description = c.Description,
                     Class = c.Class.Name,
+                    ClassId = c.ClassId,
                     Game = c.Game.Name,
                     GameId = c.Game.Id
                 }).FirstOrDefault();

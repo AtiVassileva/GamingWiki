@@ -23,6 +23,8 @@ namespace GamingWiki.Services.Models.Characters
         [Display(Name = "Class")]
         public int ClassId { get; set; }
 
+        public string Class { get; set; }
+
         public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }
 }

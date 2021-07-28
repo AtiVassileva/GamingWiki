@@ -14,6 +14,8 @@ namespace GamingWiki.Services.Contracts
 
         bool ClassExists(int classId);
 
+        bool CharacterExists(int characterId);
+
         int Create(string name, string pictureUrl,
             string description, int classId, int gameId);
 

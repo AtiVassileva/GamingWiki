@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    <form asp-controller="Characters" asp-action="Edit" asp-route-characterId="@Model.Id" method="post">
+                    <form method="post">
                         <div class="form-group">
                             <label asp-for="PictureUrl"></label>
                             <input asp-for="PictureUrl" value="@Model.PictureUrl" class="form-control">
@@ -23,8 +23,8 @@
                         <div class="form-group" style="display: inline-block;">
                             <label asp-for="ClassId"></label>
                             <select asp-for="ClassId">
-                                <option style="display:none">Select a class...</option>
-                                @foreach (var characterClass in Model.Classes)
+                                <option value="@Model.ClassId">@Model.Class</option>
+                                @foreach (var characterClass in Model.Classes.Where(c => c.Id != @Model.ClassId))
                                 {
                                     <option value="@characterClass.Id">@characterClass.Name</option>
                                 }
