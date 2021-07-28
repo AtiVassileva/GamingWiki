@@ -1,30 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using GamingWiki.Services.Models.Games;
 using static GamingWiki.Models.Common.DataConstants;
-namespace GamingWiki.Models
+
+namespace GamingWiki.Web.Models.Tricks
 {
-    public class Trick
+    public class TrickFormModel
     {
         public int Id { get; set; }
 
         [Required]
+        [MinLength(DefaultMinLength)]
         [MaxLength(HeadingMaxLength)]
         public string Heading { get; set; }
 
         [Required]
+        [MinLength(ContentMinLength)]
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; }
 
+        [Url]
         [Required]
         public string PictureUrl { get; set; }
 
         public int GameId { get; set; }
 
-        public Game Game { get; set; }
-
-        [Required]
-        public string AuthorId { get; set; }
-
-        public IdentityUser Author { get; set; }
+        public IEnumerable<GameServiceSimpleModel> Games { get; set; }
     }
 }

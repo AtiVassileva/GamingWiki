@@ -10,10 +10,11 @@ namespace GamingWiki.Web.Controllers
     {
         private readonly IGameService gameService;
         private readonly IArticleService articleService;
-
-        public HomeController(IGameService gameService, IArticleService articleService)
+        private readonly ITrickService trickService;
+        public HomeController(IGameService gameService, IArticleService articleService, ITrickService trickService)
         {
             this.articleService = articleService;
+            this.trickService = trickService;
             this.gameService = gameService;
         }
 
@@ -27,7 +28,8 @@ namespace GamingWiki.Web.Controllers
             return this.View(new HomeViewModel
             {
                 LatestArticles = this.articleService.GetLatest(),
-                BestGames = this.gameService.GetLatest()
+                LatestGames = this.gameService.GetLatest(),
+                LatestTricks = this.trickService.GetLatest()
             });
         }
 

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<TrickServiceListingModel>
+
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<section class="page-top-section set-bg" data-setbg="/img/games/big.jpg">
+    <div class="page-info">
+        <h2>Tips & Tricks</h2>
+        <div class="site-breadcrumb">
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Tricks" asp-action="All">Tips & Tricks</a>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-7">
+                <div class="row">
+                    @if (!Model.Any())
+                    {
+                        <div class="blog-content text-box text-white">
+                            <h5>
+                                No tips & tricks match your search.
+                                <a class="btn btn btn-info" asp-controller="Tricks" asp-action="All">See available tips & tricks</a>
+                            </h5>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var trick in Model)
+                        {
+                            <div class="col-lg-4 col-md-6">
+                                <div class="game-item">
+                                    <img src="@trick.PictureUrl" alt="#">
+                                    <br />
+                                    <br />
+                                    <h6><a asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.Game]</a></h6>
+                                    <h5>@trick.Heading</h5>
+                                    <p>@trick.Content</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="site-pagination">
+                    <a href="#" class="active">01.</a>
+                    <a href="#">02.</a>
+                    <a href="#">03.</a>
+                    <a href="#" class="active">>></a>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
+                <div id="stickySidebar">
+                    <div class="widget-item">
+                        <form class="search-widget" asp-controller="Reviews" asp-action="Search" method="post">
+                            <input type="text" name="searchCriteria">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">Navigation</h4>
+                            <ul>
+                                <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
+                                <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
+                                <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

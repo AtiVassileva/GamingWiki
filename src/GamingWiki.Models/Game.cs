@@ -2,7 +2,6 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
-    using System.Linq;
     using static Common.DataConstants;
 
     public class Game
@@ -29,15 +28,5 @@
         public int GenreId { get; set; }
 
         public Genre Genre { get; set; }
-
-        public ICollection<Character> Characters { get; set; }
-        = new HashSet<Character>();
-
-        public ICollection<GameCreator> GamesCreators { get; set; }
-            = new HashSet<GameCreator>();
-
-        public IEnumerable<Review> Reviews { get; set; }
-        = new HashSet<Review>();
-
     }
 }

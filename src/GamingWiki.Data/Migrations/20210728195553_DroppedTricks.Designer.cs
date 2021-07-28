@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamingWiki.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210728180927_IntroducedTipsAndTricks")]
-    partial class IntroducedTipsAndTricks
+    [Migration("20210728195553_DroppedTricks")]
+    partial class DroppedTricks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -376,33 +376,6 @@ namespace GamingWiki.Data.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("GamingWiki.Models.Trick", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("Heading")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("Tricks");
                 });
 
             modelBuilder.Entity("GamingWiki.Models.UserDiscussion", b =>
@@ -781,17 +754,6 @@ namespace GamingWiki.Data.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("GamingWiki.Models.Trick", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("GamingWiki.Models.UserDiscussion", b =>

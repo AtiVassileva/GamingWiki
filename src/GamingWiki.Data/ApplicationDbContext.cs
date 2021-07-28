@@ -57,6 +57,13 @@ namespace GamingWiki.Data
             modelBuilder.Entity<UserDiscussion>()
                 .HasKey(ud => new { ud.UserId, ud.DiscussionId });
 
+            //modelBuilder
+            //    .Entity<Trick>()
+            //    .HasOne<Game>()
+            //    .WithMany(g => g.Tricks)
+            //    .HasForeignKey(t => t.GameId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
     }
