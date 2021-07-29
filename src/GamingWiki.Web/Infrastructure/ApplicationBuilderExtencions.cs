@@ -33,7 +33,8 @@ namespace GamingWiki.Web.Infrastructure
 
         private static void MigrateDatabase(IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = serviceProvider
+                .GetRequiredService<ApplicationDbContext>();
             dbContext.Database.Migrate();
         }
         private static void SeedAreas(IServiceProvider serviceProvider)

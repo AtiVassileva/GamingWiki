@@ -21,7 +21,7 @@
         </div>
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
-                <div class="gs-meta">Developed by: <a href="">@string.Join(", ", Model.Creators)</a></div>
+                <div class="gs-meta">Developed by: <a href="" style="pointer-events: none; cursor: default;">@string.Join(", ", Model.Creators)</a></div>
                 <h2 class="gs-title">@Model.Name.ToUpper()</h2>
                 <h4>Genre: @Model.Genre&nbsp;&nbsp;&nbsp;Area: @Model.Area</h4>
                 <p>@Model.Description</p>
@@ -35,13 +35,21 @@
                 {
                     <a asp-controller="Reviews" asp-action="Create" asp-route-gameId="@Model.Id" class="btn btn-info">Add review</a>
                 }
-                    <br />
-                    <br /> 
-                <h4>Characters: </h4>
+                <br />
+                <br />
+                <h4 style="color: white;">Supported on: </h4>
+                <ul class="blog-filter">
+                    @foreach (var platform in Model.Platforms)
+                    {
+                        <li> <a href="" style="background-color: #0c062e; pointer-events: none; cursor: default;">@platform</a></li>
+                    }
+                </ul>
+                <br />
+                <h4 style="color: white;">Characters: </h4>
                 <ul class="blog-filter">
                     @foreach (var character in Model.Characters)
                     {
-                        <li><a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id">@character.Name</a></li>
+                        <li><a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" style="background-color: darkgreen;">@character.Name</a></li>
                     }
                 </ul>
                 <br />
@@ -53,7 +61,7 @@
                         </div>
                     </div>
                 </section>
-                <partial name="_SharePartial"/>
+                <partial name="_SharePartial" />
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">

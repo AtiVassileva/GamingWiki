@@ -2,6 +2,7 @@
 using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
+using GamingWiki.Services.Models.Platforms;
 
 namespace GamingWiki.Services.Contracts
 {
@@ -30,6 +31,8 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<AreaServiceModel> GetAreas();
 
         IEnumerable<GenreServiceModel> GetGenres();
+
+        IEnumerable<PlatformServiceModel> GetPlatforms();
 
         IEnumerable<GameServiceListingModel> GetLatest();
     }

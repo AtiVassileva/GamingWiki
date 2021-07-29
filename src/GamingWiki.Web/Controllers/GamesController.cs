@@ -18,7 +18,7 @@ namespace GamingWiki.Web.Controllers
             => this.View(new GameFullModel
             {
                 Games = this.helper.All(),
-                Genres = this.helper.GetGenres()
+                Genres = this.helper.GetGenres(),
             });
 
         [Authorize(Roles = AdministratorRoleName)]
@@ -27,6 +27,7 @@ namespace GamingWiki.Web.Controllers
             {
                 Areas = this.helper.GetAreas(),
                 Genres = this.helper.GetGenres(),
+                Platforms = this.helper.GetPlatforms()
             });
 
         [HttpPost]
@@ -47,6 +48,7 @@ namespace GamingWiki.Web.Controllers
             {
                 model.Areas = this.helper.GetAreas();
                 model.Genres = this.helper.GetGenres();
+                model.Platforms = this.helper.GetPlatforms();
 
                 return this.View(model);
             }
@@ -140,9 +142,8 @@ namespace GamingWiki.Web.Controllers
             });
 
         [Authorize]
-        public IActionResult Filter(int genreId) 
-            =>
-            this.View(nameof(this.All), new GameFullModel
+        public IActionResult Filter(int genreId)
+            => this.View(nameof(this.All), new GameFullModel
             {
                 Games = this.helper.Filter(genreId),
                 Genres = this.helper.GetGenres()

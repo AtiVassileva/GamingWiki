@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Genres;
+using GamingWiki.Services.Models.Platforms;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Games
@@ -36,8 +37,13 @@ namespace GamingWiki.Web.Models.Games
         [Display(Name = "Area")]
         public int AreaId { get; set; }
 
+        [Display(Name = "Platforms")]
+        public IEnumerable<int> SelectedPlatforms { get; set; }
+
         public IEnumerable<GenreServiceModel> Genres { get; set; }
 
         public IEnumerable<AreaServiceModel> Areas { get; set; }
+
+        public IEnumerable<PlatformServiceModel> Platforms { get; set; }
     }
 }

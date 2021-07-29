@@ -7,6 +7,7 @@ using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
+using GamingWiki.Services.Models.Platforms;
 
 namespace GamingWiki.Services
 {
@@ -116,6 +117,11 @@ namespace GamingWiki.Services
                             Name = c.Name
                         })
                         .OrderBy(c => c.Name)
+                        .ToList(),
+                    Platforms = this.dbContext.GamesPlatforms
+                        .Where(gp => gp.GameId == gameId)
+                        .Select(gp => gp.Platform.Name)
+                        .OrderBy(p => p.Length)
                         .ToList()
                 }).FirstOrDefault();
 
@@ -186,8 +192,7 @@ namespace GamingWiki.Services
 
 
         public IEnumerable<GenreServiceModel> GetGenres()
-            => this.dbContext
-                .Genres
+            => this.dbContext.Genres
                 .Select(g =>
                     new GenreServiceModel
                     {
@@ -196,6 +201,14 @@ namespace GamingWiki.Services
                     })
                 .OrderBy(g => g.Name)
                 .ToList();
+
+        public IEnumerable<PlatformServiceModel> GetPlatforms()
+            => this.dbContext.Platforms
+                .Select(p => new PlatformServiceModel
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                }).ToList();
 
         public IEnumerable<GameServiceListingModel> GetLatest() 
             => this.dbContext.Games
