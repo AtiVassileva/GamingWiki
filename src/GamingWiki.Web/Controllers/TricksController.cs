@@ -47,5 +47,74 @@ namespace GamingWiki.Web.Controllers
 
             return this.RedirectToAction(nameof(this.All));
         }
+
+        [Authorize]
+        public IActionResult Edit(int trickId)
+        {
+            if (!this.helper.TrickExists(trickId))
+            {
+                return this.View("Error");
+            }
+
+            var trick = this.helper.Details(trickId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != trick.AuthorId)
+            {
+                return this.Unauthorized();
+            }
+
+            return this.View(new TrickEditModel
+            {
+                Heading = trick.Heading,
+                Content = trick.Content,
+                PictureUrl = trick.PictureUrl
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(TrickEditModel model, int trickId)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                var trick = this.helper.Details(trickId);
+
+                model = new TrickEditModel
+                {
+                    Heading = trick.Heading,
+                    Content = trick.Content,
+                    PictureUrl = trick.PictureUrl
+                };
+
+                return this.View(model);
+            }
+
+            this.helper.Edit(trickId, model.Heading, model.Content, model.PictureUrl);
+
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        [Authorize]
+        public IActionResult Delete(int trickId)
+        {
+            if (!this.helper.TrickExists(trickId))
+            {
+                return this.View("Error");
+            }
+
+            var trickAuthorId = this.helper.GetTrickAuthorId(trickId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != trickAuthorId)
+            {
+                return this.Unauthorized();
+            }
+
+            this.helper.Delete(trickId);
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        [Authorize]
+        public IActionResult Search(string searchCriteria) 
+            => this.View(nameof(this.All), this.helper.Search(searchCriteria));
     }
 }

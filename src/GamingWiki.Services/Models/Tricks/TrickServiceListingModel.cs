@@ -15,5 +15,7 @@
         public int GameId { get; set; }
 
         public string Author { get; set; }
+
+        public string AuthorId { get; set; }
     }
 }

@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using GamingWiki.Services.Models.Games;
+﻿using System.ComponentModel.DataAnnotations;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Tricks
 {
-    public class TrickFormModel
+    public class TrickEditModel
     {
-        public int Id { get; set; }
-
         [Required]
         [MinLength(DefaultMinLength)]
         [MaxLength(HeadingMaxLength)]
@@ -23,10 +19,5 @@ namespace GamingWiki.Web.Models.Tricks
         [Required]
         [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
-
-        [Display(Name = "Game")]
-        public int GameId { get; set; }
-
-        public IEnumerable<GameServiceSimpleModel> Games { get; set; }
     }
 }

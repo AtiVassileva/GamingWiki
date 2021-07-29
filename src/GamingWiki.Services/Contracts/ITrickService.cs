@@ -12,6 +12,18 @@ namespace GamingWiki.Services.Contracts
 
         bool GameExists(int gameId);
 
+        bool TrickExists(int trickId);
+
+        void Edit(int trickId, string heading, string content, string pictureUrl);
+
+        void Delete(int trickId);
+
+        IEnumerable<TrickServiceListingModel> Search(string searchCriteria);
+
+        string GetTrickAuthorId(int trickId);
+
+        TrickServiceListingModel Details(int trickId);
+
         IEnumerable<GameServiceSimpleModel> GetGames();
 
         IEnumerable<TrickServiceHomeModel> GetLatest();

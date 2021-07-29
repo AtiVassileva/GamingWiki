@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TrickServiceListingModel>
+﻿@using GamingWiki.Web.Infrastructure
+@model IEnumerable<TrickServiceListingModel>
 
 <div id="preloder">
     <div class="loader"></div>
@@ -39,6 +40,11 @@
                                     <h6><a asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.Game]</a></h6>
                                     <h5>@trick.Heading</h5>
                                     <p>@trick.Content</p>
+                                    @if (this.User.IsAdmin() || this.User.GetId() == trick.AuthorId)
+                                    {
+                                        <a asp-controller="Tricks" asp-action="Edit" asp-route-trickId="@trick.Id" class="btn btn-warning">Edit</a>
+                                        <a asp-controller="Tricks" asp-action="Delete" asp-route-trickId="@trick.Id" class="btn btn-danger">Delete</a>
+                                    }
                                 </div>
                             </div>
                         }
@@ -55,7 +61,7 @@
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">
                     <div class="widget-item">
-                        <form class="search-widget" asp-controller="Reviews" asp-action="Search" method="post">
+                        <form class="search-widget" asp-controller="Tricks" asp-action="Search" method="post">
                             <input type="text" name="searchCriteria">
                             <button type="submit">Search</button>
                         </form>
