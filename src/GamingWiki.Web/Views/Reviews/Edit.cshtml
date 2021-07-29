@@ -31,7 +31,15 @@
                             <label>Price rate:</label>
                             @foreach (var (number, btnColor) in numbersColorsPairs)
                             {
-                                <input type="radio" class="@btnColor" name="priceRate" autocomplete="off" value="@number" />
+                                if (number == Model.PriceRate)
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="PriceRate" autocomplete="off" value="@number" checked />
+                                }
+                                else
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="PriceRate" autocomplete="off" value="@number" />
+                                }
+
                                 <label class="@btnColor">@number</label>
                             }
                             <br />
@@ -39,7 +47,15 @@
                             <label>Levels rate:</label>
                             @foreach (var (number, btnColor) in numbersColorsPairs)
                             {
-                                <input type="radio" class="@btnColor" name="levelsRate" autocomplete="off" value="@number" />
+                                if (number == Model.LevelsRate)
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="LevelsRate" autocomplete="off" value="@number" checked />
+                                }
+                                else
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="LevelsRate" autocomplete="off" value="@number" />
+                                }
+
                                 <label class="@btnColor">@number</label>
                             }
                             <br />
@@ -47,7 +63,15 @@
                             <label>Graphics rate:</label>
                             @foreach (var (number, btnColor) in numbersColorsPairs)
                             {
-                                <input type="radio" class="@btnColor" name="graphicsRate" autocomplete="off" value="@number" />
+                                if (number == Model.GraphicsRate)
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="GraphicsRate" autocomplete="off" value="@number" checked />
+                                }
+                                else
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="GraphicsRate" autocomplete="off" value="@number" />
+                                }
+
                                 <label class="@btnColor">@number</label>
                             }
                             <br />
@@ -55,7 +79,15 @@
                             <label>Difficulty rate:</label>
                             @foreach (var (number, btnColor) in numbersColorsPairs)
                             {
-                                <input type="radio" class="@btnColor" name="difficultyRate" autocomplete="off" value="@number" />
+                                if (number == Model.DifficultyRate)
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="DifficultyRate" autocomplete="off" value="@number" checked />
+                                }
+                                else
+                                {
+                                    <input type="radio" class="@btnColor" asp-for="DifficultyRate" autocomplete="off" value="@number" />
+                                }
+
                                 <label class="@btnColor">@number</label>
                             }
                         </div>

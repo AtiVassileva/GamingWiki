@@ -51,6 +51,27 @@ namespace GamingWiki.Services
                 .Where(r => r.Id == reviewId))
                 .FirstOrDefault();
 
+        public ReviewDetailsServiceModel Details(int reviewId)
+            => this.dbContext.Reviews
+                .Where(r => r.Id == reviewId)
+                .Select(r => new ReviewDetailsServiceModel
+                {
+                    Id = r.Id,
+                    PriceRate = r.PriceRate,
+                    DifficultyRate = r.DifficultyRate,
+                    GraphicsRate = r.GraphicsRate,
+                    LevelsRate = r.LevelsRate,
+                    AuthorId = r.AuthorId,
+                    Author = r.Author.UserName,
+                    Description = r.Description,
+                    Game = new GameServiceListingModel
+                    {
+                        Id = r.GameId,
+                        Name = r.Game.Name,
+                        PictureUrl = r.Game.PictureUrl
+                    }
+                }).FirstOrDefault();
+
         public void Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description)
         {
             var review = this.dbContext

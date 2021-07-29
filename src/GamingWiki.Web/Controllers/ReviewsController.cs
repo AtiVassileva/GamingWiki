@@ -58,16 +58,22 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            return this.View(this.helper.GetReview(reviewId));
+            return this.View(this.helper.Details(reviewId));
         }
 
         [HttpPost]
         [Authorize]
         public IActionResult Edit(ReviewFormModel model, int reviewId)
         {
-            if (!this.ModelState.IsValid)
+            if (!this.helper.ReviewExists(reviewId))
             {
                 return this.View("Error");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                var reviewDetails = this.helper.Details(reviewId);
+                return this.View(reviewDetails);
             }
 
             this.helper.Edit(reviewId, model.PriceRate, model.LevelsRate, model.GraphicsRate, model.DifficultyRate, model.Description);

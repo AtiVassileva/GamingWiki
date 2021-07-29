@@ -8,6 +8,14 @@ namespace GamingWiki.Services.Models.Reviews
 
         public GameServiceListingModel Game { get; set; }
 
+        public int PriceRate { get; set; }
+
+        public int LevelsRate { get; set; }
+
+        public int GraphicsRate { get; set; }
+
+        public int DifficultyRate { get; set; }
+
         public string Author { get; set; }
 
         public string AuthorId { get; set; }
