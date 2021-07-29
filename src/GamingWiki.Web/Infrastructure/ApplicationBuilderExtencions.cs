@@ -25,6 +25,7 @@ namespace GamingWiki.Web.Infrastructure
             SeedClasses(serviceProvider);
             SeedGenres(serviceProvider);
             SeedCategories(serviceProvider);
+            SeedPlatforms(serviceProvider);
             SeedAdministrator(serviceProvider);
 
             return app;
@@ -37,7 +38,8 @@ namespace GamingWiki.Web.Infrastructure
         }
         private static void SeedAreas(IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = serviceProvider
+                .GetRequiredService<ApplicationDbContext>();
 
             if (dbContext.Areas.Any())
             {
@@ -62,7 +64,8 @@ namespace GamingWiki.Web.Infrastructure
         
         private static void SeedClasses(IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = serviceProvider
+                .GetRequiredService<ApplicationDbContext>();
 
             if (dbContext.Classes.Any())
             {
@@ -90,7 +93,8 @@ namespace GamingWiki.Web.Infrastructure
 
         private static void SeedGenres(IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = serviceProvider
+                .GetRequiredService<ApplicationDbContext>();
 
             if (dbContext.Genres.Any())
             {
@@ -115,7 +119,8 @@ namespace GamingWiki.Web.Infrastructure
         
         private static void SeedCategories(IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = serviceProvider
+                .GetRequiredService<ApplicationDbContext>();
 
             if (dbContext.Categories.Any())
             {
@@ -135,10 +140,34 @@ namespace GamingWiki.Web.Infrastructure
             dbContext.SaveChanges();
         }
 
+        private static void SeedPlatforms(IServiceProvider serviceProvider)
+        {
+            var dbContext = serviceProvider
+                .GetRequiredService<ApplicationDbContext>();
+
+            if (dbContext.Platforms.Any())
+            {
+                return;
+            }
+
+            dbContext.Platforms.AddRange(new []
+            {
+                new Platform{Name = "PlayStation"},
+                new Platform{Name = "Xbox"},
+                new Platform{Name = "Nintendo Switch"},
+                new Platform{Name = "PC"},
+                new Platform{Name = "Mobile"},
+            });
+
+            dbContext.SaveChanges();
+        }
+
         private static void SeedAdministrator(IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider
+                .GetRequiredService<UserManager<IdentityUser>>();
+            var roleManager = serviceProvider
+                .GetRequiredService<RoleManager<IdentityRole>>();
 
             Task.Run(async () =>
                 {

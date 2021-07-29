@@ -23,5 +23,7 @@
 
         public const int MinimumRate = 1;
         public const int MaximumRate = 5;
+
+        public const int PlatformNameMaxLength = 50;
     }
 }

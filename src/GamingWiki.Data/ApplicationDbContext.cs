@@ -31,9 +31,13 @@ namespace GamingWiki.Data
 
         public DbSet<GameCreator> GamesCreators { get; set; }
 
+        public DbSet<GamePlatform> GamesPlatforms { get; set; }
+
         public DbSet<Genre> Genres { get; set; }
 
         public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Platform> Platforms { get; set; }
 
         public DbSet<Reply> Replies { get; set; }
 
@@ -54,16 +58,13 @@ namespace GamingWiki.Data
             modelBuilder.Entity<GameCreator>()
                 .HasKey(gc => new { gc.CreatorId, gc.GameId });
 
+            modelBuilder.Entity<GamePlatform>()
+                .HasKey(gp => new { gp.GameId, gp.PlatformId });
+
             modelBuilder.Entity<UserDiscussion>()
                 .HasKey(ud => new { ud.UserId, ud.DiscussionId });
 
-            //modelBuilder
-            //    .Entity<Trick>()
-            //    .HasOne<Game>()
-            //    .WithMany(g => g.Tricks)
-            //    .HasForeignKey(t => t.GameId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
+            
             base.OnModelCreating(modelBuilder);
         }
     }
