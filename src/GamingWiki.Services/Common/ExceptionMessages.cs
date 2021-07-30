@@ -4,5 +4,8 @@
     {
         public const string NonExistingArticleExceptionMessage =
             "Article does not exist!";
+        
+        public const string NonExistingCharacterExceptionMessage =
+            "Character does not exist!";
     }
 }

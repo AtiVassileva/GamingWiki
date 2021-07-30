@@ -1,25 +1,33 @@
-﻿using GamingWiki.Services.Contracts;
+﻿using System.Linq;
+using AutoMapper;
+using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class CharactersController : Controller
     {
         private readonly ICharacterService helper;
+        private readonly IMapper mapper;
 
-        public CharactersController(ICharacterService helper)
-            => this.helper = helper;
+        public CharactersController(ICharacterService helper, 
+            IMapper mapper)
+        {
+            this.helper = helper;
+            this.mapper = mapper;
+        }
 
-        [Authorize]
         public IActionResult All()
             => this.View(new CharacterFullModel
             {
-                Characters = this.helper.All(),
-                Classes = this.helper.GetClasses()
+                Characters = this.helper.All().OrderBy(c => c.Name),
+                Classes = this.helper.GetClasses().OrderBy(c => c.Name)
             });
 
         [Authorize(Roles = AdministratorRoleName)]
@@ -36,12 +44,12 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.GameExists(model.GameId))
             {
-                this.ModelState.AddModelError(nameof(model.GameId), "Game does not exist.");
+                this.ModelState.AddModelError(nameof(model.GameId), NonExistingGameExceptionMessage);
             }
 
             if (!this.helper.ClassExists(model.ClassId))
             {
-                this.ModelState.AddModelError(nameof(model.ClassId), "Class does not exist.");
+                this.ModelState.AddModelError(nameof(model.ClassId), NonExistingClassExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
@@ -58,33 +66,27 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.Details),
                 new { characterId = $"{characterId}" });
         }
-
-        [Authorize]
+        
         public IActionResult Details(int characterId)
             => this.helper.CharacterExists(characterId) ?
                 this.View(this.helper.Details(characterId)) :
-                 this.View("Error");
+                 this.View("Error", CreateError(NonExistingGameExceptionMessage));
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int characterId)
         {
             if (!this.helper.CharacterExists(characterId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
             var dbModel = this.helper.Details(characterId);
 
-            var characterModel = new CharacterServiceEditModel
-            {
-                Id = dbModel.Id,
-                Name = dbModel.Name,
-                Class = dbModel.Class,
-                ClassId = dbModel.ClassId,
-                PictureUrl = dbModel.PictureUrl,
-                Description = dbModel.Description,
-                Classes = this.helper.GetClasses()
-            };
+            var characterModel = this.mapper
+                .Map<CharacterServiceEditModel>(dbModel);
+
+            characterModel.Classes = this.helper.GetClasses()
+                .OrderBy(c => c.Name);
 
             return this.View(characterModel);
         }
@@ -95,23 +97,18 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.ClassExists(model.ClassId))
             {
-                this.ModelState.AddModelError(nameof(model.ClassId), "Class does not exist.");
+                this.ModelState.AddModelError(nameof(model.ClassId), NonExistingClassExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
                 var dbModel = this.helper.Details(characterId);
 
-                model = new CharacterServiceEditModel
-                {
-                    Id = dbModel.Id,
-                    Name = dbModel.Name,
-                    Class = dbModel.Class,
-                    ClassId = dbModel.ClassId,
-                    PictureUrl = dbModel.PictureUrl,
-                    Description = dbModel.Description,
-                    Classes = this.helper.GetClasses()
-                };
+                model = this.mapper
+                    .Map<CharacterServiceEditModel>(dbModel);
+
+                model.Classes = this.helper.GetClasses()
+                    .OrderBy(c => c.Name);
 
                 return this.View(model);
             }
@@ -127,27 +124,27 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.CharacterExists(characterId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
             }
 
             this.helper.Delete(characterId);
             return this.RedirectToAction(nameof(this.All));
         }
-
-        [Authorize]
+        
         public IActionResult Search(string letter)
             => this.View(nameof(this.All), new CharacterFullModel
             {
-                Characters = this.helper.Search(letter),
-                Classes = this.helper.GetClasses()
+                Characters = this.helper.Search(letter)
+                    .OrderBy(c => c.Name),
+                Classes = this.helper.GetClasses().OrderBy(c => c.Name)
             });
-
-        [Authorize]
+        
         public IActionResult Filter(int classId)
             => this.View(nameof(this.All), new CharacterFullModel
             {
-                Characters = this.helper.Filter(classId),
-                Classes = this.helper.GetClasses()
+                Characters = this.helper.Filter(classId)
+                    .OrderBy(c => c.Name),
+                Classes = this.helper.GetClasses().OrderBy(c => c.Name)
             });
     }
 }

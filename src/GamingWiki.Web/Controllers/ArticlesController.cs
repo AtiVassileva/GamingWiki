@@ -2,8 +2,10 @@
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Web.Infrastructure;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,13 +62,13 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Details(int articleId)
             => this.helper.ArticleExists(articleId) ? 
                 this.View(this.helper.Details(articleId)) 
-                : this.View("Error", NonExistingArticleExceptionMessage);
+                : this.View("Error", CreateError(NonExistingArticleExceptionMessage));
         
         public IActionResult Edit(int articleId)
         {
             if (!this.helper.ArticleExists(articleId))
             {
-                return this.View("Error",  NonExistingArticleExceptionMessage);
+                return this.View("Error",  CreateError(NonExistingArticleExceptionMessage));
             }
 
             var authorId = this.helper.GetAuthorId(articleId);
@@ -107,7 +109,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.ArticleExists(articleId))
             {
-                return this.View("Error", NonExistingArticleExceptionMessage);
+                return this.View("Error", CreateError(NonExistingArticleExceptionMessage));
             }
 
             var authorId = this.helper.GetAuthorId(articleId);

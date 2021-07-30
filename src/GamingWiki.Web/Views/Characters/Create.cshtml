@@ -30,7 +30,7 @@
                             <label asp-for="GameId"></label>
                             <select asp-for="GameId">
                                 <option style="display:none">Select a game...</option>
-                                @foreach (var game in Model.Games)
+                                @foreach (var game in Model.Games.OrderBy(g => g.Name))
                                 {
                                     <option value="@game.Id">@game.Name</option>
                                 }
@@ -41,7 +41,7 @@
                             <label asp-for="ClassId"></label>
                             <select asp-for="ClassId">
                                 <option style="display:none">Select a class...</option>
-                                @foreach (var characterClass in Model.Classes)
+                                @foreach (var characterClass in Model.Classes.OrderBy(c => c.Name))
                                 {
                                     <option value="@characterClass.Id">@characterClass.Name</option>
                                 }

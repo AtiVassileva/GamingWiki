@@ -23,7 +23,7 @@
                         <div class="form-group" style="display: inline-block;">
                             <label asp-for="ClassId"></label>
                             <select asp-for="ClassId">
-                                <option value="@Model.ClassId">@Model.Class</option>
+                                <option value="@Model.ClassId">@Model.ClassName</option>
                                 @foreach (var characterClass in Model.Classes.Where(c => c.Id != @Model.ClassId))
                                 {
                                     <option value="@characterClass.Id">@characterClass.Name</option>

@@ -1,21 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Games;
+using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
     public class CharacterService : ICharacterService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IMapper mapper;
 
-        public CharacterService(ApplicationDbContext dbContext)
+        public CharacterService(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         public Game ParseGame(string gameName)
@@ -49,40 +54,29 @@ namespace GamingWiki.Services
         }
 
         public CharacterServiceDetailsModel Details(int characterId)
-            => this.dbContext.Characters
-                .Where(c => c.Id == characterId)
-                .Select(c => new CharacterServiceDetailsModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    PictureUrl = c.PictureUrl,
-                    Description = c.Description,
-                    Class = c.Class.Name,
-                    ClassId = c.ClassId,
-                    Game = c.Game.Name,
-                    GameId = c.Game.Id
-                }).FirstOrDefault();
+        {
+            var character = this.FindCharacter(characterId);
+
+            var detailsModel = this.mapper
+                .Map<CharacterServiceDetailsModel>(character);
+
+            return detailsModel;
+        }
 
         public IEnumerable<CharacterAllServiceModel> All()
         => this.dbContext.Characters
-                .Select(c => new CharacterAllServiceModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    PictureUrl = c.PictureUrl,
-                })
-                .OrderBy(c => c.Name)
+                .Select(c => this.mapper
+                    .Map<CharacterAllServiceModel>(c))
                 .ToList();
 
         public void Edit(int characterId, CharacterServiceEditModel model)
         {
-            var character = this.dbContext.Characters
-                .FirstOrDefault(c => c.Id == characterId);
-
-            if (character == null)
+            if (!this.CharacterExists(characterId))
             {
-                return;
+                throw new InvalidOperationException(NonExistingCharacterExceptionMessage);
             }
+
+            var character = this.FindCharacter(characterId);
 
             character.PictureUrl = model.PictureUrl;
             character.Description = model.Description;
@@ -93,13 +87,12 @@ namespace GamingWiki.Services
 
         public void Delete(int characterId)
         {
-            var character = this.dbContext.Characters
-                .FirstOrDefault(c => c.Id == characterId);
-
-            if (character == null)
+            if (!this.CharacterExists(characterId))
             {
-                return;
+                throw new InvalidOperationException(NonExistingCharacterExceptionMessage);
             }
+
+            var character = this.FindCharacter(characterId);
 
             this.dbContext.Characters.Remove(character);
             this.dbContext.SaveChanges();
@@ -109,45 +102,32 @@ namespace GamingWiki.Services
             => this.dbContext.Characters
                 .Where(c => c.Name.ToUpper()
                     .StartsWith(letter))
-                .Select(c => new CharacterAllServiceModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    PictureUrl = c.PictureUrl,
-                })
+                .Select(c => this.mapper
+                    .Map<CharacterAllServiceModel>(c))
                 .OrderBy(c => c.Name)
                 .ToList();
 
         public IEnumerable<CharacterAllServiceModel> Filter(int classId)
             => this.dbContext.Characters
                 .Where(c => c.ClassId == classId)
-                .Select(c => new CharacterAllServiceModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    PictureUrl = c.PictureUrl
-                })
-                .OrderBy(c => c.Name)
+                .Select(c => this.mapper
+                    .Map<CharacterAllServiceModel>(c))
                 .ToList();
 
         public IEnumerable<ClassSimpleServiceModel> GetClasses()
             => this.dbContext.Classes
-                .Select(c => new ClassSimpleServiceModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .OrderBy(c => c.Name)
+                .Select(c => this.mapper
+                    .Map<ClassSimpleServiceModel>(c))
                 .ToList();
 
         public IEnumerable<GameServiceSimpleModel> GetGames()
         => this.dbContext.Games
-            .Select(g => new GameServiceSimpleModel
-            {
-                Id = g.Id,
-                Name = g.Name
-            })
-            .OrderBy(c => c.Name)
+            .Select(g => this.mapper
+                .Map<GameServiceSimpleModel>(g))
             .ToList();
+
+        private Character FindCharacter(int characterId)
+            => this.dbContext.Characters
+                .First(c => c.Id == characterId);
     }
 }

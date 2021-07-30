@@ -20,10 +20,10 @@ namespace GamingWiki.Services.Models.Characters
         [MinLength(DescriptionMinLength)]
         public string Description { get; set; }
 
-        [Display(Name = "Class")]
+        [Display(Name = "ClassName")]
         public int ClassId { get; set; }
 
-        public string Class { get; set; }
+        public string ClassName { get; set; }
 
         public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }

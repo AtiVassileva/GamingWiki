@@ -50,7 +50,7 @@ namespace GamingWiki.Services
 
         public ArticleServiceDetailsModel Details(int articleId)
         {
-            var article = this.GetArticle(articleId);
+            var article = this.FindArticle(articleId);
 
             var articleDetails = this.mapper
                 .Map<ArticleServiceDetailsModel>(article);
@@ -65,10 +65,10 @@ namespace GamingWiki.Services
         {
             if (!this.ArticleExists(articleId))
             {
-                throw new NullReferenceException(NonExistingArticleExceptionMessage);
+                throw new InvalidOperationException(NonExistingArticleExceptionMessage);
             }
 
-            var article = this.GetArticle(articleId);
+            var article = this.FindArticle(articleId);
 
             article.Heading = model.Heading;
             article.PictureUrl = model.PictureUrl;
@@ -81,10 +81,10 @@ namespace GamingWiki.Services
         {
             if (!this.ArticleExists(articleId))
             {
-                throw new NullReferenceException(NonExistingArticleExceptionMessage);
+                throw new InvalidOperationException(NonExistingArticleExceptionMessage);
             }
 
-            var article = this.GetArticle(articleId);
+            var article = this.FindArticle(articleId);
 
             this.dbContext.Articles.Remove(article);
             this.dbContext.SaveChanges();
@@ -125,7 +125,7 @@ namespace GamingWiki.Services
             .Take(HomePageEntityCount)
             .ToList();
 
-        private Article GetArticle(int articleId)
+        private Article FindArticle(int articleId)
             => this.dbContext.Articles.First(a => a.Id == articleId);
 
         private IEnumerable<ArticleAllServiceModel> GetArticles(IQueryable<Article> articlesQuery)

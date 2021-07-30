@@ -2,6 +2,9 @@
 using GamingWiki.Models;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
+using GamingWiki.Services.Models.Characters;
+using GamingWiki.Services.Models.Classes;
+using GamingWiki.Services.Models.Games;
 
 namespace GamingWiki.Services.MappingConfiguration
 {
@@ -25,8 +28,21 @@ namespace GamingWiki.Services.MappingConfiguration
 
             this.CreateMap<ArticleServiceDetailsModel, ArticleServiceEditModel>();
 
+            //Characters
+            this.CreateMap<Character, CharacterServiceDetailsModel>();
+
+            this.CreateMap<Character, CharacterAllServiceModel>();
+
+            this.CreateMap<CharacterServiceDetailsModel, CharacterServiceEditModel>();
+
             //Categories
             this.CreateMap<Category, CategoryServiceModel>();
+
+            //Classes
+            this.CreateMap<Class, ClassSimpleServiceModel>();
+
+            // Games
+            this.CreateMap<Game, GameServiceSimpleModel>();
         }
     }
 }
