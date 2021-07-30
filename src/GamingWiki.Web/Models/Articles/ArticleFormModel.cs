@@ -12,7 +12,7 @@ namespace GamingWiki.Web.Models.Articles
 
         public string Heading { get; set; }
         
-        [Display(Name = "Category")]
+        [Display(Name = "CategoryName")]
         public int CategoryId { get; set; }
 
         [Required]

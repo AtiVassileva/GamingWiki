@@ -1,28 +1,33 @@
-﻿using GamingWiki.Services.Contracts;
+﻿using AutoMapper;
+using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Articles;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class ArticlesController : Controller
     {
         private readonly IArticleService helper;
+        private readonly IMapper mapper;
 
-        public ArticlesController(IArticleService helper) 
-            => this.helper = helper;
-
-        [Authorize]
+        public ArticlesController(IArticleService helper, IMapper mapper)
+        {
+            this.helper = helper;
+            this.mapper = mapper;
+        }
+        
         public IActionResult All() 
             => this.View(new ArticleFullModel
             {
                 Articles = this.helper.All(),
                 Categories = this.helper.GetCategories()
             });
-
-        [Authorize]
+        
         public IActionResult Create() 
             => this.View(new ArticleFormModel
             {
@@ -30,18 +35,16 @@ namespace GamingWiki.Web.Controllers
             });
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(ArticleFormModel model)
         {
             if (!this.helper.CategoryExists(model.CategoryId))
             {
-                this.ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist.");
+                this.ModelState.AddModelError(nameof(model.CategoryId), NonExistingCategoryExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
                 model.Categories = this.helper.GetCategories();
-
                 return this.View(model);
             }
 
@@ -53,19 +56,17 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.Details),
                 new { articleId = $"{articleId}" });
         }
-
-        [Authorize]
+        
         public IActionResult Details(int articleId)
             => this.helper.ArticleExists(articleId) ? 
                 this.View(this.helper.Details(articleId)) 
-                : this.View("Error");
-
-        [Authorize]
+                : this.View("Error", NonExistingArticleExceptionMessage);
+        
         public IActionResult Edit(int articleId)
         {
             if (!this.helper.ArticleExists(articleId))
             {
-                return this.View("Error");
+                return this.View("Error",  NonExistingArticleExceptionMessage);
             }
 
             var authorId = this.helper.GetAuthorId(articleId);
@@ -75,34 +76,23 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            var dbModel = this.helper.Details(articleId);
+            var detailsModel = this.helper.Details(articleId);
 
-            var articleModel =  new ArticleServiceEditModel
-                {
-                    Id = dbModel.Id,
-                    Heading = dbModel.Heading,
-                    PictureUrl = dbModel.PictureUrl,
-                    Content = dbModel.Content
-                };
+            var articleModel = this.mapper
+                .Map<ArticleServiceEditModel>(detailsModel);
 
             return this.View(articleModel);
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Edit(ArticleServiceEditModel model, int articleId)
         {
             if (!this.ModelState.IsValid)
             {
-                var dbModel = this.helper.Details(articleId);
+                var detailsModel = this.helper.Details(articleId);
 
-                model = new ArticleServiceEditModel
-                {
-                    Id = dbModel.Id,
-                    Heading = dbModel.Heading,
-                    PictureUrl = dbModel.PictureUrl,
-                    Content = dbModel.Content
-                };
+                model = this.mapper
+                    .Map<ArticleServiceEditModel>(detailsModel);
 
                 return this.View(model);
             }
@@ -112,13 +102,12 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.Details),
                 new { articleId = $"{articleId}" });
         }
-
-        [Authorize]
+        
         public IActionResult Delete(int articleId)
         {
             if (!this.helper.ArticleExists(articleId))
             {
-                return this.View("Error");
+                return this.View("Error", NonExistingArticleExceptionMessage);
             }
 
             var authorId = this.helper.GetAuthorId(articleId);
@@ -133,7 +122,6 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Search(string searchCriteria) 
             => this.View(nameof(this.All), new ArticleFullModel
             {

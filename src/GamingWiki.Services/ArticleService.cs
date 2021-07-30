@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
+using static GamingWiki.Services.Common.ServiceConstants;
+using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
     public class ArticleService : IArticleService
     {
-        private const string AllDateFormat = "D";
-        private const string DetailsDateFormat = "f";
-
-        private const int HomePageEntityCount = 3;
-
         private readonly ApplicationDbContext dbContext;
         private readonly ICommentService commentService;
+        private readonly IMapper mapper;
 
-        public ArticleService(ApplicationDbContext dbContext, ICommentService commentService)
+        public ArticleService(ApplicationDbContext dbContext, ICommentService commentService, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.commentService = commentService;
+            this.mapper = mapper;
         }
 
         public IEnumerable<ArticleAllServiceModel> All()
-            => GetArticles(this.dbContext.Articles);
+            => this.GetArticles(this.dbContext.Articles)
+                .OrderByDescending(a => a.Id);
 
         public int Create(string heading, string content, int categoryId,
             string pictureUrl, string authorId)
@@ -48,30 +49,26 @@ namespace GamingWiki.Services
         }
 
         public ArticleServiceDetailsModel Details(int articleId)
-            => this.dbContext.Articles
-                .Where(a => a.Id == articleId)
-                .Select(a => new ArticleServiceDetailsModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    Category = a.Category.ToString(),
-                    Content = a.Content,
-                    Author = a.Author.UserName,
-                    AuthorId = a.AuthorId,
-                    PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString(DetailsDateFormat),
-                    Comments = this.commentService.AllByArticle(a.Id),
-                }).FirstOrDefault();
+        {
+            var article = this.GetArticle(articleId);
+
+            var articleDetails = this.mapper
+                .Map<ArticleServiceDetailsModel>(article);
+
+            articleDetails.Comments = this.commentService
+                .AllByArticle(articleDetails.Id);
+
+            return articleDetails;
+        }
 
         public void Edit(int articleId, ArticleServiceEditModel model)
         {
-            var article = this.dbContext.Articles
-                .FirstOrDefault(a => a.Id == articleId);
-
-            if (article == null)
+            if (!this.ArticleExists(articleId))
             {
-                return;
+                throw new NullReferenceException(NonExistingArticleExceptionMessage);
             }
+
+            var article = this.GetArticle(articleId);
 
             article.Heading = model.Heading;
             article.PictureUrl = model.PictureUrl;
@@ -82,13 +79,12 @@ namespace GamingWiki.Services
 
         public void Delete(int articleId)
         {
-            var article = this.dbContext.Articles
-                .FirstOrDefault(a => a.Id == articleId);
-
-            if (article == null)
+            if (!this.ArticleExists(articleId))
             {
-                return;
+                throw new NullReferenceException(NonExistingArticleExceptionMessage);
             }
+
+            var article = this.GetArticle(articleId);
 
             this.dbContext.Articles.Remove(article);
             this.dbContext.SaveChanges();
@@ -98,55 +94,43 @@ namespace GamingWiki.Services
             => this.dbContext.Categories
                 .Any(c => c.Id == categoryId);
 
+        public bool ArticleExists(int articleId)
+            => this.dbContext.Articles.Any(a => a.Id == articleId);
+
         public string GetAuthorId(int articleId)
             => this.dbContext.Articles
                 .First(a => a.Id == articleId).AuthorId;
 
-        public bool ArticleExists(int articleId)
-            => this.dbContext.Articles.Any(a => a.Id == articleId);
-
         public IEnumerable<ArticleAllServiceModel> Search(string searchCriteria)
-            => GetArticles(this.dbContext.Articles
-                .Where(a => a.Heading.ToLower().Contains(searchCriteria.ToLower().Trim())));
+            => this.GetArticles(this.dbContext.Articles
+                .Where(a => a.Heading.ToLower().Contains(searchCriteria.ToLower().Trim())))
+                .OrderByDescending(a => a.Id);
 
         public IEnumerable<ArticleAllServiceModel> Filter(int categoryId)
             => GetArticles(this.dbContext.Articles
-                .Where(a => a.CategoryId == categoryId));
+                .Where(a => a.CategoryId == categoryId))
+                .OrderByDescending(c => c.Id);
 
         public IEnumerable<CategoryServiceModel> GetCategories()
         => this.dbContext.Categories
-            .Select(c => new CategoryServiceModel
-            {
-                Id = c.Id,
-                Name = c.Name
-            })
-            .OrderByDescending(c => c.Id)
+            .Select(c => this.mapper
+                .Map<CategoryServiceModel>(c))
             .ToList();
 
         public IEnumerable<ArticleServiceHomeModel> GetLatest()
         => this.dbContext.Articles
             .OrderByDescending(a => a.Id)
-            .Select(a => new ArticleServiceHomeModel
-            {
-                Id = a.Id,
-                Heading = a.Heading,
-                PictureUrl = a.PictureUrl,
-                ShortContent = a.Content.Substring(0, 200)
-            })
+            .Select(a => this.mapper
+                .Map<ArticleServiceHomeModel>(a))
             .Take(HomePageEntityCount)
             .ToList();
 
+        private Article GetArticle(int articleId)
+            => this.dbContext.Articles.First(a => a.Id == articleId);
 
-        private static IEnumerable<ArticleAllServiceModel> GetArticles(IQueryable<Article> articlesQuery)
-        => articlesQuery.Select(a
-                => new ArticleAllServiceModel
-                {
-                    Id = a.Id,
-                    Heading = a.Heading,
-                    PictureUrl = a.PictureUrl,
-                    PublishedOn = a.PublishedOn.ToString(AllDateFormat)
-                })
-            .OrderByDescending(c => c.Id)
+        private IEnumerable<ArticleAllServiceModel> GetArticles(IQueryable<Article> articlesQuery)
+        => articlesQuery.Select(a => this.mapper
+                .Map<ArticleAllServiceModel>(a))
             .ToList();
 
     }

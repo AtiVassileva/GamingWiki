@@ -13,7 +13,7 @@ namespace GamingWiki.Services.Models.Articles
 
         public string Heading { get; set; }
 
-        public string Category { get; set; }
+        public string CategoryName { get; set; }
 
         public string Content { get; set; }
 

@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 using GamingWiki.Data;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
+using GamingWiki.Services.MappingConfiguration;
 using GamingWiki.Web.Infrastructure;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +52,7 @@ namespace GamingWiki.Web
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<ITrickService, TrickService>();
 
-            services.AddAutoMapper(Assembly.GetEntryAssembly());
+            services.AddAutoMapper(typeof(MappingProfile));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
