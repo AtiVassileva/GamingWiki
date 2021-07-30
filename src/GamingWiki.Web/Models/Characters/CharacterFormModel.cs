@@ -24,7 +24,7 @@ namespace GamingWiki.Web.Models.Characters
         public int ClassId { get; set; }
 
         [Required]
-        [MinLength(DescriptionMinLength)]
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; }
 
         public IEnumerable<GameServiceSimpleModel> Games { get; set; }

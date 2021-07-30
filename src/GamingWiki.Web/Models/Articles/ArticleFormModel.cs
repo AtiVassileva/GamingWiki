@@ -12,11 +12,11 @@ namespace GamingWiki.Web.Models.Articles
 
         public string Heading { get; set; }
         
-        [Display(Name = "CategoryName")]
+        [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
         [Required]
-        [MinLength(ContentMinLength)]
+        [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
         public string Content { get; set; }
 
         [Url]

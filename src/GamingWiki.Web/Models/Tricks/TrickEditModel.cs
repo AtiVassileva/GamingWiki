@@ -6,13 +6,13 @@ namespace GamingWiki.Web.Models.Tricks
     public class TrickEditModel
     {
         [Required]
-        [MinLength(DefaultMinLength)]
-        [MaxLength(HeadingMaxLength)]
+        [StringLength(HeadingMaxLength, 
+            MinimumLength = DefaultMinLength)]
         public string Heading { get; set; }
 
         [Required]
-        [MinLength(ContentMinLength)]
-        [MaxLength(ContentMaxLength)]
+        [StringLength(ContentMaxLength, 
+            MinimumLength = ContentMinLength)]
         public string Content { get; set; }
 
         [Url]

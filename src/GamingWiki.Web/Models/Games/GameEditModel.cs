@@ -20,7 +20,8 @@ namespace GamingWiki.Web.Models.Games
         public string TrailerUrl { get; set; }
 
         [Required]
-        [MinLength(DescriptionMinLength)]
+        [StringLength(DescriptionMaxLength, 
+            MinimumLength = DescriptionMinLength)]
         public string Description { get; set; }
 
         [Display(Name = "Area")]

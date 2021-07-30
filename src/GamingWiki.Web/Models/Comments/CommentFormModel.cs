@@ -6,7 +6,8 @@ namespace GamingWiki.Web.Models.Comments
     public class CommentFormModel
     {
         [Required]
-        [MinLength(CommentContentMinLength)]
+        [StringLength(CommentContentMaxLength, 
+            MinimumLength = CommentContentMinLength)]
         public string Content { get; set; }
     }
 }

@@ -4,6 +4,7 @@
     {
         public const int DefaultMinLength = 3;
         public const int DescriptionMinLength = 10;
+        public const int DescriptionMaxLength = 20000;
         public const int DefaultMaxLength = 100;
 
         public const int ContentMinLength = 20;
@@ -13,8 +14,13 @@
         public const int CharacterNameMaxLength = 30;
         public const int CharacterClassMaxLength = 25;
 
-        public const int ContentMaxLength = 2000;
+        public const int ContentMaxLength = 10000;
         public const int CommentContentMinLength = 5;
+        public const int CommentContentMaxLength = 5000;
+
+        public const int ReplyContentMinLength = 3;
+        public const int ReplyContentMaxLength = 3000;
+
         public const int CreatorNameMaxLength = 80;
 
         public const int GameNameMaxLength = 30;
