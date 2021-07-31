@@ -107,5 +107,9 @@ namespace GamingWiki.Web.Controllers
         
         public IActionResult Search(string searchCriteria) 
             => this.View(nameof(this.All), this.helper.Search(searchCriteria));
+
+        public IActionResult Mine()
+            => this.View(nameof(this.All), this.helper
+                .GetTricksByUser(this.User.GetId()));
     }
 }

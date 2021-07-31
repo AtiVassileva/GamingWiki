@@ -106,6 +106,10 @@ namespace GamingWiki.Services
                 .Take(HomePageEntityCount)
                 .ToList();
 
+        public IEnumerable<TrickServiceListingModel> GetTricksByUser(string userId)
+            => this.GetTricks(this.dbContext.Tricks
+                .Where(t => t.AuthorId == userId));
+
         private Trick FindTrick(int trickId) 
             => this.dbContext.Tricks
                 .First(t => t.Id == trickId);

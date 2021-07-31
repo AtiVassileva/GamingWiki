@@ -12,7 +12,7 @@
             "Category does not exist!";
         
         public const string NonExistingGameExceptionMessage =
-            "GameName does not exist!";
+            "Game does not exist!";
         
         public const string NonExistingClassExceptionMessage =
             "Class does not exist!";

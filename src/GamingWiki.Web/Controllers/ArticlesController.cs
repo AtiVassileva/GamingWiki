@@ -137,5 +137,12 @@ namespace GamingWiki.Web.Controllers
                 Articles = this.helper.Filter(categoryId),
                 Categories = this.helper.GetCategories()
             });
+
+        public IActionResult Mine() 
+            => this.View(nameof(this.All), new ArticleFullModel()
+            {
+                Articles = this.helper
+                    .GetArticlesByUser(this.User.GetId())
+            });
     }
 }

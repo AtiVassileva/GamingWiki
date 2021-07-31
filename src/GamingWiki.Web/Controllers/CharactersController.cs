@@ -2,6 +2,7 @@
 using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Characters;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Common.ExceptionMessages;

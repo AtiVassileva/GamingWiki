@@ -27,5 +27,7 @@ namespace GamingWiki.Services.Contracts
         string GetReviewAuthorId(int reviewId);
 
         IEnumerable<ReviewDetailsServiceModel> Search(string searchCriteria);
+
+        IEnumerable<ReviewDetailsServiceModel> GetReviewsByUser(string userId);
     }
 }

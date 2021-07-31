@@ -27,5 +27,7 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<GameServiceSimpleModel> GetGames();
 
         IEnumerable<TrickServiceHomeModel> GetLatest();
+
+        IEnumerable<TrickServiceListingModel> GetTricksByUser(string userId);
     }
 }

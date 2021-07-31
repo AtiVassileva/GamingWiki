@@ -45,12 +45,12 @@
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <a asp-controller="Games" asp-action="All">GameNameNames</a>
+                                <a asp-controller="Games" asp-action="All">Games</a>
                                 <ul class="sub-menu">
                                     <li><a asp-controller="Games" asp-action="All">List</a></li>
                                     @if (this.User.IsAdmin())
                                     {
-                                        <li><a asp-controller="Games" asp-action="Create">New GameNameName</a></li>
+                                        <li><a asp-controller="Games" asp-action="Create">New Game</a></li>
                                     }
                                 </ul>
                             </li>
@@ -68,12 +68,14 @@
                                 <a asp-controller="Reviews" asp-action="All">Reviews</a>
                                 <ul class="sub-menu">
                                     <li><a asp-controller="Reviews" asp-action="All">List</a></li>
+                                    <li><a asp-controller="Reviews" asp-action="Mine">My Reviews</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a asp-controller="Articles" asp-action="All">Articles</a>
                                 <ul class="sub-menu">
                                     <li><a asp-controller="Articles" asp-action="All">List</a></li>
+                                    <li><a asp-controller="Articles" asp-action="Mine">My Articles</a></li>
                                     <li><a asp-controller="Articles" asp-action="Create">New Article</a></li>
                                 </ul>
                             </li>
@@ -81,6 +83,7 @@
                                 <a asp-controller="Tricks" asp-action="All">Tips & Tricks</a>
                                 <ul class="sub-menu">
                                     <li><a asp-controller="Tricks" asp-action="All">List</a></li>
+                                    <li><a asp-controller="Tricks" asp-action="Mine">My Tricks</a></li>
                                     <li><a asp-controller="Tricks" asp-action="Create">New Trick</a></li>
                                 </ul>
                             </li>
@@ -126,7 +129,7 @@
             </a>
             <ul class="main-menu footer-menu">
                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Games" asp-action="All">GameNameNames</a></li>
+                <li><a asp-controller="Games" asp-action="All">Games</a></li>
                 <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
                 <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
                 <li><a asp-controller="Articles" asp-action="All">Articles</a></li>

@@ -100,5 +100,9 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Search(string searchCriteria) 
             => this.View(nameof(this.All), this.helper.Search(searchCriteria));
+
+        public IActionResult Mine()
+            => this.View(nameof(this.All), this.helper
+                .GetReviewsByUser(this.User.GetId()));
     }
 }

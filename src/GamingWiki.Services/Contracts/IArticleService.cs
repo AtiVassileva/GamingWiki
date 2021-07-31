@@ -30,5 +30,7 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<CategoryServiceModel> GetCategories();
 
         IEnumerable<ArticleServiceHomeModel> GetLatest();
+
+        IEnumerable<ArticleAllServiceModel> GetArticlesByUser(string userId);
     }
 }

@@ -128,6 +128,10 @@ namespace GamingWiki.Services
             .Take(HomePageEntityCount)
             .ToList();
 
+        public IEnumerable<ArticleAllServiceModel> GetArticlesByUser(string userId)
+            => this.GetArticles(this.dbContext.Articles
+                .Where(a => a.AuthorId == userId));
+
         private Article FindArticle(int articleId)
             => this.dbContext.Articles
                 .Include(a => a.Author)

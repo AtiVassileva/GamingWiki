@@ -119,6 +119,10 @@ namespace GamingWiki.Services
                                     .ToLower().Trim())
                             && r.Description != null));
 
+        public IEnumerable<ReviewDetailsServiceModel> GetReviewsByUser(string userId)
+            => this.GetReviews(this.dbContext.Reviews
+                .Where(r => r.AuthorId == userId));
+
 
         private IEnumerable<ReviewDetailsServiceModel> GetReviews(IQueryable reviewsQuery)
         {
