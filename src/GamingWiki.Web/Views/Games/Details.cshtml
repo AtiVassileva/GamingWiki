@@ -44,15 +44,18 @@
                         <li> <a href="" style="background-color: #0c062e; pointer-events: none; cursor: default;">@platform</a></li>
                     }
                 </ul>
-                <br />
-                <h4 style="color: white;">Characters: </h4>
-                <ul class="blog-filter">
-                    @foreach (var character in Model.Characters)
-                    {
-                        <li><a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" style="background-color: darkgreen;">@character.Name</a></li>
-                    }
-                </ul>
-                <br />
+                @if (Model.Characters.Any())
+                {
+                    <br/>
+                    <h4 style="color: white;">Characters: </h4>
+                    <ul class="blog-filter">
+                        @foreach (var character in Model.Characters)
+                        {
+                            <li><a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" style="background-color: darkgreen;">@character.Name</a></li>
+                        }
+                    </ul>
+                    <br/>
+                }
                 <section class="intro-video-section set-bg d-flex align-items-end " data-setbg="@Model.PictureUrl">
                     <a href="@Model.TrailerUrl" class="video-play-btn video-popup"><img src="/img/icons/solid-right-arrow.png" alt="#"></a>
                     <div class="container">
@@ -70,8 +73,8 @@
                             <h4 class="widget-title">Ratings</h4>
                             @if (Math.Abs(Model.Rating) <= 0)
                             {
-                                <h4 class="widget-title">There are no currently added reviews to this game.</h4>
-                                <a asp-controller="Reviews" asp-action="Create" asp-route-gameId="@Model.Id" class="btn btn-outline-info">Be the first to add a review</a>
+                                <h4 class="widget-title">There are currently no added reviews for this game.</h4>
+                                <div class="text-center"><a asp-controller="Reviews" asp-action="Create" asp-route-gameId="@Model.Id" class="btn btn-info">Be the first to add a review</a></div>
                             }
                             else
                             {
