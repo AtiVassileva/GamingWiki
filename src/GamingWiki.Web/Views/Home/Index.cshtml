@@ -38,7 +38,7 @@
                                         <img src="@game.PictureUrl" alt="#">
                                     </div>
                                     <div class="tw-text">
-                                        <div class="tw-meta">Trending / in <a asp-controller="Games" asp-action="All">Games</a></div>
+                                        <div class="tw-meta">Trending / in <a asp-controller="Games" asp-action="All">GameNameNames</a></div>
                                         <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id"><h5>@game.Name.ToUpper()</h5></a>
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@
                 <div class="col-md-4">
                     <div class="intro-text-box text-box text-white">
                         <div class="top-meta">Latest / in <a asp-controller="Tricks" asp-action="All">Tips & Tricks</a></div>
-                        <h5><a style="color: #b01ba5;" asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.Game]</a></h5>
+                        <h5><a style="color: #b01ba5;" asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.GameName]</a></h5>
                         <br />
                         <h3>@trick.Heading</h3>
                         <p>@trick.Content</p>

@@ -45,12 +45,12 @@
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <a asp-controller="Games" asp-action="All">Games</a>
+                                <a asp-controller="Games" asp-action="All">GameNameNames</a>
                                 <ul class="sub-menu">
                                     <li><a asp-controller="Games" asp-action="All">List</a></li>
                                     @if (this.User.IsAdmin())
                                     {
-                                        <li><a asp-controller="Games" asp-action="Create">New Game</a></li>
+                                        <li><a asp-controller="Games" asp-action="Create">New GameNameName</a></li>
                                     }
                                 </ul>
                             </li>
@@ -126,7 +126,7 @@
             </a>
             <ul class="main-menu footer-menu">
                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Games" asp-action="All">Games</a></li>
+                <li><a asp-controller="Games" asp-action="All">GameNameNames</a></li>
                 <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
                 <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
                 <li><a asp-controller="Articles" asp-action="All">Articles</a></li>

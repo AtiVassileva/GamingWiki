@@ -12,7 +12,7 @@
             "Category does not exist!";
         
         public const string NonExistingGameExceptionMessage =
-            "Game does not exist!";
+            "GameName does not exist!";
         
         public const string NonExistingClassExceptionMessage =
             "Class does not exist!";
@@ -31,5 +31,8 @@
         
         public const string NonExistingReviewExceptionMessage =
             "Review does not exist!";
+        
+        public const string NonExistingTrickExceptionMessage =
+            "Trick does not exist!";
     }
 }

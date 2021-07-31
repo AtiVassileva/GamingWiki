@@ -1,21 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Tricks;
+using static GamingWiki.Services.Common.ServiceConstants;
+using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
     public class TrickService : ITrickService
     {
-        private const int HomePageEntityCount = 3;
-
         private readonly ApplicationDbContext dbContext;
+        private readonly IConfigurationProvider configuration;
 
-        public TrickService(ApplicationDbContext dbContext)
-            => this.dbContext = dbContext;
+        public TrickService(ApplicationDbContext dbContext, IMapper mapper)
+        {
+            this.dbContext = dbContext;
+            this.configuration = mapper.ConfigurationProvider;
+        }
 
         public IEnumerable<TrickServiceListingModel> All()
             => this.GetTricks(this.dbContext.Tricks)
@@ -44,12 +51,12 @@ namespace GamingWiki.Services
 
         public void Edit(int trickId, string heading, string content, string pictureUrl)
         {
-            var trick = this.FindTrick(trickId);
-
-            if (trick == null)
+            if (!this.TrickExists(trickId))
             {
-                return;
+                throw new InvalidOperationException(NonExistingTrickExceptionMessage);
             }
+
+            var trick = this.FindTrick(trickId);
 
             trick.Heading = heading;
             trick.Content = content;
@@ -60,12 +67,12 @@ namespace GamingWiki.Services
 
         public void Delete(int trickId)
         {
-            var trick = this.FindTrick(trickId);
-
-            if (trick == null)
+            if (!this.TrickExists(trickId))
             {
-                return;
+                throw new InvalidOperationException(NonExistingTrickExceptionMessage);
             }
+
+            var trick = this.FindTrick(trickId);
 
             this.dbContext.Tricks.Remove(trick);
             this.dbContext.SaveChanges();
@@ -73,8 +80,9 @@ namespace GamingWiki.Services
 
         public IEnumerable<TrickServiceListingModel> Search(string searchCriteria)
             => this.GetTricks(this.dbContext.Tricks.Where(t =>
-                t.Heading.ToLower().Contains(searchCriteria.ToLower()) 
-                || t.Content.ToLower().Contains(searchCriteria.ToLower())));
+                t.Heading.ToLower()
+                    .Contains(searchCriteria.ToLower()) || t.Content.ToLower()
+                    .Contains(searchCriteria.ToLower())));
 
         public string GetTrickAuthorId(int trickId)
             => this.dbContext.Tricks
@@ -82,46 +90,30 @@ namespace GamingWiki.Services
 
         public TrickServiceListingModel Details(int trickId)
             => this.GetTricks(this.dbContext.Tricks
-                .Where(t => t.Id == trickId)).FirstOrDefault();
+                .Where(t => t.Id == trickId))
+                .FirstOrDefault();
 
         public IEnumerable<GameServiceSimpleModel> GetGames()
             => this.dbContext.Games
-                .Select(g => new GameServiceSimpleModel
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                }).OrderBy(g => g.Name)
+                .ProjectTo<GameServiceSimpleModel>(this.configuration)
+                .OrderBy(g => g.Name)
                 .ToList();
 
         public IEnumerable<TrickServiceHomeModel> GetLatest()
             => this.dbContext.Tricks
-                .Select(t => new TrickServiceHomeModel
-                {
-                    Id = t.Id,
-                    Heading = t.Heading,
-                    Content = t.Content,
-                    GameId = t.GameId,
-                    Game = t.Game.Name
-                }).OrderByDescending(t => t.Id)
+                .ProjectTo<TrickServiceHomeModel>(this.configuration)
+                .OrderByDescending(t => t.Id)
                 .Take(HomePageEntityCount)
                 .ToList();
 
         private Trick FindTrick(int trickId) 
             => this.dbContext.Tricks
-                .FirstOrDefault(t => t.Id == trickId);
+                .First(t => t.Id == trickId);
 
-        private IEnumerable<TrickServiceListingModel> GetTricks(IQueryable<Trick> tricksQuery) 
+        private IEnumerable<TrickServiceListingModel> GetTricks(IQueryable tricksQuery) 
             => tricksQuery
-                .Select(t => new TrickServiceListingModel
-                {
-                    Id = t.Id,
-                    Heading = t.Heading,
-                    Content = t.Content,
-                    PictureUrl = t.PictureUrl,
-                    GameId = t.GameId,
-                    Game = t.Game.Name,
-                    Author = t.Author.UserName,
-                    AuthorId = t.AuthorId
-                }).ToList();
+                .ProjectTo<TrickServiceListingModel>(this.configuration)
+                .OrderByDescending(t => t.Id)
+                .ToList();
     }
 }

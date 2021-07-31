@@ -1,26 +1,30 @@
-﻿using GamingWiki.Services.Contracts;
+﻿using AutoMapper;
+using GamingWiki.Services.Contracts;
+using GamingWiki.Services.Models.Tricks;
 using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Tricks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.WebConstants;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class TricksController : Controller
     {
         private readonly ITrickService helper;
+        private readonly IMapper mapper;
 
-        public TricksController(ITrickService helper) 
-            => this.helper = helper;
-
-        [Authorize]
-        public IActionResult All()
+        public TricksController(ITrickService helper, IMapper mapper)
         {
-            var col = this.helper.All();
-            return this.View(col);
+            this.helper = helper;
+            this.mapper = mapper;
         }
 
-        [Authorize]
+        public IActionResult All() 
+            => this.View(this.helper.All());
+        
         public IActionResult Create()
             => this.View(new TrickFormModel
             {
@@ -28,12 +32,11 @@ namespace GamingWiki.Web.Controllers
             });
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(TrickFormModel model)
         {
             if (!this.helper.GameExists(model.GameId))
             {
-                this.ModelState.AddModelError(nameof(model.GameId), "Game does not exist.");
+                this.ModelState.AddModelError(nameof(model.GameId), NonExistingGameExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
@@ -47,45 +50,35 @@ namespace GamingWiki.Web.Controllers
 
             return this.RedirectToAction(nameof(this.All));
         }
-
-        [Authorize]
+        
         public IActionResult Edit(int trickId)
         {
             if (!this.helper.TrickExists(trickId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingTrickExceptionMessage));
             }
 
-            var trick = this.helper.Details(trickId);
+            var detailsModel = this.helper.Details(trickId);
 
-            if (!this.User.IsAdmin() && this.User.GetId() != trick.AuthorId)
+            if (!this.User.IsAdmin() && this.User.GetId() != detailsModel.AuthorId)
             {
                 return this.Unauthorized();
             }
 
-            return this.View(new TrickEditModel
-            {
-                Heading = trick.Heading,
-                Content = trick.Content,
-                PictureUrl = trick.PictureUrl
-            });
+            return this.View(this.mapper
+                .Map<TrickServiceEditModel>(detailsModel));
         }
 
         [HttpPost]
-        [Authorize]
-        public IActionResult Edit(TrickEditModel model, int trickId)
+        public IActionResult Edit(TrickServiceEditModel model, int trickId)
         {
             if (!this.ModelState.IsValid)
             {
-                var trick = this.helper.Details(trickId);
+                var detailsModel = this.helper.Details(trickId);
 
-                model = new TrickEditModel
-                {
-                    Heading = trick.Heading,
-                    Content = trick.Content,
-                    PictureUrl = trick.PictureUrl
-                };
-
+                model = this.mapper
+                    .Map<TrickServiceEditModel>(detailsModel);
+                
                 return this.View(model);
             }
 
@@ -93,13 +86,12 @@ namespace GamingWiki.Web.Controllers
 
             return this.RedirectToAction(nameof(this.All));
         }
-
-        [Authorize]
+        
         public IActionResult Delete(int trickId)
         {
             if (!this.helper.TrickExists(trickId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingTrickExceptionMessage));
             }
 
             var trickAuthorId = this.helper.GetTrickAuthorId(trickId);
@@ -112,8 +104,7 @@ namespace GamingWiki.Web.Controllers
             this.helper.Delete(trickId);
             return this.RedirectToAction(nameof(this.All));
         }
-
-        [Authorize]
+        
         public IActionResult Search(string searchCriteria) 
             => this.View(nameof(this.All), this.helper.Search(searchCriteria));
     }

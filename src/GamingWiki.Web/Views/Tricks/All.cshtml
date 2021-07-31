@@ -37,7 +37,7 @@
                                     <img src="@trick.PictureUrl" alt="#">
                                     <br />
                                     <br />
-                                    <h6><a asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.Game]</a></h6>
+                                    <h6><a asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.GameName]</a></h6>
                                     <h5>@trick.Heading</h5>
                                     <p>@trick.Content</p>
                                     @if (this.User.IsAdmin() || this.User.GetId() == trick.AuthorId)

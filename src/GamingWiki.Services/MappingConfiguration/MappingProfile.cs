@@ -11,6 +11,7 @@ using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
 using GamingWiki.Services.Models.Replies;
 using GamingWiki.Services.Models.Reviews;
+using GamingWiki.Services.Models.Tricks;
 
 namespace GamingWiki.Services.MappingConfiguration
 {
@@ -82,6 +83,13 @@ namespace GamingWiki.Services.MappingConfiguration
             this.CreateMap<Review, ReviewDetailsServiceModel>()
                 .ForMember(r => r.Author, cfg => cfg
                     .MapFrom(r => r.Author.UserName));
+
+            //Tricks
+            this.CreateMap<Trick, TrickServiceHomeModel>();
+            this.CreateMap<Trick, TrickServiceListingModel>()
+                .ForMember(t => t.Author, cfg => cfg
+                    .MapFrom(t => t.Author.UserName));
+            this.CreateMap<TrickServiceListingModel, TrickServiceEditModel>();
         }
     }
 }

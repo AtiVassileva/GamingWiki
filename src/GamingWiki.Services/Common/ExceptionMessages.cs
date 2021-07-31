@@ -12,9 +12,15 @@
             "Comment does not exist!";
         
         public const string NonExistingGameExceptionMessage =
-            "Game does not exist!";
+            "GameName does not exist!";
         
         public const string NonExistingReplyExceptionMessage =
             "Reply does not exist!";
+        
+        public const string NonExistingReviewExceptionMessage =
+            "Review does not exist!";
+        
+        public const string NonExistingTrickExceptionMessage =
+            "Trick does not exist!";
     }
 }

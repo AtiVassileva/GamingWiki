@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static GamingWiki.Models.Common.DataConstants;
 
-namespace GamingWiki.Web.Models.Tricks
+namespace GamingWiki.Services.Models.Tricks
 {
-    public class TrickEditModel
+    public class TrickServiceEditModel
     {
         [Required]
         [StringLength(HeadingMaxLength, 

@@ -10,6 +10,6 @@
 
         public int GameId { get; set; }
 
-        public string Game { get; set; }
+        public string GameName { get; set; }
     }
 }

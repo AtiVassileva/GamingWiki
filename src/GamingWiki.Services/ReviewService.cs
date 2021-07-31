@@ -9,6 +9,7 @@ using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Reviews;
 using Microsoft.EntityFrameworkCore;
+using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -74,7 +75,7 @@ namespace GamingWiki.Services
         {
             if (!this.ReviewExists(reviewId))
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(NonExistingReviewExceptionMessage);
             }
 
             var review = this.FindReview(reviewId);
@@ -92,7 +93,7 @@ namespace GamingWiki.Services
         {
             if (!this.ReviewExists(reviewId))
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(NonExistingReviewExceptionMessage);
             }
 
             var review = this.FindReview(reviewId);
