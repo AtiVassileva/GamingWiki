@@ -28,5 +28,8 @@
         
         public const string NonExistingReplyExceptionMessage =
             "Reply does not exist!";
+        
+        public const string NonExistingReviewExceptionMessage =
+            "Review does not exist!";
     }
 }

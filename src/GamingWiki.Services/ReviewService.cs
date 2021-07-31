@@ -1,19 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Reviews;
+using Microsoft.EntityFrameworkCore;
 
 namespace GamingWiki.Services
 {
     public class ReviewService : IReviewService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IMapper mapper;
+        private readonly IConfigurationProvider configuration;
 
-        public ReviewService(ApplicationDbContext dbContext)
-            => this.dbContext = dbContext;
+        public ReviewService(ApplicationDbContext dbContext, IMapper mapper)
+        {
+            this.dbContext = dbContext;
+            this.mapper = mapper;
+            this.configuration = mapper.ConfigurationProvider;
+        }
 
         public IEnumerable<ReviewDetailsServiceModel> All()
             => this.GetReviews(this.dbContext.Reviews
@@ -22,12 +32,8 @@ namespace GamingWiki.Services
         public GameServiceListingModel GetGame(int gameId)
         => this.dbContext.Games
             .Where(g => g.Id == gameId)
-            .Select(g => new GameServiceListingModel
-            {
-                Id = g.Id,
-                Name = g.Name,
-                PictureUrl = g.PictureUrl
-            }).FirstOrDefault();
+            .ProjectTo<GameServiceListingModel>(this.configuration)
+            .FirstOrDefault();
 
         public void Create(int gameId, string authorId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description)
         {
@@ -52,35 +58,26 @@ namespace GamingWiki.Services
                 .FirstOrDefault();
 
         public ReviewDetailsServiceModel Details(int reviewId)
-            => this.dbContext.Reviews
-                .Where(r => r.Id == reviewId)
-                .Select(r => new ReviewDetailsServiceModel
-                {
-                    Id = r.Id,
-                    PriceRate = r.PriceRate,
-                    DifficultyRate = r.DifficultyRate,
-                    GraphicsRate = r.GraphicsRate,
-                    LevelsRate = r.LevelsRate,
-                    AuthorId = r.AuthorId,
-                    Author = r.Author.UserName,
-                    Description = r.Description,
-                    Game = new GameServiceListingModel
-                    {
-                        Id = r.GameId,
-                        Name = r.Game.Name,
-                        PictureUrl = r.Game.PictureUrl
-                    }
-                }).FirstOrDefault();
+        {
+            var dbModel = this.FindReview(reviewId);
+
+            var detailsModel = this.mapper
+                .Map<ReviewDetailsServiceModel>(dbModel);
+
+            detailsModel.Game = this.mapper
+                .Map<GameServiceListingModel>(dbModel.Game);
+
+            return detailsModel;
+        }
 
         public void Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description)
         {
-            var review = this.dbContext
-                .Reviews.FirstOrDefault(r => r.Id == reviewId);
-
-            if (review == null)
+            if (!this.ReviewExists(reviewId))
             {
-                return;
+                throw new InvalidOperationException();
             }
+
+            var review = this.FindReview(reviewId);
 
             review.PriceRate = priceRate;
             review.LevelsRate = levelsRate;
@@ -93,13 +90,12 @@ namespace GamingWiki.Services
 
         public void Delete(int reviewId)
         {
-            var review = this.dbContext
-                .Reviews.FirstOrDefault(r => r.Id == reviewId);
-
-            if (review == null)
+            if (!this.ReviewExists(reviewId))
             {
-                return;
+                throw new InvalidOperationException();
             }
+
+            var review = this.FindReview(reviewId);
 
             this.dbContext.Reviews.Remove(review);
             this.dbContext.SaveChanges();
@@ -118,25 +114,31 @@ namespace GamingWiki.Services
         public IEnumerable<ReviewDetailsServiceModel> Search(string searchCriteria)
             => this.GetReviews(this.dbContext.Reviews
                 .Where(r => r.Game.Name.ToLower()
-                                .Contains(searchCriteria.ToLower().Trim())
+                                .Contains(searchCriteria
+                                    .ToLower().Trim())
                             && r.Description != null));
-            
 
-        private IEnumerable<ReviewDetailsServiceModel> GetReviews(IQueryable<Review> reviewsQuery)
-        => reviewsQuery
-            .Select(r => new ReviewDetailsServiceModel
+
+        private IEnumerable<ReviewDetailsServiceModel> GetReviews(IQueryable reviewsQuery)
+        {
+            var reviewsModels = reviewsQuery
+                .ProjectTo<ReviewDetailsServiceModel>(this.configuration);
+
+            foreach (var model in reviewsModels)
             {
-                Id = r.Id,
-                Author = r.Author.UserName,
-                AuthorId = r.AuthorId,
-                Game = new GameServiceListingModel
-                {
-                    Id = r.GameId,
-                    Name = r.Game.Name,
-                    PictureUrl = r.Game.PictureUrl
-                },
-                Description = r.Description
-            }).ToList();
+                model.Game = this.mapper
+                    .Map<GameServiceListingModel>(model.Game);
+            }
+
+            return reviewsModels
+                .OrderByDescending(r => r.Id);
+        }
+
+        private Review FindReview(int reviewId)
+            => this.dbContext.Reviews
+                .Include(r => r.Author)
+                .Include(r => r.Game)
+                .First(r => r.Id == reviewId);
 
     }
 }

@@ -23,6 +23,7 @@ namespace GamingWiki.Web.Models.Reviews
         [Display(Name = "Difficulty Rate ")]
         public int DifficultyRate { get; set; }
 
+        [StringLength(ReviewDescriptionMaxLength)]
         public string Description { get; set; }
 
         public GameServiceListingModel Game { get; set; }

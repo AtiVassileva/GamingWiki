@@ -3,20 +3,21 @@ using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Reviews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.WebConstants;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class ReviewsController : Controller
     {
         private readonly IReviewService helper;
 
         public ReviewsController(IReviewService helper) 
             => this.helper = helper;
-
-        [Authorize]
+        
         public IActionResult All() => this.View(this.helper.All());
-
-        [Authorize]
+        
         public IActionResult Create(int gameId) 
             => this.View(new ReviewFormModel
             {
@@ -24,12 +25,11 @@ namespace GamingWiki.Web.Controllers
             });
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(ReviewFormModel model, int gameId)
         {
             if (!this.helper.GameExists(gameId))
             {
-                this.ModelState.AddModelError(nameof(gameId), "Game does not exist.");
+                this.ModelState.AddModelError(nameof(gameId), NonExistingGameExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
@@ -42,13 +42,12 @@ namespace GamingWiki.Web.Controllers
 
             return this.Redirect($"/Games/Details?gameId={gameId}");
         }
-
-        [Authorize]
+        
         public IActionResult Edit(int reviewId)
         {
             if (!this.helper.ReviewExists(reviewId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingReviewExceptionMessage));
             }
 
             var authorId = this.helper.GetReviewAuthorId(reviewId);
@@ -62,12 +61,11 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Edit(ReviewFormModel model, int reviewId)
         {
             if (!this.helper.ReviewExists(reviewId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingReviewExceptionMessage));
             }
 
             if (!this.ModelState.IsValid)
@@ -80,13 +78,12 @@ namespace GamingWiki.Web.Controllers
 
             return this.Redirect(nameof(this.All));
         }
-
-        [Authorize]
+        
         public IActionResult Delete(int reviewId)
         {
             if (!this.helper.ReviewExists(reviewId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingReviewExceptionMessage));
             }
 
             var authorId = this.helper.GetReviewAuthorId(reviewId);
@@ -101,7 +98,6 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Search(string searchCriteria) 
             => this.View(nameof(this.All), this.helper.Search(searchCriteria));
     }

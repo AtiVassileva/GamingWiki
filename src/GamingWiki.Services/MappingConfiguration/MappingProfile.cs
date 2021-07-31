@@ -10,6 +10,7 @@ using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
 using GamingWiki.Services.Models.Replies;
+using GamingWiki.Services.Models.Reviews;
 
 namespace GamingWiki.Services.MappingConfiguration
 {
@@ -76,6 +77,11 @@ namespace GamingWiki.Services.MappingConfiguration
             this.CreateMap<Reply, ReplyServiceModel>()
                 .ForMember(r => r.Replier, cfg => cfg
                     .MapFrom(r => r.Replier.UserName));
+
+            //Reviews
+            this.CreateMap<Review, ReviewDetailsServiceModel>()
+                .ForMember(r => r.Author, cfg => cfg
+                    .MapFrom(r => r.Author.UserName));
         }
     }
 }
