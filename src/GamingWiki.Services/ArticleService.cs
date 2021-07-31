@@ -118,6 +118,7 @@ namespace GamingWiki.Services
         public IEnumerable<CategoryServiceModel> GetCategories()
         => this.dbContext.Categories
             .ProjectTo<CategoryServiceModel>(this.configuration)
+            .OrderByDescending(c => c.Id)
             .ToList();
 
         public IEnumerable<ArticleServiceHomeModel> GetLatest()

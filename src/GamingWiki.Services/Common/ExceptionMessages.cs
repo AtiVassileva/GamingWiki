@@ -13,5 +13,8 @@
         
         public const string NonExistingGameExceptionMessage =
             "Game does not exist!";
+        
+        public const string NonExistingReplyExceptionMessage =
+            "Reply does not exist!";
     }
 }

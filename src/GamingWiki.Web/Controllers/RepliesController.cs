@@ -1,11 +1,14 @@
 ﻿using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models.Replies;
+using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class RepliesController : Controller
     {
         private readonly IReplyService helper;
@@ -14,7 +17,6 @@ namespace GamingWiki.Web.Controllers
         => this.helper = helper;
 
         [HttpPost]
-        [Authorize]
         public IActionResult Add(ReplyFormModel model, int commentId)
         {
             if (!this.ModelState.IsValid)
@@ -27,13 +29,12 @@ namespace GamingWiki.Web.Controllers
 
            return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
-
-        [Authorize]
+        
         public IActionResult Delete(int replyId)
         {
             if (!this.helper.ReplyExists(replyId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingReplyExceptionMessage));
             }
 
             var replierId = this.helper.GetReplyAuthorId(replyId);

@@ -20,7 +20,9 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Index()
         {
-            if (!this.User.Identity.IsAuthenticated)
+            var userIdentity = this.User.Identity;
+
+            if (userIdentity is {IsAuthenticated: false})
             {
                 return this.View("GuestPage");
             }

@@ -25,5 +25,8 @@
         
         public const string NonExistingGenreExceptionMessage =
             "Genre does not exist!";
+        
+        public const string NonExistingReplyExceptionMessage =
+            "Reply does not exist!";
     }
 }
