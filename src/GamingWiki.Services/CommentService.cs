@@ -1,39 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Comments;
+using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
     public class CommentService : ICommentService
     {
-        private const string DateFormat = "dd/MM/yyyy";
-
         private readonly ApplicationDbContext dbContext;
         private readonly IReplyService replyService;
+        private readonly IMapper mapper;
 
-        public CommentService(ApplicationDbContext dbContext, IReplyService replyService)
+        public CommentService(ApplicationDbContext dbContext, IReplyService replyService, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.replyService = replyService;
+            this.mapper = mapper;
         }
 
-        public IEnumerable<CommentServiceModel> AllByArticle(int articleId) 
-            => this.dbContext.Comments
-                .Where(c => c.ArticleId == articleId)
-                .Select(c =>
-                    new CommentServiceModel
-                    {
-                        Id = c.Id,
-                        Content = c.Content,
-                        Commenter = c.Commenter.UserName,
-                        CommenterId = c.CommenterId,
-                        AddedOn = c.AddedOn.ToString(DateFormat),
-                        Replies = this.replyService.AllByComment(c.Id)
-                    }).ToList();
+        public IEnumerable<CommentServiceModel> AllByArticle(int articleId)
+        {
+            var comments = this.dbContext.Comments;
+
+            foreach (var comment in comments)
+            {
+                var currentComment = this.mapper
+                    .Map<CommentServiceModel>(comment);
+
+                currentComment.Replies = 
+                    this.replyService.AllByComment(currentComment.Id);
+
+                yield return currentComment;
+            }
+        }
 
         public int Add(int articleId, string content, string commenterId)
         {
@@ -53,18 +57,14 @@ namespace GamingWiki.Services
 
         public int Delete(int commentId)
         {
-            var comment = this.dbContext.Comments
-                .FirstOrDefault(c => c.Id == commentId);
-
-            if (comment == null)
+            if (!this.CommentExists(commentId))
             {
-                return 0;
+                throw new InvalidOperationException(NonExistingCommentExceptionMessage);
             }
 
-            var articleId = this.dbContext.Comments
-                .Where(c => c.Id == commentId)
-                .Select(c => c.ArticleId)
-                .FirstOrDefault();
+            var comment = this.FindComment(commentId);
+
+            var articleId = this.GetArticleId(commentId);
 
             this.dbContext.Comments.Remove(comment);
             this.dbContext.SaveChanges();
@@ -78,5 +78,14 @@ namespace GamingWiki.Services
         public string GetCommentAuthorId(int commentId)
             => this.dbContext.Comments
                 .First(c => c.Id == commentId).CommenterId;
+
+        public int GetArticleId(int commentId)
+            => this.dbContext.Comments
+                .Where(c => c.Id == commentId)
+                .Select(c => c.ArticleId)
+                .First();
+
+        public Comment FindComment(int commentId)
+            => this.dbContext.Comments.First(c => c.Id == commentId);
     }
 }

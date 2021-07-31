@@ -15,6 +15,9 @@
             "Game does not exist!";
         
         public const string NonExistingClassExceptionMessage =
-            "ClassName does not exist!";
+            "Class does not exist!";
+        
+        public const string NonExistingCommentExceptionMessage =
+            "Comment does not exist!";
     }
 }

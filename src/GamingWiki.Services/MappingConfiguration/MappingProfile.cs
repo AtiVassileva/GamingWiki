@@ -4,6 +4,7 @@ using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
+using GamingWiki.Services.Models.Comments;
 using GamingWiki.Services.Models.Games;
 
 namespace GamingWiki.Services.MappingConfiguration
@@ -12,6 +13,7 @@ namespace GamingWiki.Services.MappingConfiguration
     {
         private const string DetailsDateFormat = "f";
         private const string ArticleListingDateFormat = "D";
+        private const string CommentDateFormat = "dd/MM/yyyy";
 
         public MappingProfile()
         {
@@ -40,6 +42,13 @@ namespace GamingWiki.Services.MappingConfiguration
 
             //Classes
             this.CreateMap<Class, ClassSimpleServiceModel>();
+
+            //Comments
+            this.CreateMap<Comment, CommentServiceModel>()
+                .ForMember(c => c.Commenter, cfg => cfg
+                    .MapFrom(c => c.Commenter.UserName))
+                .ForMember(c => c.AddedOn, cfg => cfg
+                    .MapFrom(c => c.AddedOn.ToString(CommentDateFormat)));
 
             // Games
             this.CreateMap<Game, GameServiceSimpleModel>();

@@ -7,5 +7,8 @@
         
         public const string NonExistingCharacterExceptionMessage =
             "Character does not exist!";
+        
+        public const string NonExistingCommentExceptionMessage =
+            "Comment does not exist!";
     }
 }

@@ -3,9 +3,12 @@ using GamingWiki.Web.Models.Comments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static GamingWiki.Web.Infrastructure.ClaimsPrincipalExtensions;
+using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly ICommentService helper;
@@ -14,7 +17,6 @@ namespace GamingWiki.Web.Controllers
             => this.helper = helper;
 
         [HttpPost]
-        [Authorize]
         public IActionResult Add(CommentFormModel model, int articleId)
         {
             if (!this.ModelState.IsValid)
@@ -27,13 +29,12 @@ namespace GamingWiki.Web.Controllers
 
             return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
-
-        [Authorize]
+        
         public IActionResult Delete(int commentId)
         {
             if (!this.helper.CommentExists(commentId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingCommentExceptionMessage));
             }
 
             var authorId = this.helper.GetCommentAuthorId(commentId);
@@ -44,6 +45,7 @@ namespace GamingWiki.Web.Controllers
             }
 
             var articleId = this.helper.Delete(commentId);
+
             return this.Redirect($"/Articles/Details?articleId={articleId}");
         }
     }
