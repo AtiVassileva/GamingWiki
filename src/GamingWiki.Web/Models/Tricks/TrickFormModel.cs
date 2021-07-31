@@ -24,7 +24,7 @@ namespace GamingWiki.Web.Models.Tricks
         [Display(Name = "Picture URL")]
         public string PictureUrl { get; set; }
 
-        [Display(Name = "GameName")]
+        [Display(Name = "Game")]
         public int GameId { get; set; }
 
         public IEnumerable<GameServiceSimpleModel> Games { get; set; }

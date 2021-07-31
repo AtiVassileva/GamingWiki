@@ -10,5 +10,8 @@
         
         public const string NonExistingCommentExceptionMessage =
             "Comment does not exist!";
+        
+        public const string NonExistingGameExceptionMessage =
+            "Game does not exist!";
     }
 }

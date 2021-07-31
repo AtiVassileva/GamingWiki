@@ -26,8 +26,8 @@ namespace GamingWiki.Web.Controllers
         public IActionResult All()
             => this.View(new CharacterFullModel
             {
-                Characters = this.helper.All().OrderBy(c => c.Name),
-                Classes = this.helper.GetClasses().OrderBy(c => c.Name)
+                Characters = this.helper.All(),
+                Classes = this.helper.GetClasses()
             });
 
         [Authorize(Roles = AdministratorRoleName)]
@@ -85,8 +85,7 @@ namespace GamingWiki.Web.Controllers
             var characterModel = this.mapper
                 .Map<CharacterServiceEditModel>(dbModel);
 
-            characterModel.Classes = this.helper.GetClasses()
-                .OrderBy(c => c.Name);
+            characterModel.Classes = this.helper.GetClasses();
 
             return this.View(characterModel);
         }
@@ -107,8 +106,7 @@ namespace GamingWiki.Web.Controllers
                 model = this.mapper
                     .Map<CharacterServiceEditModel>(dbModel);
 
-                model.Classes = this.helper.GetClasses()
-                    .OrderBy(c => c.Name);
+                model.Classes = this.helper.GetClasses();
 
                 return this.View(model);
             }
@@ -134,17 +132,15 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Search(string letter)
             => this.View(nameof(this.All), new CharacterFullModel
             {
-                Characters = this.helper.Search(letter)
-                    .OrderBy(c => c.Name),
-                Classes = this.helper.GetClasses().OrderBy(c => c.Name)
+                Characters = this.helper.Search(letter),
+                Classes = this.helper.GetClasses()
             });
         
         public IActionResult Filter(int classId)
             => this.View(nameof(this.All), new CharacterFullModel
             {
-                Characters = this.helper.Filter(classId)
-                    .OrderBy(c => c.Name),
-                Classes = this.helper.GetClasses().OrderBy(c => c.Name)
+                Characters = this.helper.Filter(classId),
+                Classes = this.helper.GetClasses()
             });
     }
 }

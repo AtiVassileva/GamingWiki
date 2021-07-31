@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Games;
+using Microsoft.EntityFrameworkCore;
 using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
@@ -16,11 +18,13 @@ namespace GamingWiki.Services
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly IConfigurationProvider configuration;
 
         public CharacterService(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.configuration = mapper.ConfigurationProvider;
         }
 
         public Game ParseGame(string gameName)
@@ -65,8 +69,7 @@ namespace GamingWiki.Services
 
         public IEnumerable<CharacterAllServiceModel> All()
         => this.dbContext.Characters
-                .Select(c => this.mapper
-                    .Map<CharacterAllServiceModel>(c))
+                .ProjectTo<CharacterAllServiceModel>(this.configuration)
                 .ToList();
 
         public void Edit(int characterId, CharacterServiceEditModel model)
@@ -102,32 +105,33 @@ namespace GamingWiki.Services
             => this.dbContext.Characters
                 .Where(c => c.Name.ToUpper()
                     .StartsWith(letter))
-                .Select(c => this.mapper
-                    .Map<CharacterAllServiceModel>(c))
+                .ProjectTo<CharacterAllServiceModel>(this.configuration)
                 .OrderBy(c => c.Name)
                 .ToList();
 
         public IEnumerable<CharacterAllServiceModel> Filter(int classId)
             => this.dbContext.Characters
                 .Where(c => c.ClassId == classId)
-                .Select(c => this.mapper
-                    .Map<CharacterAllServiceModel>(c))
+                .ProjectTo<CharacterAllServiceModel>(this.configuration)
+                .OrderBy(c => c.Name)
                 .ToList();
 
         public IEnumerable<ClassSimpleServiceModel> GetClasses()
             => this.dbContext.Classes
-                .Select(c => this.mapper
-                    .Map<ClassSimpleServiceModel>(c))
+                .ProjectTo<ClassSimpleServiceModel>(this.configuration)
+                .OrderBy(c => c.Name)
                 .ToList();
 
         public IEnumerable<GameServiceSimpleModel> GetGames()
         => this.dbContext.Games
-            .Select(g => this.mapper
-                .Map<GameServiceSimpleModel>(g))
+            .ProjectTo<GameServiceSimpleModel>(this.configuration)
+            .OrderBy(c => c.Name)
             .ToList();
 
         private Character FindCharacter(int characterId)
             => this.dbContext.Characters
+                .Include(c => c.Class)
+                .Include(c => c.Game)
                 .First(c => c.Id == characterId);
     }
 }

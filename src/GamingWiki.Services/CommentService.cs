@@ -6,6 +6,7 @@ using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Comments;
+using Microsoft.EntityFrameworkCore;
 using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
@@ -25,7 +26,9 @@ namespace GamingWiki.Services
 
         public IEnumerable<CommentServiceModel> AllByArticle(int articleId)
         {
-            var comments = this.dbContext.Comments;
+            var comments = this.dbContext.Comments
+                .Where(c => c.ArticleId == articleId)
+                .Include(c => c.Commenter);
 
             foreach (var comment in comments)
             {

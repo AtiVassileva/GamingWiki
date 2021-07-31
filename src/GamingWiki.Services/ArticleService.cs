@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
+using Microsoft.EntityFrameworkCore;
 using static GamingWiki.Services.Common.ServiceConstants;
 using static GamingWiki.Services.Common.ExceptionMessages;
 
@@ -17,12 +19,14 @@ namespace GamingWiki.Services
         private readonly ApplicationDbContext dbContext;
         private readonly ICommentService commentService;
         private readonly IMapper mapper;
+        private readonly IConfigurationProvider configuration;
 
         public ArticleService(ApplicationDbContext dbContext, ICommentService commentService, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.commentService = commentService;
             this.mapper = mapper;
+            this.configuration = mapper.ConfigurationProvider;
         }
 
         public IEnumerable<ArticleAllServiceModel> All()
@@ -54,7 +58,7 @@ namespace GamingWiki.Services
 
             var articleDetails = this.mapper
                 .Map<ArticleServiceDetailsModel>(article);
-
+            
             articleDetails.Comments = this.commentService
                 .AllByArticle(articleDetails.Id);
 
@@ -113,24 +117,24 @@ namespace GamingWiki.Services
 
         public IEnumerable<CategoryServiceModel> GetCategories()
         => this.dbContext.Categories
-            .Select(c => this.mapper
-                .Map<CategoryServiceModel>(c))
+            .ProjectTo<CategoryServiceModel>(this.configuration)
             .ToList();
 
         public IEnumerable<ArticleServiceHomeModel> GetLatest()
         => this.dbContext.Articles
             .OrderByDescending(a => a.Id)
-            .Select(a => this.mapper
-                .Map<ArticleServiceHomeModel>(a))
+            .ProjectTo<ArticleServiceHomeModel>(this.configuration)
             .Take(HomePageEntityCount)
             .ToList();
 
         private Article FindArticle(int articleId)
-            => this.dbContext.Articles.First(a => a.Id == articleId);
+            => this.dbContext.Articles
+                .Include(a => a.Author)
+                .First(a => a.Id == articleId);
 
-        private IEnumerable<ArticleAllServiceModel> GetArticles(IQueryable<Article> articlesQuery)
-        => articlesQuery.Select(a => this.mapper
-                .Map<ArticleAllServiceModel>(a))
+        private IEnumerable<ArticleAllServiceModel> GetArticles(IQueryable articlesQuery)
+        => articlesQuery
+            .ProjectTo<ArticleAllServiceModel>(this.configuration)
             .ToList();
 
     }

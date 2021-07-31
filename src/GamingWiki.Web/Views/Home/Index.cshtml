@@ -38,8 +38,8 @@
                                         <img src="@game.PictureUrl" alt="#">
                                     </div>
                                     <div class="tw-text">
-                                        <div class="tw-meta">Trending / in <a asp-controller="Games" asp-action="All">GameNames</a></div>
-                                        <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id"><h5>@game.Name</h5></a>
+                                        <div class="tw-meta">Trending / in <a asp-controller="Games" asp-action="All">Games</a></div>
+                                        <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id"><h5>@game.Name.ToUpper()</h5></a>
                                     </div>
                                 </div>
                             }

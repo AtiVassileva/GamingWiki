@@ -29,7 +29,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.GameExists(gameId))
             {
-                this.ModelState.AddModelError(nameof(gameId), "GameName does not exist.");
+                this.ModelState.AddModelError(nameof(gameId), "Game does not exist.");
             }
 
             if (!this.ModelState.IsValid)

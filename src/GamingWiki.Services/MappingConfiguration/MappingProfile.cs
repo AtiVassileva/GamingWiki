@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using GamingWiki.Models;
+using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Comments;
 using GamingWiki.Services.Models.Games;
+using GamingWiki.Services.Models.Genres;
+using GamingWiki.Services.Models.Platforms;
 
 namespace GamingWiki.Services.MappingConfiguration
 {
@@ -17,6 +20,9 @@ namespace GamingWiki.Services.MappingConfiguration
 
         public MappingProfile()
         {
+            //Areas
+            this.CreateMap<Area, AreaServiceModel>();
+
             //Articles
             this.CreateMap<Article, ArticleServiceDetailsModel>()
                 .ForMember(a => a.Author, cfg => cfg.MapFrom(a => a.Author.UserName))
@@ -32,10 +38,9 @@ namespace GamingWiki.Services.MappingConfiguration
 
             //Characters
             this.CreateMap<Character, CharacterServiceDetailsModel>();
-
             this.CreateMap<Character, CharacterAllServiceModel>();
-
             this.CreateMap<CharacterServiceDetailsModel, CharacterServiceEditModel>();
+            this.CreateMap<Character, CharacterGameServiceModel>();
 
             //Categories
             this.CreateMap<Category, CategoryServiceModel>();
@@ -52,6 +57,19 @@ namespace GamingWiki.Services.MappingConfiguration
 
             // Games
             this.CreateMap<Game, GameServiceSimpleModel>();
+            this.CreateMap<Game, GameServiceListingModel>();
+            this.CreateMap<GameServiceDetailsModel, GameServiceEditModel>();
+            this.CreateMap<Game, GameServiceDetailsModel>()
+                .ForMember(g => g.Area, cfg => cfg
+                    .MapFrom(g => g.Area.Name))
+                .ForMember(g => g.Genre, cfg => cfg
+                    .MapFrom(g => g.Genre.Name));
+
+            //Genres
+            this.CreateMap<Genre, GenreServiceModel>();
+
+            //Platforms
+            this.CreateMap<Platform, PlatformServiceModel>();
         }
     }
 }

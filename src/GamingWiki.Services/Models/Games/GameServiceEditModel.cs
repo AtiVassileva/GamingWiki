@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using GamingWiki.Services.Models.Areas;
 using static GamingWiki.Models.Common.DataConstants;
 
-namespace GamingWiki.Web.Models.Games
+namespace GamingWiki.Services.Models.Games
 {
-    public class GameEditModel
+    public class GameServiceEditModel
     {
         public string Name { get; set; }
 

@@ -19,5 +19,11 @@
         
         public const string NonExistingCommentExceptionMessage =
             "Comment does not exist!";
+        
+        public const string NonExistingAreaExceptionMessage =
+            "Area does not exist!";
+        
+        public const string NonExistingGenreExceptionMessage =
+            "Genre does not exist!";
     }
 }

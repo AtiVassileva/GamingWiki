@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
@@ -8,22 +11,27 @@ using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
+using Microsoft.EntityFrameworkCore;
+using static GamingWiki.Services.Common.ServiceConstants;
+using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
     public class GameService : IGameService
     {
-        private const int HomePageEntityCount = 3;
-
         private readonly ApplicationDbContext dbContext;
+        private readonly IMapper mapper;
+        private readonly IConfigurationProvider configuration;
 
-        public GameService(ApplicationDbContext dbContext) 
-            => this.dbContext = dbContext;
+        public GameService(ApplicationDbContext dbContext, IMapper mapper)
+        {
+            this.dbContext = dbContext;
+            this.mapper = mapper;
+            this.configuration = mapper.ConfigurationProvider;
+        }
 
         public IEnumerable<Creator> ParseCreators(string creatorsNames)
         {
-            var creators = new List<Creator>();
-
             foreach (var creatorName in creatorsNames
                 .Split(", "))
             {
@@ -41,10 +49,9 @@ namespace GamingWiki.Services
                     this.dbContext.SaveChanges();
                 }
 
-                creators.Add(creator);
+                yield return creator;
             }
-
-            return creators;
+            
         }
 
         public bool AreaExists(int areaId)
@@ -83,57 +90,39 @@ namespace GamingWiki.Services
 
         public IEnumerable<GameServiceListingModel> All()
         => this.dbContext.Games
-            .Select(g => new GameServiceListingModel
-            {
-                Id = g.Id,
-                Name = g.Name,
-                PictureUrl = g.PictureUrl,
-            }).OrderBy(g => g.Name)
+            .ProjectTo<GameServiceListingModel>(this.configuration)
+            .OrderBy(g => g.Name)
             .ToList();
 
-        public GameServiceDetailsModel Details(int gameId) 
-            => this.dbContext.Games
-                .Where(g => g.Id == gameId)
-                .Select(g => new GameServiceDetailsModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl,
-                    TrailerUrl = g.TrailerUrl,
-                    Description = g.Description,
-                    Area = g.Area.Name,
-                    AreaId = g.AreaId,
-                    Genre = g.Genre.Name,
-                    Ratings = this.GetRatings(gameId),
-                    Rating = this.GetRatings(gameId).Values.Average(),
-                    Creators = this.dbContext.GamesCreators
-                        .Where(gc => gc.GameId == gameId)
-                        .Select(gc => gc.Creator.Name).ToList(),
-                    Characters = this.dbContext.Characters
-                        .Where(c => c.GameId == gameId)
-                        .Select(c => new CharacterGameServiceModel
-                        {
-                            Id = c.Id,
-                            Name = c.Name
-                        })
-                        .OrderBy(c => c.Name)
-                        .ToList(),
-                    Platforms = this.dbContext.GamesPlatforms
-                        .Where(gp => gp.GameId == gameId)
-                        .Select(gp => gp.Platform.Name)
-                        .OrderBy(p => p.Length)
-                        .ToList()
-                }).FirstOrDefault();
+        public GameServiceDetailsModel Details(int gameId)
+        {
+            if (!this.GameExists(gameId))
+            {
+                throw new InvalidOperationException(NonExistingGameExceptionMessage);
+            }
+
+            var game = this.FindGame(gameId);
+
+            var gameDetails = this.mapper
+                .Map<GameServiceDetailsModel>(game);
+
+            gameDetails.Ratings = this.GetRatings(gameDetails.Id);
+            gameDetails.Rating = gameDetails.Ratings.Values.Average();
+            gameDetails.Creators = this.GetCreators(gameDetails.Id);
+            gameDetails.Characters = this.GetCharacters(gameDetails.Id);
+            gameDetails.Platforms = this.GetPlatformsByGame(gameDetails.Id);
+
+            return gameDetails;
+        }
 
         public void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl)
         {
-            var game = this.dbContext.Games
-                .FirstOrDefault(g => g.Id == gameId);
-
-            if (game == null)
+            if (!this.GameExists(gameId))
             {
-                return;
+                throw new InvalidOperationException(NonExistingGameExceptionMessage);
             }
+
+            var game = this.FindGame(gameId);
 
             game.Description = description;
             game.PictureUrl = pictureUrl;
@@ -145,13 +134,12 @@ namespace GamingWiki.Services
 
         public void Delete(int gameId)
         {
-            var game = this.dbContext.Games
-                .FirstOrDefault(g => g.Id == gameId);
-
-            if (game == null)
+            if (!this.GameExists(gameId))
             {
-                return;
+                throw new InvalidOperationException(NonExistingGameExceptionMessage);
             }
+
+            var game = this.FindGame(gameId);
 
             this.dbContext.Games.Remove(game);
             this.dbContext.SaveChanges();
@@ -161,63 +149,40 @@ namespace GamingWiki.Services
             => this.dbContext.Games
                 .Where(g => g.Name.ToUpper()
                     .StartsWith(letter))
-                .Select(g => new GameServiceListingModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl,
-                }).ToList();
+                .ProjectTo<GameServiceListingModel>(this.configuration)
+                .OrderBy(g => g.Name)
+                .ToList();
 
         public IEnumerable<GameServiceListingModel> Filter(int genreId)
             => this.dbContext.Games
                 .Where(g => g.GenreId == genreId)
-                .Select(g => new GameServiceListingModel
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    PictureUrl = g.PictureUrl
-                }).ToList();
+                .ProjectTo<GameServiceListingModel>(this.configuration)
+                .OrderBy(g => g.Name)
+                .ToList();
 
         public IEnumerable<AreaServiceModel> GetAreas()
             => this.dbContext
                 .Areas
-                .Select(a =>
-                    new AreaServiceModel
-                    {
-                        Id = a.Id,
-                        Name = a.Name
-                    })
+                .ProjectTo<AreaServiceModel>(this.configuration)
                 .OrderBy(a => a.Name)
                 .ToList();
 
 
         public IEnumerable<GenreServiceModel> GetGenres()
             => this.dbContext.Genres
-                .Select(g =>
-                    new GenreServiceModel
-                    {
-                        Id = g.Id,
-                        Name = g.Name
-                    })
+                .ProjectTo<GenreServiceModel>(this.configuration)
                 .OrderBy(g => g.Name)
                 .ToList();
 
         public IEnumerable<PlatformServiceModel> GetPlatforms()
             => this.dbContext.Platforms
-                .Select(p => new PlatformServiceModel
-                {
-                    Id = p.Id,
-                    Name = p.Name
-                }).ToList();
+                .ProjectTo<PlatformServiceModel>(this.configuration)
+                .OrderBy(p => p.Name.Length)
+                .ToList();
 
         public IEnumerable<GameServiceListingModel> GetLatest() 
             => this.dbContext.Games
-                .Select(g => new GameServiceListingModel
-                {
-                    Id = g.Id,
-                    Name = g.Name.ToUpper(),
-                    PictureUrl = g.PictureUrl,
-                })
+                .ProjectTo<GameServiceListingModel>(this.configuration)
                 .OrderByDescending(g => g.Id)
                 .Take(HomePageEntityCount)
                 .ToList();
@@ -247,20 +212,29 @@ namespace GamingWiki.Services
                 CreatorId = c.Id
             });
 
-        //private IEnumerable<string> GetCreators(int gameId)
-        //    => this.dbContext.GamesCreators
-        //        .Where(gc => gc.GameId == gameId)
-        //        .Select(gc => gc.Creator.Name).ToList();
+        private Game FindGame(int gameId)
+            => this.dbContext.Games
+                .Include(g => g.Area)
+                .Include(g => g.Genre)
+                .First(g => g.Id == gameId);
 
-        //private IEnumerable<CharacterGameServiceModel> GetCharacters(int gameId)
-        //    => this.dbContext.Characters
-        //        .Where(c => c.GameId == gameId)
-        //        .Select(c => new CharacterGameServiceModel
-        //        {
-        //            Id = c.Id,
-        //            Name = c.Name
-        //        })
-        //        .OrderBy(c => c.Name)
-        //        .ToList();
+        private IEnumerable<string> GetCreators(int gameId)
+            => this.dbContext.GamesCreators
+                .Where(gc => gc.GameId == gameId)
+                .Select(gc => gc.Creator.Name).ToList();
+
+        private IEnumerable<CharacterGameServiceModel> GetCharacters(int gameId)
+            => this.dbContext.Characters
+                .Where(c => c.GameId == gameId)
+                .ProjectTo<CharacterGameServiceModel>(this.configuration)
+                .OrderBy(c => c.Name)
+                .ToList();
+
+        public IEnumerable<string> GetPlatformsByGame(int gameId)
+            => this.dbContext.GamesPlatforms
+                .Where(gp => gp.GameId == gameId)
+                .Select(gp => gp.Platform.Name)
+                .OrderBy(p => p.Length)
+                .ToList();
     }
 }

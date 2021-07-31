@@ -21,18 +21,16 @@
         </div>
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
-                <div class="gs-meta">GameName: <a asp-controller="Games" asp-action="Details" asp-route-gameId="@Model.GameId">@Model.GameName</a></div>
+                <div class="gs-meta">Game: <a asp-controller="Games" asp-action="Details" asp-route-gameId="@Model.GameId">@Model.GameName</a></div>
                 <h2 class="gs-title">@Model.Name
-                    @if (this.User.IsAdmin())
-                    {
-                        <a asp-controller="Characters" asp-action="Edit" asp-route-characterId="@Model.Id" class="btn btn-warning">Edit</a>
-                        <a asp-controller="Characters" asp-action="Delete" asp-route-characterId="@Model.Id" class="btn btn-danger">Delete</a>
-                    }
-                    </h2>
-                <h4>ClassNameName: @Model.ClassName</h4>
+                </h2>
+                <h4>Class: @Model.ClassName</h4>
                 <p>@Model.Description</p>
-                
-                
+                @if (this.User.IsAdmin())
+                {
+                    <a asp-controller="Characters" asp-action="Edit" asp-route-characterId="@Model.Id" class="btn btn-warning">Edit</a>
+                    <a asp-controller="Characters" asp-action="Delete" asp-route-characterId="@Model.Id" class="btn btn-danger">Delete</a>
+                }
                 <partial name="_SharePartial"/>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">

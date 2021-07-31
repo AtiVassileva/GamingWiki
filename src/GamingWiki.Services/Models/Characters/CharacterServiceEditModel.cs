@@ -20,7 +20,7 @@ namespace GamingWiki.Services.Models.Characters
         [MinLength(DescriptionMinLength)]
         public string Description { get; set; }
 
-        [Display(Name = "ClassName")]
+        [Display(Name = "Class")]
         public int ClassId { get; set; }
 
         public string ClassName { get; set; }

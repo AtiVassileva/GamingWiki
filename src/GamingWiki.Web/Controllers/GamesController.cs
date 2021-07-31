@@ -1,19 +1,25 @@
-﻿using GamingWiki.Services.Contracts;
+﻿using AutoMapper;
+using GamingWiki.Services.Contracts;
+using GamingWiki.Services.Models.Games;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
 {
+    [Authorize]
     public class GamesController : Controller
     {
         private readonly IGameService helper;
+        private readonly IMapper mapper;
+        public GamesController(IGameService helper, IMapper mapper)
+        {
+            this.helper = helper;
+            this.mapper = mapper;
+        }
 
-        public GamesController(IGameService helper)
-            => this.helper = helper;
-
-        [Authorize]
         public IActionResult All() 
             => this.View(new GameFullModel
             {
@@ -36,12 +42,12 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.AreaExists(model.AreaId))
             {
-                this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
+                this.ModelState.AddModelError(nameof(model.AreaId), NonExistingAreaExceptionMessage);
             }
 
             if (!this.helper.GenreExists(model.GenreId))
             {
-                this.ModelState.AddModelError(nameof(model.GenreId), "Genre does not exist.");
+                this.ModelState.AddModelError(nameof(model.GenreId), NonExistingGenreExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
@@ -59,58 +65,45 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.Details),
                 new { gameId = $"{gameId}" });
         }
-
-        [Authorize]
+        
         public IActionResult Details(int gameId)
             => this.helper.GameExists(gameId)
                 ? this.View(this.helper.Details(gameId))
-                : this.View("Error");
+                : this.View("Error", CreateError(NonExistingGameExceptionMessage));
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int gameId)
         {
             if (!this.helper.GameExists(gameId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
             var dbModel = this.helper.Details(gameId);
 
-            var viewModel = new GameEditModel
-            {
-                Name = dbModel.Name,
-                PictureUrl = dbModel.PictureUrl,
-                TrailerUrl = dbModel.TrailerUrl,
-                Description = dbModel.Description,
-                AreaId = dbModel.AreaId,
-                Area = dbModel.Area,
-                Areas = this.helper.GetAreas()
-            };
+            var viewModel = this.mapper
+                .Map<GameServiceEditModel>(dbModel);
+
+            viewModel.Areas = this.helper.GetAreas();
 
             return this.View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Roles = AdministratorRoleName)]
-        public IActionResult Edit(GameEditModel model, int gameId)
+        public IActionResult Edit(GameServiceEditModel model, int gameId)
         {
             if (!this.helper.AreaExists(model.AreaId))
             {
-                this.ModelState.AddModelError(nameof(model.AreaId), "Area does not exist.");
+                this.ModelState.AddModelError(nameof(model.AreaId), NonExistingAreaExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
                 var dbModel = this.helper.Details(gameId);
 
-                model = new GameEditModel
-                {
-                    Name = dbModel.Name,
-                    PictureUrl = dbModel.PictureUrl,
-                    TrailerUrl = dbModel.TrailerUrl,
-                    Description = dbModel.Description,
-                    Areas = this.helper.GetAreas()
-                };
+                model = this.mapper.Map<GameServiceEditModel>(dbModel);
+                model.Areas = this.helper.GetAreas();
 
                 return this.View(model);
             }
@@ -126,22 +119,20 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.helper.GameExists(gameId))
             {
-                return this.View("Error");
+                return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
             this.helper.Delete(gameId);
             return this.Redirect(nameof(this.All));
         }
-
-        [Authorize]
+        
         public IActionResult Search(string letter) 
             => this.View(nameof(this.All), new GameFullModel
             {
                 Games = this.helper.Search(letter),
                 Genres = this.helper.GetGenres()
             });
-
-        [Authorize]
+        
         public IActionResult Filter(int genreId)
             => this.View(nameof(this.All), new GameFullModel
             {
