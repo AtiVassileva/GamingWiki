@@ -1,5 +1,8 @@
-﻿using GamingWiki.Services.Contracts;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Contracts;
+using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Web.Infrastructure;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Reviews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +14,21 @@ namespace GamingWiki.Web.Controllers
     [Authorize]
     public class ReviewsController : Controller
     {
+        private const int ReviewsPerPage = 3;
+
         private readonly IReviewService helper;
 
         public ReviewsController(IReviewService helper) 
             => this.helper = helper;
         
-        public IActionResult All() => this.View(this.helper.All());
+        public IActionResult All(int pageIndex = 1) 
+            => this.View(new ReviewFullModel
+            {
+                Reviews = PaginatedList<ReviewDetailsServiceModel>
+                    .Create(this.helper.All(),
+                        pageIndex, ReviewsPerPage),
+                Tokens = new KeyValuePair<object, object>("All", null)
+            });
         
         public IActionResult Create(int gameId) 
             => this.View(new ReviewFormModel
@@ -97,12 +109,36 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect(nameof(this.All));
         }
 
-        [HttpPost]
-        public IActionResult Search(string searchCriteria) 
-            => this.View(nameof(this.All), this.helper.Search(searchCriteria));
+        public IActionResult Search(string parameter, int pageIndex = 1, string name = null)
+        {
+            return this.View(nameof(this.All), new ReviewFullModel
+            {
+                Reviews = PaginatedList<ReviewDetailsServiceModel>
+                    .Create(this.helper.Search(parameter),
+                        pageIndex, ReviewsPerPage),
+                Tokens = new KeyValuePair<object, object>("Search", parameter)
+            });
+        }
 
-        public IActionResult Mine()
-            => this.View(nameof(this.All), this.helper
-                .GetReviewsByUser(this.User.GetId()));
+        [HttpPost]
+        public IActionResult Search(string searchCriteria, 
+            int pageIndex = 1) 
+            => this.View(nameof(this.All), new ReviewFullModel
+            {
+                Reviews = PaginatedList<ReviewDetailsServiceModel>
+                    .Create(this.helper.Search(searchCriteria),
+                        pageIndex, ReviewsPerPage),
+                Tokens = new KeyValuePair<object, object>("Search", searchCriteria)
+            });
+
+        public IActionResult Mine(int pageIndex = 1)
+            => this.View(nameof(this.All), new ReviewFullModel
+            {
+                Reviews = PaginatedList<ReviewDetailsServiceModel>
+                    .Create(this.helper.GetReviewsByUser
+                            (this.User.GetId()),
+                        pageIndex, ReviewsPerPage),
+                Tokens = new KeyValuePair<object, object>("Mine", null)
+            });
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Reviews;
 
@@ -6,7 +7,7 @@ namespace GamingWiki.Services.Contracts
 {
     public interface IReviewService
     {
-        IEnumerable<ReviewDetailsServiceModel> All();
+        IQueryable<ReviewDetailsServiceModel> All();
 
         GameServiceListingModel GetGame(int gameId);
 
@@ -26,8 +27,8 @@ namespace GamingWiki.Services.Contracts
 
         string GetReviewAuthorId(int reviewId);
 
-        IEnumerable<ReviewDetailsServiceModel> Search(string searchCriteria);
+        IQueryable<ReviewDetailsServiceModel> Search(string searchCriteria);
 
-        IEnumerable<ReviewDetailsServiceModel> GetReviewsByUser(string userId);
+        IQueryable<ReviewDetailsServiceModel> GetReviewsByUser(string userId);
     }
 }

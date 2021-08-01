@@ -26,7 +26,7 @@ namespace GamingWiki.Services
             this.configuration = mapper.ConfigurationProvider;
         }
 
-        public IEnumerable<ReviewDetailsServiceModel> All()
+        public IQueryable<ReviewDetailsServiceModel> All()
             => this.GetReviews(this.dbContext.Reviews
                 .Where(r => r.Description != null));
 
@@ -112,19 +112,19 @@ namespace GamingWiki.Services
             => this.dbContext.Reviews
                 .First(r => r.Id == reviewId).AuthorId;
 
-        public IEnumerable<ReviewDetailsServiceModel> Search(string searchCriteria)
+        public IQueryable<ReviewDetailsServiceModel> Search(string searchCriteria)
             => this.GetReviews(this.dbContext.Reviews
                 .Where(r => r.Game.Name.ToLower()
                                 .Contains(searchCriteria
                                     .ToLower().Trim())
                             && r.Description != null));
 
-        public IEnumerable<ReviewDetailsServiceModel> GetReviewsByUser(string userId)
+        public IQueryable<ReviewDetailsServiceModel> GetReviewsByUser(string userId)
             => this.GetReviews(this.dbContext.Reviews
                 .Where(r => r.AuthorId == userId));
 
 
-        private IEnumerable<ReviewDetailsServiceModel> GetReviews(IQueryable reviewsQuery)
+        private IQueryable<ReviewDetailsServiceModel> GetReviews(IQueryable reviewsQuery)
         {
             var reviewsModels = reviewsQuery
                 .ProjectTo<ReviewDetailsServiceModel>(this.configuration);
