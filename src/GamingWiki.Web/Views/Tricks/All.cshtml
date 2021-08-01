@@ -1,5 +1,5 @@
 ﻿@using GamingWiki.Web.Infrastructure
-@model IEnumerable<TrickServiceListingModel>
+@model TrickFullModel
 
 <div id="preloder">
     <div class="loader"></div>
@@ -19,43 +19,56 @@
         <div class="row">
             <div class="col-xl-7 col-lg-8 col-md-7">
                 <div class="row">
-                    @if (!Model.Any())
+                    @if (!Model.Tricks.Any())
                     {
-                        <div class="blog-content text-box text-white">
-                            <h5>
-                                No tips & tricks match your search.
-                                <a class="btn btn btn-info" asp-controller="Tricks" asp-action="All">See available tips & tricks</a>
-                            </h5>
-                        </div>
-                    }
-                    else
-                    {
-                        @foreach (var trick in Model)
+            <div class="blog-content text-box text-white">
+                <h5>
+                    No tips & tricks match your search.
+                    <a class="btn btn btn-info" asp-controller="Tricks" asp-action="All">See available tips & tricks</a>
+                </h5>
+            </div> }
+                        else
                         {
-                            <div class="col-lg-4 col-md-6">
-                                <div class="game-item">
-                                    <img src="@trick.PictureUrl" alt="#">
-                                    <br />
-                                    <br />
-                                    <h6><a asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.GameName]</a></h6>
-                                    <h5>@trick.Heading</h5>
-                                    <p>@trick.Content</p>
-                                    @if (this.User.IsAdmin() || this.User.GetId() == trick.AuthorId)
-                                    {
-                                        <a asp-controller="Tricks" asp-action="Edit" asp-route-trickId="@trick.Id" class="btn btn-warning">Edit</a>
-                                        <a asp-controller="Tricks" asp-action="Delete" asp-route-trickId="@trick.Id" class="btn btn-danger">Delete</a>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    }
+            @foreach (var trick in Model.Tricks)
+            {
+            <div class="col-lg-4 col-md-6">
+                <div class="game-item">
+                    <img src="@trick.PictureUrl" alt="#">
+                    <br />
+                    <br />
+                    <h6><a asp-controller="Games" asp-action="Details" asp-route-gameId="@trick.GameId">[@trick.GameName]</a></h6>
+                    <h5>@trick.Heading</h5>
+                    <p>@trick.Content</p>
+                    @if (this.User.IsAdmin() || this.User.GetId() == trick.AuthorId)
+                    {
+            <a asp-controller="Tricks" asp-action="Edit" asp-route-trickId="@trick.Id" class="btn btn-warning">Edit</a>
+                                    <a asp-controller="Tricks" asp-action="Delete" asp-route-trickId="@trick.Id" class="btn btn-danger">Delete</a>}
                 </div>
-                <div class="site-pagination">
-                    <a href="#" class="active">01.</a>
-                    <a href="#">02.</a>
-                    <a href="#">03.</a>
-                    <a href="#" class="active">>></a>
+            </div>}}
                 </div>
+                @if (Model.Tricks.Any())
+                {
+            <div class="site-pagination">
+                @{ var prevDisabled = !Model.Tricks.PreviousPage ? "disabled" : string.Empty;
+                                    var nextDisabled = !Model.Tricks.NextPage ? "disabled" : string.Empty; }
+
+                <a asp-controller="Tricks" asp-action="@Model.Tokens.Key"
+                   asp-route-parameter="@Model.Tokens.Value"
+                   asp-route-pageIndex="@(Model.Tricks.PageIndex - 1)"
+                   class="btn btn-success @prevDisabled">&lt;&lt;</a>
+
+                @for (var i = 1; i <= Model.Tricks.TotalPages; i++)
+                {
+            <a asp-controller="Tricks" asp-action="@Model.Tokens.Key"
+               asp-route-parameter="@Model.Tokens.Value"
+               asp-route-pageIndex="@i"
+               class="btn btn-success">@i</a>}
+
+                <a asp-controller="Tricks" asp-action="@Model.Tokens.Key"
+                   asp-route-parameter="@Model.Tokens.Value"
+                   asp-route-pageIndex="@(Model.Tricks.PageIndex + 1)"
+                   class="btn btn-success @nextDisabled">&gt;&gt;</a>
+            </div>}
             </div>
 
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">

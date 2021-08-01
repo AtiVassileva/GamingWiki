@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Tricks;
 
@@ -6,7 +7,7 @@ namespace GamingWiki.Services.Contracts
 {
     public interface ITrickService
     {
-        IEnumerable<TrickServiceListingModel> All();
+        IQueryable<TrickServiceListingModel> All();
 
         void Create(string heading, string content, string authorId, string pictureUrl, int gameId);
 
@@ -18,7 +19,7 @@ namespace GamingWiki.Services.Contracts
 
         void Delete(int trickId);
 
-        IEnumerable<TrickServiceListingModel> Search(string searchCriteria);
+        IQueryable<TrickServiceListingModel> Search(string searchCriteria);
 
         string GetTrickAuthorId(int trickId);
 
@@ -28,6 +29,6 @@ namespace GamingWiki.Services.Contracts
 
         IEnumerable<TrickServiceHomeModel> GetLatest();
 
-        IEnumerable<TrickServiceListingModel> GetTricksByUser(string userId);
+        IQueryable<TrickServiceListingModel> GetTricksByUser(string userId);
     }
 }

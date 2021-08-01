@@ -24,7 +24,7 @@ namespace GamingWiki.Services
             this.configuration = mapper.ConfigurationProvider;
         }
 
-        public IEnumerable<TrickServiceListingModel> All()
+        public IQueryable<TrickServiceListingModel> All()
             => this.GetTricks(this.dbContext.Tricks)
                 .OrderByDescending(t => t.Id);
 
@@ -78,10 +78,12 @@ namespace GamingWiki.Services
             this.dbContext.SaveChanges();
         }
 
-        public IEnumerable<TrickServiceListingModel> Search(string searchCriteria)
+        public IQueryable<TrickServiceListingModel> Search(string searchCriteria)
             => this.GetTricks(this.dbContext.Tricks.Where(t =>
                 t.Heading.ToLower()
                     .Contains(searchCriteria.ToLower()) || t.Content.ToLower()
+                    .Contains(searchCriteria.ToLower()) ||
+                t.Game.Name.ToLower()
                     .Contains(searchCriteria.ToLower())));
 
         public string GetTrickAuthorId(int trickId)
@@ -106,18 +108,17 @@ namespace GamingWiki.Services
                 .Take(HomePageEntityCount)
                 .ToList();
 
-        public IEnumerable<TrickServiceListingModel> GetTricksByUser(string userId)
+        public IQueryable<TrickServiceListingModel> GetTricksByUser(string userId)
             => this.GetTricks(this.dbContext.Tricks
                 .Where(t => t.AuthorId == userId));
 
-        private Trick FindTrick(int trickId) 
+        private Trick FindTrick(int trickId)
             => this.dbContext.Tricks
                 .First(t => t.Id == trickId);
 
-        private IEnumerable<TrickServiceListingModel> GetTricks(IQueryable tricksQuery) 
+        private IQueryable<TrickServiceListingModel> GetTricks(IQueryable tricksQuery)
             => tricksQuery
                 .ProjectTo<TrickServiceListingModel>(this.configuration)
-                .OrderByDescending(t => t.Id)
-                .ToList();
+                .OrderByDescending(t => t.Id);
     }
 }

@@ -1,7 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using GamingWiki.Services.Contracts;
+using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Services.Models.Tricks;
 using GamingWiki.Web.Infrastructure;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Tricks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +16,8 @@ namespace GamingWiki.Web.Controllers
     [Authorize]
     public class TricksController : Controller
     {
+        private const int TricksPerPage = 3;
+
         private readonly ITrickService helper;
         private readonly IMapper mapper;
 
@@ -22,8 +27,14 @@ namespace GamingWiki.Web.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult All() 
-            => this.View(this.helper.All());
+        public IActionResult All(int pageIndex = 1) 
+            => this.View(new TrickFullModel
+            {
+                Tricks = PaginatedList<TrickServiceListingModel>
+                    .Create(this.helper.All(),
+                        pageIndex, TricksPerPage),
+                Tokens = new KeyValuePair<object, object>("All", null)
+            });
         
         public IActionResult Create()
             => this.View(new TrickFormModel
@@ -104,12 +115,36 @@ namespace GamingWiki.Web.Controllers
             this.helper.Delete(trickId);
             return this.RedirectToAction(nameof(this.All));
         }
-        
-        public IActionResult Search(string searchCriteria) 
-            => this.View(nameof(this.All), this.helper.Search(searchCriteria));
 
-        public IActionResult Mine()
-            => this.View(nameof(this.All), this.helper
-                .GetTricksByUser(this.User.GetId()));
+        public IActionResult Search(string parameter,
+            int pageIndex = 1, string name = null)
+            => this.View(nameof(this.All), new TrickFullModel
+            {
+                Tricks = PaginatedList<TrickServiceListingModel>
+                    .Create(this.helper.Search(parameter),
+                        pageIndex, TricksPerPage),
+                Tokens = new KeyValuePair<object, object>("Search", parameter)
+            });
+
+        [HttpPost]
+        public IActionResult Search(string searchCriteria, 
+            int pageIndex = 1) 
+            => this.View(nameof(this.All), new TrickFullModel
+            {
+                Tricks = PaginatedList<TrickServiceListingModel>
+                    .Create(this.helper.Search(searchCriteria),
+                        pageIndex, TricksPerPage),
+                Tokens = new KeyValuePair<object, object>("Search", searchCriteria)
+            });
+
+        public IActionResult Mine(int pageIndex = 1)
+            => this.View(nameof(this.All), new TrickFullModel
+            {
+                Tricks = PaginatedList<TrickServiceListingModel>
+                    .Create(this.helper
+                            .GetTricksByUser(this.User.GetId()),
+                        pageIndex, TricksPerPage),
+                Tokens = new KeyValuePair<object, object>("Mine", null)
+            });
     }
 }
