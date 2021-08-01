@@ -29,9 +29,10 @@
                 @if (!Model.Articles.Any())
                 {
                     <div class="blog-content text-box text-white">
-                        <h5>There are no available articles for the given category.</h5>
+                        <h5>No articles match your search.</h5>
                         <br/>
-                        <a class="btn btn btn-success" asp-controller="Articles" asp-action="Create">Be the first to add one!</a>
+                        <a class="btn btn btn-info" asp-controller="Articles" asp-action="Create">New Article</a>
+                        <a class="btn btn btn-success" asp-controller="Articles" asp-action="All">Back to full list</a>
                     </div>
                     <br/>
                 }
