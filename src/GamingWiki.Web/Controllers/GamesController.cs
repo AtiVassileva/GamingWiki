@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Common.ExceptionMessages;
@@ -12,6 +14,8 @@ namespace GamingWiki.Web.Controllers
     [Authorize]
     public class GamesController : Controller
     {
+        private const int GamesPerPage = 3;
+
         private readonly IGameService helper;
         private readonly IMapper mapper;
         public GamesController(IGameService helper, IMapper mapper)
@@ -20,11 +24,14 @@ namespace GamingWiki.Web.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult All() 
+        public IActionResult All(int pageIndex = 1) 
             => this.View(new GameFullModel
             {
-                Games = this.helper.All(),
+                Games = PaginatedList<GameServiceListingModel>
+                    .Create(this.helper.All(), pageIndex, GamesPerPage),
                 Genres = this.helper.GetGenres(),
+                Tokens = new KeyValuePair<object, object>
+                    ("All", string.Empty)
             });
 
         [Authorize(Roles = AdministratorRoleName)]
@@ -125,19 +132,27 @@ namespace GamingWiki.Web.Controllers
             this.helper.Delete(gameId);
             return this.Redirect(nameof(this.All));
         }
-        
-        public IActionResult Search(string letter) 
+
+        public IActionResult Search(string parameter, int pageIndex = 1)
             => this.View(nameof(this.All), new GameFullModel
             {
-                Games = this.helper.Search(letter),
-                Genres = this.helper.GetGenres()
+                Games = PaginatedList<GameServiceListingModel>
+                    .Create(this.helper.Search(parameter), 
+                        pageIndex, GamesPerPage),
+                Genres = this.helper.GetGenres(),
+                Tokens = new KeyValuePair<object, object>
+                    ("Search", parameter)
             });
-        
-        public IActionResult Filter(int genreId)
+
+        public IActionResult Filter(int parameter, int pageIndex = 1)
             => this.View(nameof(this.All), new GameFullModel
             {
-                Games = this.helper.Filter(genreId),
-                Genres = this.helper.GetGenres()
+                Games = PaginatedList<GameServiceListingModel>
+                    .Create(this.helper.Filter(parameter), 
+                        pageIndex, GamesPerPage),
+                Genres = this.helper.GetGenres(),
+                Tokens = new KeyValuePair<object, object>
+                ("Filter", parameter)
             });
 
     }

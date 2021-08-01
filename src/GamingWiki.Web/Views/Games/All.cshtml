@@ -12,19 +12,20 @@
 @{
     var letters = Enumerable.Range(65, 26);
 }
+
 <section class="games-section">
     <div class="container">
         <ul class="blog-filter">
             @foreach (var genre in Model.Genres)
             {
-                <li><a asp-controller="Games" asp-action="Filter" asp-route-genreId="@genre.Id">@genre.Name</a></li>
+                <li><a asp-controller="Games" asp-action="Filter" asp-route-parameter="@genre.Id">@genre.Name</a></li>
             }
         </ul>
         <br />
         <ul class="game-filter">
             @foreach (var letter in letters)
             {
-                <li><a asp-controller="Games" asp-action="Search" asp-route-letter="@((char) letter)">@((char) letter)</a></li>
+                <li><a asp-controller="Games" asp-action="Search" asp-route-parameter="@((char) letter)">@((char) letter)</a></li>
             }
         </ul>
         <div class="row">
@@ -33,7 +34,8 @@
                     @if (!Model.Games.Any())
                     {
                         <div class="blog-content text-box text-white">
-                            <h5>No games match your search.
+                            <h5>
+                                No games match your search.
                                 <a class="btn btn btn-info" asp-controller="Games" asp-action="All">See available games</a>
                             </h5>
                         </div>
@@ -46,17 +48,36 @@
                                 <div class="game-item">
                                     <img src="@game.PictureUrl" alt="#">
                                     <h5>@game.Name</h5>
-                                    <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id" class="read-more">Read More <img src="/img/icons/double-arrow.png" alt="#"/></a>
+                                    <a asp-controller="Games" asp-action="Details" asp-route-gameId="@game.Id" class="read-more">Read More <img src="/img/icons/double-arrow.png" alt="#" /></a>
                                 </div>
                             </div>
                         }
                     }
                 </div>
                 <div class="site-pagination">
-                    <a href="#" class="active">01.</a>
-                    <a href="#">02.</a>
-                    <a href="#">03.</a>
-                    <a href="#" class="active">>></a>
+                    @{
+                        var prevDisabled = !Model.Games.PreviousPage ? "disabled" : string.Empty;
+                        var nextDisabled = !Model.Games.NextPage ? "disabled" : string.Empty;
+                        // FIX WITH DICTIONARY!
+                    }
+
+                    <a asp-controller="Games" asp-action="@Model.Tokens.Key" 
+                       asp-route-parameter="@Model.Tokens.Value"
+                       asp-route-pageIndex="@(Model.Games.PageIndex - 1)" 
+                       class="btn @prevDisabled"><<</a>
+                    
+                    @for (var i = 1; i <= Model.Games.TotalPages; i++)
+                    {
+                        <a asp-controller="Games" asp-action="@Model.Tokens.Key" 
+                           asp-route-parameter="@Model.Tokens.Value"
+                           asp-route-pageIndex="@i" 
+                           class="btn">@i</a>
+                    }
+
+                    <a asp-controller="Games" asp-action="@Model.Tokens.Key" 
+                       asp-route-parameter="@Model.Tokens.Value"
+                       asp-route-pageIndex="@(Model.Games.PageIndex + 1)" 
+                       class="btn @nextDisabled">>></a>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
@@ -72,20 +93,6 @@
                             </ul>
                         </div>
                     </div>
-                    @*<div class="widget-item">
-                        <div class="categories-widget">
-                            <h4 class="widget-title">platform</h4>
-                            <ul>
-                                <li><a href="">Xbox</a></li>
-                                <li><a href="">X box 360</a></li>
-                                <li><a href="">Play Station</a></li>
-                                <li><a href="">Play Station VR</a></li>
-                                <li><a href="">Nintendo Wii</a></li>
-                                <li><a href="">Nintendo Wii U</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    *@
                 </div>
             </div>
         </div>

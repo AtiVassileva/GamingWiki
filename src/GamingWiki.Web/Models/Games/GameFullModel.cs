@@ -6,8 +6,10 @@ namespace GamingWiki.Web.Models.Games
 {
     public class GameFullModel
     {
-        public IEnumerable<GameServiceListingModel> Games { get; set; }
+        public PaginatedList<GameServiceListingModel> Games { get; set; }
 
         public IEnumerable<GenreServiceModel> Genres { get; set; }
+
+        public KeyValuePair<object, object> Tokens { get; set; } = new();
     }
 }

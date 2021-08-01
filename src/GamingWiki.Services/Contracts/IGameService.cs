@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
@@ -16,7 +17,7 @@ namespace GamingWiki.Services.Contracts
 
         int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames);
 
-        IEnumerable<GameServiceListingModel> All();
+        IQueryable<GameServiceListingModel> All();
 
         GameServiceDetailsModel Details(int gameId);
 
@@ -24,9 +25,9 @@ namespace GamingWiki.Services.Contracts
 
         void Delete(int gameId);
 
-        IEnumerable<GameServiceListingModel> Search(string letter);
+        IQueryable<GameServiceListingModel> Search(string letter);
 
-        IEnumerable<GameServiceListingModel> Filter(int genreId);
+        IQueryable<GameServiceListingModel> Filter(int genreId);
 
         IEnumerable<AreaServiceModel> GetAreas();
 

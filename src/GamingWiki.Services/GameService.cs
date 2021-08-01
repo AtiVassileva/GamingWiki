@@ -88,11 +88,10 @@ namespace GamingWiki.Services
             return game.Id;
         }
 
-        public IEnumerable<GameServiceListingModel> All()
-        => this.dbContext.Games
-            .ProjectTo<GameServiceListingModel>(this.configuration)
-            .OrderBy(g => g.Name)
-            .ToList();
+        public IQueryable<GameServiceListingModel> All()
+            => this.dbContext.Games
+                .ProjectTo<GameServiceListingModel>(this.configuration)
+                .OrderBy(g => g.Name);
 
         public GameServiceDetailsModel Details(int gameId)
         {
@@ -145,20 +144,18 @@ namespace GamingWiki.Services
             this.dbContext.SaveChanges();
         }
 
-        public IEnumerable<GameServiceListingModel> Search(string letter) 
+        public IQueryable<GameServiceListingModel> Search(string letter) 
             => this.dbContext.Games
                 .Where(g => g.Name.ToUpper()
                     .StartsWith(letter))
                 .ProjectTo<GameServiceListingModel>(this.configuration)
-                .OrderBy(g => g.Name)
-                .ToList();
+                .OrderBy(g => g.Name);
 
-        public IEnumerable<GameServiceListingModel> Filter(int genreId)
+        public IQueryable<GameServiceListingModel> Filter(int genreId)
             => this.dbContext.Games
                 .Where(g => g.GenreId == genreId)
                 .ProjectTo<GameServiceListingModel>(this.configuration)
-                .OrderBy(g => g.Name)
-                .ToList();
+                .OrderBy(g => g.Name);
 
         public IEnumerable<AreaServiceModel> GetAreas()
             => this.dbContext

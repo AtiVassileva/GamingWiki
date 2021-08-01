@@ -12,6 +12,7 @@ using GamingWiki.Services.MappingConfiguration;
 using GamingWiki.Web.Infrastructure;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Mvc;
+using ReflectionIT.Mvc.Paging;
 
 namespace GamingWiki.Web
 {
