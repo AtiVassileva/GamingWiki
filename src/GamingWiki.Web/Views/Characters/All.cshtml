@@ -17,14 +17,14 @@
         <ul class="blog-filter">
             @foreach (var characterClass in Model.Classes)
             {
-                <li><a asp-controller="Characters" asp-action="Filter" asp-route-classId="@characterClass.Id">@characterClass.Name</a></li>
+                <li><a asp-controller="Characters" asp-action="Filter" asp-route-parameter="@characterClass.Id">@characterClass.Name</a></li>
             }
         </ul>
         <br/>
         <ul class="game-filter">
             @foreach (var letter in letters)
             {
-                <li><a asp-controller="Characters" asp-action="Search" asp-route-letter="@((char) letter)">@((char) letter)</a></li>
+                <li><a asp-controller="Characters" asp-action="Search" asp-route-parameter="@((char) letter)">@((char) letter)</a></li>
             }
         </ul>
         <div class="row">
@@ -52,11 +52,33 @@
                         }
                     }
                 </div>
-                <div class="site-pagination">
-                    <a href="#" class="active">01.</a>
-                    <a href="#">02.</a>
-                    <a href="#">03.</a>
-                </div>
+                @if (Model.Characters.Any())
+                {
+                    <div class="site-pagination">
+                        @{
+                            var prevDisabled = !Model.Characters.PreviousPage ? "disabled" : string.Empty;
+                            var nextDisabled = !Model.Characters.NextPage ? "disabled" : string.Empty;
+                        }
+
+                        <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
+                           asp-route-parameter="@Model.Tokens.Value"
+                           asp-route-pageIndex="@(Model.Characters.PageIndex - 1)"
+                           class="btn btn-success @prevDisabled">&lt;&lt;</a>
+
+                        @for (var i = 1; i <= Model.Characters.TotalPages; i++)
+                        {
+                            <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@i"
+                               class="btn btn-success">@i</a>
+                        }
+
+                        <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
+                           asp-route-parameter="@Model.Tokens.Value"
+                           asp-route-pageIndex="@(Model.Characters.PageIndex + 1)"
+                           class="btn btn-success @nextDisabled">&gt;&gt;</a>
+                    </div>
+                }
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">

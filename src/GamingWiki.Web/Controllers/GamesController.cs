@@ -133,26 +133,28 @@ namespace GamingWiki.Web.Controllers
             return this.Redirect(nameof(this.All));
         }
 
-        public IActionResult Search(string parameter, int pageIndex = 1)
+        public IActionResult Search([FromQuery(Name = "parameter") ]
+            string letter, int pageIndex = 1)
             => this.View(nameof(this.All), new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.Search(parameter), 
+                    .Create(this.helper.Search(letter), 
                         pageIndex, GamesPerPage),
                 Genres = this.helper.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
-                    ("Search", parameter)
+                    ("Search", letter)
             });
 
-        public IActionResult Filter(int parameter, int pageIndex = 1)
+        public IActionResult Filter([FromQuery(Name = "parameter")]
+            int genreId, int pageIndex = 1)
             => this.View(nameof(this.All), new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.Filter(parameter), 
+                    .Create(this.helper.Filter(genreId), 
                         pageIndex, GamesPerPage),
                 Genres = this.helper.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
-                ("Filter", parameter)
+                ("Filter", genreId)
             });
 
     }

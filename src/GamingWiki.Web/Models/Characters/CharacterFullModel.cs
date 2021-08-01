@@ -6,8 +6,10 @@ namespace GamingWiki.Web.Models.Characters
 {
     public class CharacterFullModel
     {
-        public IEnumerable<CharacterAllServiceModel> Characters { get; set; }
+        public PaginatedList<CharacterAllServiceModel> Characters { get; set; }
 
         public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
+
+        public KeyValuePair<object, object> Tokens { get; set; } = new();
     }
 }

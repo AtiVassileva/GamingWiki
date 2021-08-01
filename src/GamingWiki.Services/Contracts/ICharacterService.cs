@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Models;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
@@ -21,15 +22,15 @@ namespace GamingWiki.Services.Contracts
 
         CharacterServiceDetailsModel Details(int characterId);
 
-        IEnumerable<CharacterAllServiceModel> All();
+        IQueryable<CharacterAllServiceModel> All();
 
         void Edit(int characterId, CharacterServiceEditModel model);
 
         void Delete(int characterId);
 
-        IEnumerable<CharacterAllServiceModel> Search(string letter);
+        IQueryable<CharacterAllServiceModel> Search(string letter);
 
-        IEnumerable<CharacterAllServiceModel> Filter(int classId);
+        IQueryable<CharacterAllServiceModel> Filter(int classId);
 
         IEnumerable<ClassSimpleServiceModel> GetClasses();
 

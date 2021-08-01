@@ -36,6 +36,8 @@
                         <div class="blog-content text-box text-white">
                             <h5>
                                 No games match your search.
+                                <br />
+                                <br />
                                 <a class="btn btn btn-info" asp-controller="Games" asp-action="All">See available games</a>
                             </h5>
                         </div>
@@ -54,31 +56,34 @@
                         }
                     }
                 </div>
-                <div class="site-pagination">
-                    @{
-                        var prevDisabled = !Model.Games.PreviousPage ? "disabled" : string.Empty;
-                        var nextDisabled = !Model.Games.NextPage ? "disabled" : string.Empty;
-                        // FIX WITH DICTIONARY!
-                    }
+                @if (Model.Games.Any())
+                {
+                    <div class="site-pagination">
+                        @{
+                            var prevDisabled = !Model.Games.PreviousPage ? "disabled" : string.Empty;
+                            var nextDisabled = !Model.Games.NextPage ? "disabled" : string.Empty;
+                        }
 
-                    <a asp-controller="Games" asp-action="@Model.Tokens.Key" 
-                       asp-route-parameter="@Model.Tokens.Value"
-                       asp-route-pageIndex="@(Model.Games.PageIndex - 1)" 
-                       class="btn @prevDisabled"><<</a>
-                    
-                    @for (var i = 1; i <= Model.Games.TotalPages; i++)
-                    {
-                        <a asp-controller="Games" asp-action="@Model.Tokens.Key" 
+                        <a asp-controller="Games" asp-action="@Model.Tokens.Key"
                            asp-route-parameter="@Model.Tokens.Value"
-                           asp-route-pageIndex="@i" 
-                           class="btn">@i</a>
-                    }
+                           asp-route-pageIndex="@(Model.Games.PageIndex - 1)"
+                           class="btn btn-success @prevDisabled">&lt;&lt;</a>
 
-                    <a asp-controller="Games" asp-action="@Model.Tokens.Key" 
+                        @for (var i = 1; i <= Model.Games.TotalPages; i++)
+                        {
+                            <a asp-controller="Games" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@i"
+                               class="btn btn-success">@i</a>
+                        }
+
+                    <a asp-controller="Games" asp-action="@Model.Tokens.Key"
                        asp-route-parameter="@Model.Tokens.Value"
-                       asp-route-pageIndex="@(Model.Games.PageIndex + 1)" 
-                       class="btn @nextDisabled">>></a>
-                </div>
+                       asp-route-pageIndex="@(Model.Games.PageIndex + 1)"
+                       class="btn btn-success @nextDisabled">&gt;&gt;</a>
+                    </div>
+                }
+                
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">

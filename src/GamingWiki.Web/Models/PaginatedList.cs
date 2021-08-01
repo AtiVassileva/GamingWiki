@@ -11,7 +11,7 @@ namespace GamingWiki.Web.Models
 
         public int TotalPages { get; set; }
 
-        public PaginatedList(List<T> entities, int pageIndex, 
+        public PaginatedList(IEnumerable<T> entities, int pageIndex, 
             int count, int pageSize)
         {
             this.PageIndex = pageIndex;

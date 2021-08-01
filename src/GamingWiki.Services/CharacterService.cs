@@ -67,10 +67,9 @@ namespace GamingWiki.Services
             return detailsModel;
         }
 
-        public IEnumerable<CharacterAllServiceModel> All()
+        public IQueryable<CharacterAllServiceModel> All()
         => this.dbContext.Characters
-                .ProjectTo<CharacterAllServiceModel>(this.configuration)
-                .ToList();
+                .ProjectTo<CharacterAllServiceModel>(this.configuration);
 
         public void Edit(int characterId, CharacterServiceEditModel model)
         {
@@ -101,20 +100,18 @@ namespace GamingWiki.Services
             this.dbContext.SaveChanges();
         }
 
-        public IEnumerable<CharacterAllServiceModel> Search(string letter)
+        public IQueryable<CharacterAllServiceModel> Search(string letter)
             => this.dbContext.Characters
                 .Where(c => c.Name.ToUpper()
                     .StartsWith(letter))
                 .ProjectTo<CharacterAllServiceModel>(this.configuration)
-                .OrderBy(c => c.Name)
-                .ToList();
+                .OrderBy(c => c.Name);
 
-        public IEnumerable<CharacterAllServiceModel> Filter(int classId)
+        public IQueryable<CharacterAllServiceModel> Filter(int classId)
             => this.dbContext.Characters
                 .Where(c => c.ClassId == classId)
                 .ProjectTo<CharacterAllServiceModel>(this.configuration)
-                .OrderBy(c => c.Name)
-                .ToList();
+                .OrderBy(c => c.Name);
 
         public IEnumerable<ClassSimpleServiceModel> GetClasses()
             => this.dbContext.Classes

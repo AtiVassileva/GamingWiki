@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Characters;
-using GamingWiki.Web.Infrastructure;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Common.ExceptionMessages;
@@ -14,6 +14,8 @@ namespace GamingWiki.Web.Controllers
     [Authorize]
     public class CharactersController : Controller
     {
+        private const int CharactersPerPage = 3;
+
         private readonly ICharacterService helper;
         private readonly IMapper mapper;
 
@@ -24,11 +26,14 @@ namespace GamingWiki.Web.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult All()
+        public IActionResult All(int pageIndex = 1)
             => this.View(new CharacterFullModel
             {
-                Characters = this.helper.All(),
-                Classes = this.helper.GetClasses()
+                Characters = PaginatedList<CharacterAllServiceModel>
+                    .Create(this.helper.All(),
+                        pageIndex, CharactersPerPage),
+                Classes = this.helper.GetClasses(),
+                Tokens = new KeyValuePair<object, object>("All", null)
             });
 
         [Authorize(Roles = AdministratorRoleName)]
@@ -130,18 +135,25 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.All));
         }
         
-        public IActionResult Search(string letter)
+        public IActionResult Search([FromQuery(Name = "parameter")] string letter, int pageIndex = 1)
             => this.View(nameof(this.All), new CharacterFullModel
             {
-                Characters = this.helper.Search(letter),
-                Classes = this.helper.GetClasses()
+                Characters = PaginatedList<CharacterAllServiceModel>
+                    .Create(this.helper.Search(letter),
+                        pageIndex, CharactersPerPage),
+                Classes = this.helper.GetClasses(),
+                Tokens = new KeyValuePair<object, object>("Search", letter)
             });
         
-        public IActionResult Filter(int classId)
+        public IActionResult Filter([FromQuery(Name = "parameter")]
+            int classId, int pageIndex = 1)
             => this.View(nameof(this.All), new CharacterFullModel
             {
-                Characters = this.helper.Filter(classId),
-                Classes = this.helper.GetClasses()
+                Characters = PaginatedList<CharacterAllServiceModel>
+                    .Create(this.helper.Filter(classId),
+                        pageIndex, CharactersPerPage),
+                Classes = this.helper.GetClasses(),
+                Tokens = new KeyValuePair<object, object>("Filter", classId)
             });
     }
 }
