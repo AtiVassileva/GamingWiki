@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
 
@@ -6,7 +7,7 @@ namespace GamingWiki.Services.Contracts
 {
     public interface IArticleService
     {
-        IEnumerable<ArticleAllServiceModel> All();
+        IQueryable<ArticleAllServiceModel> All();
 
         int Create(string heading, string content, int categoryId,
             string pictureUrl, string authorId);
@@ -23,14 +24,14 @@ namespace GamingWiki.Services.Contracts
 
         bool ArticleExists(int articleId);
 
-        IEnumerable<ArticleAllServiceModel> Search(string searchCriteria);
+        IQueryable<ArticleAllServiceModel> Search(string searchCriteria);
 
-        IEnumerable<ArticleAllServiceModel> Filter(int categoryId);
+        IQueryable<ArticleAllServiceModel> Filter(int categoryId);
 
         IEnumerable<CategoryServiceModel> GetCategories();
 
         IEnumerable<ArticleServiceHomeModel> GetLatest();
 
-        IEnumerable<ArticleAllServiceModel> GetArticlesByUser(string userId);
+        IQueryable<ArticleAllServiceModel> GetArticlesByUser(string userId);
     }
 }

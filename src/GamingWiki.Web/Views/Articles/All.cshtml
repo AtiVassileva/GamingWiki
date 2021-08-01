@@ -22,7 +22,7 @@
                     <ul class="blog-filter">
                         @foreach (var category in Model.Categories)
                         {
-                            <li><a asp-controller="Articles" asp-action="Filter" asp-route-categoryId="@category.Id">@category.Name</a></li>
+                            <li><a asp-controller="Articles" asp-action="Filter" asp-route-parameter="@category.Id">@category.Name</a></li>
                         }
                     </ul>
                 }
@@ -50,16 +50,40 @@
                             </div>
                         </div>}
                 }
-                <div class="site-pagination">
-                    <a href="#" class="active">01.</a>
-                    <a href="#">02.</a>
-                    <a href="#">03.</a>
-                </div>
+                @if (Model.Articles.Any())
+                {
+                    <div class="site-pagination">
+                        @{
+                            var prevDisabled = !Model.Articles.PreviousPage ? "disabled" : string.Empty;
+                            var nextDisabled = !Model.Articles.NextPage ? "disabled" : string.Empty;
+                        }
+
+                        <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
+                           asp-route-parameter="@Model.Tokens.Value"
+                           asp-route-pageIndex="@(Model.Articles.PageIndex - 1)"
+                           class="btn btn-success @prevDisabled">&lt;&lt;</a>
+
+                        @for (var i = 1; i <= Model.Articles.TotalPages; i++)
+                        {
+                            <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@i"
+                               class="btn btn-success">@i</a>
+                        }
+
+                        <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
+                           asp-route-parameter="@Model.Tokens.Value"
+                           asp-route-pageIndex="@(Model.Articles.PageIndex + 1)"
+                           class="btn btn-success @nextDisabled">&gt;&gt;</a>
+                    </div>
+                }
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar">
                 <div id="stickySidebar">
                     <div class="widget-item">
-                        <form class="search-widget" asp-controller="Articles" asp-action="Search" method="post">
+                        <form class="search-widget" asp-controller="Articles" 
+                              asp-action="Search"
+                              method="post">
                             <input type="text" name="searchCriteria">
                             <button type="submit">Search</button>
                         </form>

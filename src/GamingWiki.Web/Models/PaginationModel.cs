@@ -6,7 +6,7 @@ namespace GamingWiki.Web.Models
 {
     public class PaginationModel
     {
-        public PaginatedList<IBaseModel> PaginatedList  { get; set; }
+        public PaginatedList<object> PaginatedList  { get; set; }
         
         public string ControllerName { get; set; }
 

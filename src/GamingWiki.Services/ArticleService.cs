@@ -29,7 +29,7 @@ namespace GamingWiki.Services
             this.configuration = mapper.ConfigurationProvider;
         }
 
-        public IEnumerable<ArticleAllServiceModel> All()
+        public IQueryable<ArticleAllServiceModel> All()
             => this.GetArticles(this.dbContext.Articles)
                 .OrderByDescending(a => a.Id);
 
@@ -105,15 +105,15 @@ namespace GamingWiki.Services
             => this.dbContext.Articles
                 .First(a => a.Id == articleId).AuthorId;
 
-        public IEnumerable<ArticleAllServiceModel> Search(string searchCriteria)
+        public IQueryable<ArticleAllServiceModel> Search(string searchCriteria)
             => this.GetArticles(this.dbContext.Articles
                 .Where(a => a.Heading.ToLower().Contains(searchCriteria.ToLower().Trim())))
                 .OrderByDescending(a => a.Id);
 
-        public IEnumerable<ArticleAllServiceModel> Filter(int categoryId)
+        public IQueryable<ArticleAllServiceModel> Filter(int categoryId)
             => GetArticles(this.dbContext.Articles
                 .Where(a => a.CategoryId == categoryId))
-                .OrderByDescending(c => c.Id);
+                .OrderByDescending(a => a.Id);
 
         public IEnumerable<CategoryServiceModel> GetCategories()
         => this.dbContext.Categories
@@ -128,19 +128,19 @@ namespace GamingWiki.Services
             .Take(HomePageEntityCount)
             .ToList();
 
-        public IEnumerable<ArticleAllServiceModel> GetArticlesByUser(string userId)
+        public IQueryable<ArticleAllServiceModel> GetArticlesByUser(string userId)
             => this.GetArticles(this.dbContext.Articles
-                .Where(a => a.AuthorId == userId));
+                .Where(a => a.AuthorId == userId))
+                .OrderByDescending(a => a.Id);
 
         private Article FindArticle(int articleId)
             => this.dbContext.Articles
                 .Include(a => a.Author)
                 .First(a => a.Id == articleId);
 
-        private IEnumerable<ArticleAllServiceModel> GetArticles(IQueryable articlesQuery)
+        private IQueryable<ArticleAllServiceModel> GetArticles(IQueryable articlesQuery)
         => articlesQuery
-            .ProjectTo<ArticleAllServiceModel>(this.configuration)
-            .ToList();
+            .ProjectTo<ArticleAllServiceModel>(this.configuration);
 
     }
 }

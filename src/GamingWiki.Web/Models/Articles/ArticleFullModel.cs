@@ -6,8 +6,10 @@ namespace GamingWiki.Web.Models.Articles
 {
     public class ArticleFullModel
     {
-        public IEnumerable<ArticleAllServiceModel> Articles { get; set; }
+        public PaginatedList<ArticleAllServiceModel> Articles { get; set; }
 
         public IEnumerable<CategoryServiceModel> Categories { get; set; }
+
+        public KeyValuePair<object, object> Tokens { get; set; }
     }
 }

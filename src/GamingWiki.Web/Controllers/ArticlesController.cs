@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
 using GamingWiki.Web.Infrastructure;
@@ -7,6 +9,7 @@ using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -14,6 +17,8 @@ namespace GamingWiki.Web.Controllers
     [Authorize]
     public class ArticlesController : Controller
     {
+        private const int ArticlesPerPage = 1;
+
         private readonly IArticleService helper;
         private readonly IMapper mapper;
 
@@ -23,11 +28,14 @@ namespace GamingWiki.Web.Controllers
             this.mapper = mapper;
         }
         
-        public IActionResult All() 
+        public IActionResult All(int pageIndex = 1) 
             => this.View(new ArticleFullModel
             {
-                Articles = this.helper.All(),
-                Categories = this.helper.GetCategories()
+                Articles = PaginatedList<ArticleAllServiceModel>
+                    .Create(this.helper.All(),
+                        pageIndex, ArticlesPerPage),
+                Categories = this.helper.GetCategories(),
+                Tokens = new KeyValuePair<object, object>("All", null)
             });
         
         public IActionResult Create() 
@@ -123,26 +131,50 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.All));
         }
 
+        public IActionResult Search(string parameter, int pageIndex = 1, string name = null)
+        {
+            return this.View(nameof(this.All), new ArticleFullModel
+            {
+                Articles = PaginatedList<ArticleAllServiceModel>
+                    .Create(this.helper.Search(parameter),
+                        pageIndex, ArticlesPerPage),
+                Categories = this.helper.GetCategories(),
+                Tokens = new KeyValuePair<object, object>("Search", parameter)
+            });
+        }
+
         [HttpPost]
-        public IActionResult Search(string searchCriteria) 
+        public IActionResult Search(string searchCriteria, int pageIndex = 1)
+        {
+            return this.View(nameof(this.All), new ArticleFullModel
+            {
+                Articles = PaginatedList<ArticleAllServiceModel>
+                    .Create(this.helper.Search(searchCriteria),
+                        pageIndex, ArticlesPerPage),
+                Categories = this.helper.GetCategories(),
+                Tokens = new KeyValuePair<object, object>("Search", searchCriteria)
+            });
+        }
+
+        public IActionResult Filter([FromQuery(Name = "parameter")]
+            int categoryId, int pageIndex = 1) 
             => this.View(nameof(this.All), new ArticleFullModel
             {
-                Articles = this.helper.Search(searchCriteria),
-                Categories = this.helper.GetCategories()
+                Articles = PaginatedList<ArticleAllServiceModel>
+                    .Create(this.helper.Filter(categoryId),
+                        pageIndex, ArticlesPerPage),
+                Categories = this.helper.GetCategories(),
+                Tokens = new KeyValuePair<object, object>("Filter", categoryId)
             });
 
-        public IActionResult Filter(int categoryId) 
-            => this.View(nameof(this.All), new ArticleFullModel
-            {
-                Articles = this.helper.Filter(categoryId),
-                Categories = this.helper.GetCategories()
-            });
-
-        public IActionResult Mine() 
+        public IActionResult Mine(int pageIndex = 1) 
             => this.View(nameof(this.All), new ArticleFullModel()
             {
-                Articles = this.helper
-                    .GetArticlesByUser(this.User.GetId())
+                Articles = PaginatedList<ArticleAllServiceModel>
+                    .Create(this.helper.GetArticlesByUser
+                            (this.User.GetId()),
+                        pageIndex, ArticlesPerPage),
+                Tokens = new KeyValuePair<object, object>("Mine", null)
             });
     }
 }
