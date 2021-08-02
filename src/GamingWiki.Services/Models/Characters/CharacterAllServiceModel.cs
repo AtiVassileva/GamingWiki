@@ -1,11 +1,7 @@
 ﻿namespace GamingWiki.Services.Models.Characters
 {
-    public class CharacterAllServiceModel
+    public class CharacterAllServiceModel : CharacterGameServiceModel
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
         public string PictureUrl { get; set; }
     }
 }

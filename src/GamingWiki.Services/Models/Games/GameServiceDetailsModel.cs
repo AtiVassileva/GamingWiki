@@ -5,17 +5,11 @@ using GamingWiki.Services.Models.Reviews;
 
 namespace GamingWiki.Services.Models.Games
 {
-    public class GameServiceDetailsModel
+    public class GameServiceDetailsModel : GameServiceListingModel
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
         public string Description { get; set; }
 
         public string Genre { get; set; }
-
-        public string PictureUrl { get; set; }
 
         public double Rating { get; set; }
 
@@ -33,8 +27,7 @@ namespace GamingWiki.Services.Models.Games
 
         public IEnumerable<CharacterGameServiceModel> Characters { get; set; }
 
-        public IEnumerable<ReviewDetailsServiceModel> Reviews { get; set; }
-
+        public IEnumerable<ReviewServiceSimpleModel> Reviews { get; set; }
 
         public IEnumerable<string> Platforms { get; set; }
     }

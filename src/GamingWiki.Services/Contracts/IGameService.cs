@@ -4,6 +4,7 @@ using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
+using GamingWiki.Services.Models.Reviews;
 
 namespace GamingWiki.Services.Contracts
 {
@@ -36,5 +37,7 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<PlatformServiceModel> GetPlatforms();
 
         IEnumerable<GameServiceListingModel> GetLatest();
+
+        IEnumerable<ReviewServiceSimpleModel> GetReviews(int gameId);
     }
 }

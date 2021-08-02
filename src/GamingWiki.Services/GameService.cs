@@ -173,10 +173,10 @@ namespace GamingWiki.Services
                 .OrderBy(g => g.Name)
                 .ToList();
 
-        public IEnumerable<ReviewDetailsServiceModel> GetReviews(int gameId)
+        public IEnumerable<ReviewServiceSimpleModel> GetReviews(int gameId)
             => this.dbContext.Reviews
                 .Where(r => r.GameId == gameId)
-                .ProjectTo<ReviewDetailsServiceModel>(this.configuration)
+                .ProjectTo<ReviewServiceSimpleModel>(this.configuration)
                 .OrderByDescending(r => r.Id)
                 .ToList();
 

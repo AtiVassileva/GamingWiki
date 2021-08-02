@@ -83,6 +83,10 @@ namespace GamingWiki.Services.MappingConfiguration
             this.CreateMap<Review, ReviewDetailsServiceModel>()
                 .ForMember(r => r.Author, cfg => cfg
                     .MapFrom(r => r.Author.UserName));
+            
+            this.CreateMap<Review, ReviewServiceSimpleModel>()
+                .ForMember(r => r.Author, cfg => cfg
+                    .MapFrom(r => r.Author.UserName));
 
             //Tricks
             this.CreateMap<Trick, TrickServiceHomeModel>();
