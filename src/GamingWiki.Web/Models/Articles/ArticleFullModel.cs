@@ -4,12 +4,10 @@ using GamingWiki.Services.Models.Categories;
 
 namespace GamingWiki.Web.Models.Articles
 {
-    public class ArticleFullModel
+    public class ArticleFullModel : BaseFullModel
     {
         public PaginatedList<ArticleAllServiceModel> Articles { get; set; }
 
         public IEnumerable<CategoryServiceModel> Categories { get; set; }
-
-        public KeyValuePair<object, object> Tokens { get; set; }
     }
 }
