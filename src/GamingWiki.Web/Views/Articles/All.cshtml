@@ -54,15 +54,14 @@
                 @if (Model.Articles.Any())
                 {
                     <div class="site-pagination">
-                        @{
-                            var prevDisabled = !Model.Articles.PreviousPage ? "disabled" : string.Empty;
-                            var nextDisabled = !Model.Articles.NextPage ? "disabled" : string.Empty;
+                        
+                        @if (Model.Articles.PreviousPage)
+                        {
+                            <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@(Model.Articles.PageIndex - 1)"
+                               class="btn btn-success">&lt;&lt;</a>
                         }
-
-                        <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
-                           asp-route-parameter="@Model.Tokens.Value"
-                           asp-route-pageIndex="@(Model.Articles.PageIndex - 1)"
-                           class="btn btn-success @prevDisabled">&lt;&lt;</a>
 
                         @for (var i = 1; i <= Model.Articles.TotalPages; i++)
                         {
@@ -71,11 +70,14 @@
                                asp-route-pageIndex="@i"
                                class="btn btn-success">@i</a>
                         }
-
-                        <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
-                           asp-route-parameter="@Model.Tokens.Value"
-                           asp-route-pageIndex="@(Model.Articles.PageIndex + 1)"
-                           class="btn btn-success @nextDisabled">&gt;&gt;</a>
+                        
+                        @if (Model.Articles.NextPage)
+                        {
+                            <a asp-controller="Articles" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@(Model.Articles.PageIndex + 1)"
+                               class="btn btn-success">&gt;&gt;</a>
+                        }
                     </div>
                 }
             </div>

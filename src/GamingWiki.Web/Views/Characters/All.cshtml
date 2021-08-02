@@ -20,7 +20,7 @@
                 <li><a asp-controller="Characters" asp-action="Filter" asp-route-parameter="@characterClass.Id">@characterClass.Name</a></li>
             }
         </ul>
-        <br/>
+        <br />
         <ul class="game-filter">
             @foreach (var letter in letters)
             {
@@ -46,7 +46,7 @@
                                 <div class="game-item">
                                     <img src="@character.PictureUrl" alt="#" style="width: 370px; height: 345px; object-fit: cover">
                                     <h5>@character.Name</h5>
-                                    <a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" class="read-more">See More <img src="/img/icons/double-arrow.png" alt="#"/></a>
+                                    <a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" class="read-more">See More <img src="/img/icons/double-arrow.png" alt="#" /></a>
                                 </div>
                             </div>
                         }
@@ -55,15 +55,14 @@
                 @if (Model.Characters.Any())
                 {
                     <div class="site-pagination">
-                        @{
-                            var prevDisabled = !Model.Characters.PreviousPage ? "disabled" : string.Empty;
-                            var nextDisabled = !Model.Characters.NextPage ? "disabled" : string.Empty;
+                        
+                        @if (Model.Characters.PreviousPage)
+                        {
+                            <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@(Model.Characters.PageIndex - 1)"
+                               class="btn btn-success">&lt;&lt;</a>
                         }
-
-                        <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
-                           asp-route-parameter="@Model.Tokens.Value"
-                           asp-route-pageIndex="@(Model.Characters.PageIndex - 1)"
-                           class="btn btn-success @prevDisabled">&lt;&lt;</a>
 
                         @for (var i = 1; i <= Model.Characters.TotalPages; i++)
                         {
@@ -73,10 +72,13 @@
                                class="btn btn-success">@i</a>
                         }
 
-                        <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
-                           asp-route-parameter="@Model.Tokens.Value"
-                           asp-route-pageIndex="@(Model.Characters.PageIndex + 1)"
-                           class="btn btn-success @nextDisabled">&gt;&gt;</a>
+                        @if (Model.Characters.NextPage)
+                        {
+                            <a asp-controller="Characters" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@(Model.Characters.PageIndex + 1)"
+                               class="btn btn-success">&gt;&gt;</a>
+                        }
                     </div>
                 }
             </div>

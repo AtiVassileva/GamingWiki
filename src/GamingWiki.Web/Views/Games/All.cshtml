@@ -59,15 +59,13 @@
                 @if (Model.Games.Any())
                 {
                     <div class="site-pagination">
-                        @{
-                            var prevDisabled = !Model.Games.PreviousPage ? "disabled" : string.Empty;
-                            var nextDisabled = !Model.Games.NextPage ? "disabled" : string.Empty;
+                        @if (Model.Games.PreviousPage)
+                        {
+                            <a asp-controller="Games" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@(Model.Games.PageIndex - 1)"
+                               class="btn btn-success">&lt;&lt;</a>
                         }
-
-                        <a asp-controller="Games" asp-action="@Model.Tokens.Key"
-                           asp-route-parameter="@Model.Tokens.Value"
-                           asp-route-pageIndex="@(Model.Games.PageIndex - 1)"
-                           class="btn btn-success @prevDisabled">&lt;&lt;</a>
 
                         @for (var i = 1; i <= Model.Games.TotalPages; i++)
                         {
@@ -76,11 +74,14 @@
                                asp-route-pageIndex="@i"
                                class="btn btn-success">@i</a>
                         }
-
-                    <a asp-controller="Games" asp-action="@Model.Tokens.Key"
-                       asp-route-parameter="@Model.Tokens.Value"
-                       asp-route-pageIndex="@(Model.Games.PageIndex + 1)"
-                       class="btn btn-success @nextDisabled">&gt;&gt;</a>
+                        
+                        @if (Model.Games.NextPage)
+                        {
+                            <a asp-controller="Games" asp-action="@Model.Tokens.Key"
+                               asp-route-parameter="@Model.Tokens.Value"
+                               asp-route-pageIndex="@(Model.Games.PageIndex + 1)"
+                               class="btn btn-success">&gt;&gt;</a>
+                        }
                     </div>
                 }
                 

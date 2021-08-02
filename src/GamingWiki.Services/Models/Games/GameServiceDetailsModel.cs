@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Characters;
-using GamingWiki.Services.Models.Platforms;
+using GamingWiki.Services.Models.Reviews;
 
 namespace GamingWiki.Services.Models.Games
 {
@@ -32,6 +32,10 @@ namespace GamingWiki.Services.Models.Games
         public IEnumerable<AreaServiceModel> Areas { get; set; }
 
         public IEnumerable<CharacterGameServiceModel> Characters { get; set; }
+
+        public IEnumerable<ReviewDetailsServiceModel> Reviews { get; set; }
+
+
         public IEnumerable<string> Platforms { get; set; }
     }
 }

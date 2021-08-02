@@ -88,7 +88,7 @@ namespace GamingWiki.Web.Controllers
 
             this.helper.Edit(reviewId, model.PriceRate, model.LevelsRate, model.GraphicsRate, model.DifficultyRate, model.Description);
 
-            return this.Redirect(nameof(this.All));
+            return this.RedirectToAction(nameof(GamesController.Details), model.Game.Id);
         }
         
         public IActionResult Delete(int reviewId)

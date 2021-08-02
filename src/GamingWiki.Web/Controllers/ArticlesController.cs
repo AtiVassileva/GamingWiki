@@ -9,7 +9,6 @@ using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamingWiki.Web.Controllers
@@ -17,7 +16,7 @@ namespace GamingWiki.Web.Controllers
     [Authorize]
     public class ArticlesController : Controller
     {
-        private const int ArticlesPerPage = 1;
+        private const int ArticlesPerPage = 2;
 
         private readonly IArticleService helper;
         private readonly IMapper mapper;

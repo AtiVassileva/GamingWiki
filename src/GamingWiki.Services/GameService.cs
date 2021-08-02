@@ -11,6 +11,7 @@ using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
+using GamingWiki.Services.Models.Reviews;
 using Microsoft.EntityFrameworkCore;
 using static GamingWiki.Services.Common.ServiceConstants;
 using static GamingWiki.Services.Common.ExceptionMessages;
@@ -109,6 +110,7 @@ namespace GamingWiki.Services
             gameDetails.Rating = gameDetails.Ratings.Values.Average();
             gameDetails.Creators = this.GetCreators(gameDetails.Id);
             gameDetails.Characters = this.GetCharacters(gameDetails.Id);
+            gameDetails.Reviews = this.GetReviews(gameDetails.Id);
             gameDetails.Platforms = this.GetPlatformsByGame(gameDetails.Id);
 
             return gameDetails;
@@ -169,6 +171,13 @@ namespace GamingWiki.Services
             => this.dbContext.Genres
                 .ProjectTo<GenreServiceModel>(this.configuration)
                 .OrderBy(g => g.Name)
+                .ToList();
+
+        public IEnumerable<ReviewDetailsServiceModel> GetReviews(int gameId)
+            => this.dbContext.Reviews
+                .Where(r => r.GameId == gameId)
+                .ProjectTo<ReviewDetailsServiceModel>(this.configuration)
+                .OrderByDescending(r => r.Id)
                 .ToList();
 
         public IEnumerable<PlatformServiceModel> GetPlatforms()
