@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Articles;
@@ -130,9 +129,8 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.All));
         }
 
-        public IActionResult Search(string parameter, int pageIndex = 1, string name = null)
-        {
-            return this.View(nameof(this.All), new ArticleFullModel
+        public IActionResult Search(string parameter, int pageIndex = 1, string name = null) 
+            => this.View(nameof(this.All), new ArticleFullModel
             {
                 Articles = PaginatedList<ArticleAllServiceModel>
                     .Create(this.helper.Search(parameter),
@@ -140,12 +138,11 @@ namespace GamingWiki.Web.Controllers
                 Categories = this.helper.GetCategories(),
                 Tokens = new KeyValuePair<object, object>("Search", parameter)
             });
-        }
 
         [HttpPost]
-        public IActionResult Search(string searchCriteria, int pageIndex = 1)
-        {
-            return this.View(nameof(this.All), new ArticleFullModel
+        public IActionResult Search(string searchCriteria, 
+            int pageIndex = 1) 
+            => this.View(nameof(this.All), new ArticleFullModel
             {
                 Articles = PaginatedList<ArticleAllServiceModel>
                     .Create(this.helper.Search(searchCriteria),
@@ -153,7 +150,6 @@ namespace GamingWiki.Web.Controllers
                 Categories = this.helper.GetCategories(),
                 Tokens = new KeyValuePair<object, object>("Search", searchCriteria)
             });
-        }
 
         public IActionResult Filter([FromQuery(Name = "parameter")]
             int categoryId, int pageIndex = 1) 

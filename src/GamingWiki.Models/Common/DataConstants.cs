@@ -15,10 +15,10 @@
         public const int CharacterClassMaxLength = 25;
 
         public const int ContentMaxLength = 10000;
-        public const int CommentContentMinLength = 5;
+        public const int CommentContentMinLength = 3;
         public const int CommentContentMaxLength = 5000;
 
-        public const int ReplyContentMinLength = 3;
+        public const int ReplyContentMinLength = 2;
         public const int ReplyContentMaxLength = 3000;
 
         public const int CreatorNameMaxLength = 80;

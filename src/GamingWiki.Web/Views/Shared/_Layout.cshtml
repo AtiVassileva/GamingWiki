@@ -106,9 +106,7 @@
         </main>
     </div>
     
-@if (this.User.Identity.IsAuthenticated)
-{
-    <section class="newsletter-section">
+   <section class="newsletter-section">
         <div class="container">
             <h2>Subscribe to our newsletter</h2>
             <form class="newsletter-form">
@@ -117,7 +115,7 @@
             </form>
         </div>
     </section>
-}
+
     <footer class="footer-section">
         <div class="container">
             <div class="footer-left-pic">
@@ -129,14 +127,17 @@
             <a asp-controller="Home" asp-action="Index" class="footer-logo" style="color: white; font-weight: bold;">
                 <img src="/img/controller.png" style="width: 70px; height: 45px;" alt=""> <br />Gaming Wiki
             </a>
-            <ul class="main-menu footer-menu">
-                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Games" asp-action="All">Games</a></li>
-                <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
-                <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
-                <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
-                <li><a asp-controller="Tricks" asp-action="All">Tips & Tricks</a></li>
-            </ul>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <ul class="main-menu footer-menu">
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Games" asp-action="All">Games</a></li>
+                    <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
+                    <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
+                    <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
+                    <li><a asp-controller="Tricks" asp-action="All">Tips & Tricks</a></li>
+                </ul>
+            }
             <div class="footer-social d-flex justify-content-center">
                 <a href="https://www.pinterest.com/"><i class="fa fa-pinterest"></i></a>
                 <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>

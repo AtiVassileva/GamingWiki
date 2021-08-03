@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Services.Contracts;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Comments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,13 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error");
+                return this.View("Error", new ErrorViewModel());
             }
 
             var commenterId = this.User.GetId();
             this.helper.Add(articleId, model.Content,commenterId);
 
-            return this.Redirect($"/Articles/Details?articleId={articleId}");
+            return RedirectToAction(nameof(ArticlesController.Details), "Articles", new { articleId });
         }
         
         public IActionResult Delete(int commentId)
@@ -39,14 +40,14 @@ namespace GamingWiki.Web.Controllers
 
             var authorId = this.helper.GetCommentAuthorId(commentId);
 
-            if (!this.User.IsAdmin() || this.User.GetId() != authorId)
+            if (!this.User.IsAdmin() && this.User.GetId() != authorId)
             {
                 return this.Unauthorized();
             }
 
             var articleId = this.helper.Delete(commentId);
 
-            return this.Redirect($"/Articles/Details?articleId={articleId}");
+            return RedirectToAction(nameof(ArticlesController.Details), "Articles", new { articleId });
         }
     }
 }

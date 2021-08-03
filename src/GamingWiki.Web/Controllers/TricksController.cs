@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using GamingWiki.Services.Contracts;
-using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Services.Models.Tricks;
 using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;

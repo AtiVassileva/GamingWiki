@@ -31,7 +31,7 @@ namespace GamingWiki.Web.Controllers
                     .Create(this.helper.All(), pageIndex, GamesPerPage),
                 Genres = this.helper.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
-                    ("All", string.Empty)
+                    ("All", null)
             });
 
         [Authorize(Roles = AdministratorRoleName)]
@@ -70,7 +70,7 @@ namespace GamingWiki.Web.Controllers
                 model.GenreId, model.CreatorsNames);
 
             return this.RedirectToAction(nameof(this.Details),
-                new { gameId = $"{gameId}" });
+                new { gameId });
         }
         
         public IActionResult Details(int gameId)
@@ -118,7 +118,7 @@ namespace GamingWiki.Web.Controllers
             this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl);
 
             return this.RedirectToAction(nameof(this.Details),
-                new { gameId = $"{gameId}" });
+                new { gameId });
         }
 
         [Authorize(Roles = AdministratorRoleName)]

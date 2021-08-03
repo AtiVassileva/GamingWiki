@@ -52,7 +52,7 @@ namespace GamingWiki.Web.Controllers
             this.helper.Create(gameId, this.User.GetId(), model.PriceRate, model.LevelsRate, model.GraphicsRate,
                 model.DifficultyRate, model.Description);
 
-            return this.Redirect($"/Games/Details?gameId={gameId}");
+            return RedirectToAction(nameof(GamesController.Details), "Games", new { gameId });
         }
         
         public IActionResult Edit(int reviewId)
@@ -69,7 +69,8 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            return this.View(this.helper.Details(reviewId));
+            var reviewDetails = this.helper.Details(reviewId);
+            return this.View(reviewDetails);
         }
 
         [HttpPost]
@@ -88,7 +89,7 @@ namespace GamingWiki.Web.Controllers
 
             this.helper.Edit(reviewId, model.PriceRate, model.LevelsRate, model.GraphicsRate, model.DifficultyRate, model.Description);
 
-            return this.RedirectToAction(nameof(GamesController.Details), model.Game.Id);
+            return RedirectToAction(nameof(GamesController.Details), "Games", new { gameId = model.Game.Id});
         }
         
         public IActionResult Delete(int reviewId)
@@ -100,25 +101,24 @@ namespace GamingWiki.Web.Controllers
 
             var authorId = this.helper.GetReviewAuthorId(reviewId);
 
-            if (this.User.GetId() != authorId && !this.User.IsAdmin())
+            if (!this.User.IsAdmin() && this.User.GetId() != authorId)
             {
                 return this.Unauthorized();
             }
 
             this.helper.Delete(reviewId);
+
             return this.Redirect(nameof(this.All));
         }
 
-        public IActionResult Search(string parameter, int pageIndex = 1, string name = null)
-        {
-            return this.View(nameof(this.All), new ReviewFullModel
+        public IActionResult Search(string parameter, int pageIndex = 1, string name = null) 
+            => this.View(nameof(this.All), new ReviewFullModel
             {
                 Reviews = PaginatedList<ReviewDetailsServiceModel>
                     .Create(this.helper.Search(parameter),
                         pageIndex, ReviewsPerPage),
                 Tokens = new KeyValuePair<object, object>("Search", parameter)
             });
-        }
 
         [HttpPost]
         public IActionResult Search(string searchCriteria, 

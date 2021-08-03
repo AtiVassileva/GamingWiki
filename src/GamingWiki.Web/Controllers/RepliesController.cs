@@ -1,5 +1,6 @@
 ﻿using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Infrastructure;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Replies;
 using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Common.WebConstants;
@@ -21,13 +22,13 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("Error");
+                return this.View("Error", new ErrorViewModel());
             }
 
             var replierId = this.User.GetId();
             var articleId = this.helper.Add(model.ReplyContent, commentId, replierId);
 
-           return this.Redirect($"/Articles/Details?articleId={articleId}");
+            return RedirectToAction(nameof(ArticlesController.Details), "Articles", new { articleId });
         }
         
         public IActionResult Delete(int replyId)
@@ -45,7 +46,8 @@ namespace GamingWiki.Web.Controllers
             }
 
             var articleId = this.helper.Delete(replyId);
-            return this.Redirect($"/Articles/Details?articleId={articleId}");
+
+            return RedirectToAction(nameof(ArticlesController.Details), "Articles", new { articleId });
         }
     }
 }

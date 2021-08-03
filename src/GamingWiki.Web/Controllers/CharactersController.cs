@@ -70,7 +70,7 @@ namespace GamingWiki.Web.Controllers
                 model.Description, model.ClassId, model.GameId);
 
             return this.RedirectToAction(nameof(this.Details),
-                new { characterId = $"{characterId}" });
+                new {characterId});
         }
         
         public IActionResult Details(int characterId)
@@ -120,7 +120,7 @@ namespace GamingWiki.Web.Controllers
             this.helper.Edit(characterId, model);
 
             return this.RedirectToAction(nameof(this.Details),
-                new { characterId = $"{characterId}" });
+                new { characterId });
         }
 
         [Authorize(Roles = AdministratorRoleName)]
