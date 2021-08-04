@@ -67,7 +67,6 @@ namespace GamingWiki.Services
         public bool GameExists(string gameName)
             => this.dbContext.Games.Any(g => g.Name == gameName);
 
-
         public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, IEnumerable<int> supportedPlatforms)
         {
             var game = new Game
@@ -123,7 +122,8 @@ namespace GamingWiki.Services
             return gameDetails;
         }
 
-        public void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl)
+        public void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, 
+            IEnumerable<int> platforms)
         {
             if (!this.GameExists(gameId))
             {
@@ -136,6 +136,16 @@ namespace GamingWiki.Services
             game.PictureUrl = pictureUrl;
             game.AreaId = areaId;
             game.TrailerUrl = trailerUrl;
+
+            var oldPlatforms = this.GetGamePlatforms(game.Id).ToList();
+            var newPlatforms = platforms.ToList();
+
+            if ((!oldPlatforms.All(newPlatforms.Contains) 
+                || !newPlatforms.All(oldPlatforms.Contains)) 
+                && oldPlatforms.Count != newPlatforms.Count)
+            {
+                this.ParseEditedPlatforms(oldPlatforms, newPlatforms, game);
+            }
 
             this.dbContext.SaveChanges();
         }
@@ -191,6 +201,12 @@ namespace GamingWiki.Services
             => this.dbContext.Platforms
                 .ProjectTo<PlatformServiceModel>(this.configuration)
                 .OrderBy(p => p.Name.Length)
+                .ToList();
+
+        public IEnumerable<int> GetGamePlatforms(int gameId)
+            => this.dbContext.GamesPlatforms
+                .Where(gp => gp.GameId == gameId)
+                .Select(gp => gp.PlatformId)
                 .ToList();
 
         public IEnumerable<GameServiceListingModel> GetLatest() 
@@ -257,5 +273,46 @@ namespace GamingWiki.Services
                 .ProjectTo<CharacterGameServiceModel>(this.configuration)
                 .OrderBy(c => c.Name)
                 .ToList();
+
+        private void ParseEditedPlatforms(IEnumerable<int> oldPlatformsList, IEnumerable<int> newPlatformsList, Game game)
+        {
+
+            var oldPlatforms = oldPlatformsList.ToList();
+            var newPlatforms = newPlatformsList.ToList();
+
+            this.RemoveOldPlatforms(game, oldPlatforms, newPlatforms);
+            this.AddNewPlatforms(game, newPlatforms, oldPlatforms);
+        }
+
+        private void RemoveOldPlatforms(Game game, IList<int> oldPlatforms, IList<int> newPlatforms)
+        {
+            foreach (var platformId in oldPlatforms)
+            {
+                if (!newPlatforms.Contains(platformId))
+                {
+                    var entity = this.dbContext.GamesPlatforms
+                        .First(gp => gp.GameId == game.Id
+                                     && gp.PlatformId == platformId);
+
+                    this.dbContext.GamesPlatforms.Remove(entity);
+                }
+            }
+        }
+        private void AddNewPlatforms(Game game, IList<int> newPlatforms, IList<int> oldPlatforms)
+        {
+            foreach (var platformId in newPlatforms)
+            {
+                if (!oldPlatforms.Contains(platformId))
+                {
+                    var entity = new GamePlatform
+                    {
+                        GameId = game.Id,
+                        PlatformId = platformId
+                    };
+
+                    this.dbContext.GamesPlatforms.Add(entity);
+                }
+            }
+        }
     }
 }

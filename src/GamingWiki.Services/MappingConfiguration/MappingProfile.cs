@@ -71,7 +71,7 @@ namespace GamingWiki.Services.MappingConfiguration
             //Genres
             this.CreateMap<Genre, GenreServiceModel>();
 
-            //Platforms
+            //SupportedPlatforms
             this.CreateMap<Platform, PlatformServiceModel>();
 
             //Replies

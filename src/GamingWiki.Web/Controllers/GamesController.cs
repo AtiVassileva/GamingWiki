@@ -98,6 +98,9 @@ namespace GamingWiki.Web.Controllers
                 .Map<GameServiceEditModel>(dbModel);
 
             viewModel.Areas = this.helper.GetAreas();
+            viewModel.SupportedPlatforms = this.helper
+                .GetGamePlatforms(gameId);
+            viewModel.AllPlatforms = this.helper.GetPlatforms();
 
             return this.View(viewModel);
         }
@@ -121,7 +124,7 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl);
+            this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl, model.SupportedPlatforms);
 
             return this.RedirectToAction(nameof(this.Details),
                 new { gameId });

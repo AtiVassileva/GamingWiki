@@ -59,11 +59,10 @@
                             <label asp-for="SupportedPlatforms"></label>
                             @foreach (var platform in Model.Platforms)
                             {
-                                <input type="checkbox" name="supportedPlatforms" value="@platform.Id"/>
+                                <input type="checkbox" name="supportedSupportedPlatforms" value="@platform.Id"/>
                                 <label>@platform.Name&nbsp;</label>
                             }
                         </div>
-
                         <div class="form-group">
                             <label asp-for="Description"></label>
                             <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"

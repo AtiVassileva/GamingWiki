@@ -24,7 +24,7 @@ namespace GamingWiki.Services.Contracts
 
         GameServiceDetailsModel Details(int gameId);
 
-        void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl);
+        void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, IEnumerable<int> platforms);
 
         void Delete(int gameId);
 
@@ -37,6 +37,8 @@ namespace GamingWiki.Services.Contracts
         IEnumerable<GenreServiceModel> GetGenres();
 
         IEnumerable<PlatformServiceModel> GetPlatforms();
+
+        IEnumerable<int> GetGamePlatforms(int gameId);
 
         IEnumerable<GameServiceListingModel> GetLatest();
 

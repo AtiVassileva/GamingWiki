@@ -38,6 +38,17 @@
                             <span asp-validation-for="AreaId" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="SupportedPlatforms"></label>
+                            @foreach (var platform in Model.AllPlatforms)
+                            {
+                                var isChecked = Model.SupportedPlatforms.Contains(platform.Id)
+                                ? "checked": string.Empty;
+
+                                <input type="checkbox" name="supportedPlatforms" value="@platform.Id" @isChecked />
+                                <label>@platform.Name&nbsp;</label>
+                            }
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Description"></label>
                             <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"
                                       style="background-color: black;">@Model.Description</textarea>

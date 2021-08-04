@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using GamingWiki.Services.Models.Areas;
+using GamingWiki.Services.Models.Platforms;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Services.Models.Games
@@ -30,6 +31,11 @@ namespace GamingWiki.Services.Models.Games
         public string Area { get; set; }
 
         public IEnumerable<AreaServiceModel> Areas { get; set; }
+
+        [Display(Name = "Supported Platforms")]
+        public IEnumerable<int> SupportedPlatforms { get; set; }
+
+        public IEnumerable<PlatformServiceModel> AllPlatforms { get; set; }
     }
 
 }
