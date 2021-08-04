@@ -34,5 +34,8 @@
         
         public const string NonExistingTrickExceptionMessage =
             "Trick does not exist!";
+
+        public const string AlreadyExistingGameExceptionMessage =
+            "Game already exists!";
     }
 }

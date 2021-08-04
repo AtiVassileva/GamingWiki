@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using GamingWiki.Services.Models.Areas;
 using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
+using Microsoft.AspNetCore.Mvc;
 using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Web.Models.Games
@@ -37,9 +38,9 @@ namespace GamingWiki.Web.Models.Games
 
         [Display(Name = "Area")]
         public int AreaId { get; set; }
-
-        [Display(Name = "Platforms")]
-        public IEnumerable<int> SelectedPlatforms { get; set; }
+        
+        [Display(Name = "Supported Platforms")]
+        public IEnumerable<int> SupportedPlatforms { get; set; }
 
         public IEnumerable<GenreServiceModel> Genres { get; set; }
 

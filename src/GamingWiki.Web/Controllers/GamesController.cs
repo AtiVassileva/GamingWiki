@@ -47,6 +47,11 @@ namespace GamingWiki.Web.Controllers
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create(GameFormModel model)
         {
+            if (this.helper.GameExists(model.Name))
+            {
+                this.ModelState.AddModelError(nameof(model.AreaId), AlreadyExistingGameExceptionMessage);
+            }
+
             if (!this.helper.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), NonExistingAreaExceptionMessage);
@@ -67,7 +72,8 @@ namespace GamingWiki.Web.Controllers
             }
 
             var gameId = this.helper.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
-                model.GenreId, model.CreatorsNames);
+                model.GenreId, model.CreatorsNames,
+                model.SupportedPlatforms);
 
             return this.RedirectToAction(nameof(this.Details),
                 new { gameId });

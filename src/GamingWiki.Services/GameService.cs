@@ -64,8 +64,11 @@ namespace GamingWiki.Services
         public bool GameExists(int gameId)
             => this.dbContext.Games.Any(g => g.Id == gameId);
 
+        public bool GameExists(string gameName)
+            => this.dbContext.Games.Any(g => g.Name == gameName);
 
-        public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames)
+
+        public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, IEnumerable<int> supportedPlatforms)
         {
             var game = new Game
             {
@@ -83,6 +86,10 @@ namespace GamingWiki.Services
             var creators = this.ParseCreators(creatorsNames);
 
             this.dbContext.GamesCreators.AddRange(ParseGamesCreators(creators, game.Id));
+
+            var gamePlatforms = ParsePlatforms(game.Id, supportedPlatforms);
+
+            this.dbContext.GamesPlatforms.AddRange(gamePlatforms);
 
             this.dbContext.SaveChanges();
 
@@ -211,6 +218,21 @@ namespace GamingWiki.Services
             return ratings;
         }
 
+        public IEnumerable<string> GetPlatformsByGame(int gameId)
+            => this.dbContext.GamesPlatforms
+                .Where(gp => gp.GameId == gameId)
+                .Select(gp => gp.Platform.Name)
+                .OrderBy(p => p.Length)
+                .ToList();
+
+        private static IEnumerable<GamePlatform> ParsePlatforms(int gameId, IEnumerable<int> supportedPlatforms)
+            => supportedPlatforms
+                .Select(platformId => new GamePlatform
+                {
+                    GameId = gameId,
+                    PlatformId = platformId
+                });
+
         private static IEnumerable<GameCreator> ParseGamesCreators(IEnumerable<Creator> creators, int gameId)
             => creators.Select(c => new GameCreator
             {
@@ -234,13 +256,6 @@ namespace GamingWiki.Services
                 .Where(c => c.GameId == gameId)
                 .ProjectTo<CharacterGameServiceModel>(this.configuration)
                 .OrderBy(c => c.Name)
-                .ToList();
-
-        public IEnumerable<string> GetPlatformsByGame(int gameId)
-            => this.dbContext.GamesPlatforms
-                .Where(gp => gp.GameId == gameId)
-                .Select(gp => gp.Platform.Name)
-                .OrderBy(p => p.Length)
                 .ToList();
     }
 }
