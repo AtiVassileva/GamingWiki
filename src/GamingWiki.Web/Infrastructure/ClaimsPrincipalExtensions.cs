@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Areas.Admin.AdminConstants;
 
 namespace GamingWiki.Web.Infrastructure
 {

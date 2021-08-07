@@ -1,4 +1,6 @@
-﻿namespace GamingWiki.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace GamingWiki.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
@@ -28,5 +30,12 @@
         public int GenreId { get; set; }
 
         public Genre Genre { get; set; }
+
+        public bool IsApproved { get; set; }
+
+        [Required]
+        public string ContributorId { get; set; }
+
+        public IdentityUser Contributor { get; set; }
     }
 }

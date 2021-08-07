@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Areas.Admin.AdminConstants;
 
 namespace GamingWiki.Web.Infrastructure
 {

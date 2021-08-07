@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Models.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace GamingWiki.Models
 {
@@ -26,5 +27,12 @@ namespace GamingWiki.Models
         public int GameId { get; set; }
 
         public Game Game { get; set; }
+
+        public bool IsApproved { get; set; }
+
+        [Required]
+        public string ContributorId { get; set; }
+
+        public IdentityUser Contributor { get; set; }
     }
 }
