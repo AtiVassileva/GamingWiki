@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
@@ -9,7 +7,6 @@ using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Reviews;
 using Microsoft.EntityFrameworkCore;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -71,11 +68,11 @@ namespace GamingWiki.Services
             return detailsModel;
         }
 
-        public void Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description)
+        public bool Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description)
         {
             if (!this.ReviewExists(reviewId))
             {
-                throw new InvalidOperationException(NonExistingReviewExceptionMessage);
+                return false;
             }
 
             var review = this.FindReview(reviewId);
@@ -87,19 +84,23 @@ namespace GamingWiki.Services
             review.Description = description;
 
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
-        public void Delete(int reviewId)
+        public bool Delete(int reviewId)
         {
             if (!this.ReviewExists(reviewId))
             {
-                throw new InvalidOperationException(NonExistingReviewExceptionMessage);
+                return false;
             }
 
             var review = this.FindReview(reviewId);
 
             this.dbContext.Reviews.Remove(review);
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
         public bool GameExists(int gameId)

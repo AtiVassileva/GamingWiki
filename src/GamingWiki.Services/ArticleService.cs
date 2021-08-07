@@ -10,7 +10,6 @@ using GamingWiki.Services.Models.Articles;
 using GamingWiki.Services.Models.Categories;
 using Microsoft.EntityFrameworkCore;
 using static GamingWiki.Services.Common.ServiceConstants;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -65,11 +64,11 @@ namespace GamingWiki.Services
             return articleDetails;
         }
 
-        public void Edit(int articleId, ArticleServiceEditModel model)
+        public bool Edit(int articleId, ArticleServiceEditModel model)
         {
             if (!this.ArticleExists(articleId))
             {
-                throw new InvalidOperationException(NonExistingArticleExceptionMessage);
+                return false;
             }
 
             var article = this.FindArticle(articleId);
@@ -79,19 +78,23 @@ namespace GamingWiki.Services
             article.Content = model.Content;
 
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
-        public void Delete(int articleId)
+        public bool Delete(int articleId)
         {
             if (!this.ArticleExists(articleId))
             {
-                throw new InvalidOperationException(NonExistingArticleExceptionMessage);
+                return false;
             }
 
             var article = this.FindArticle(articleId);
 
             this.dbContext.Articles.Remove(article);
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
         public bool CategoryExists(int categoryId)

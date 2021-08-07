@@ -45,7 +45,14 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            var articleId = this.helper.Delete(replyId);
+            var deleted = this.helper.Delete(replyId);
+
+            if (!deleted)
+            {
+                return this.BadRequest();
+            }
+
+            var articleId = this.helper.GetArticleIdByReply(replyId);
 
             return RedirectToAction(nameof(ArticlesController.Details), "Articles", new { articleId });
         }

@@ -7,7 +7,6 @@ using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Replies;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -46,21 +45,19 @@ namespace GamingWiki.Services
             return articleId;
         }
 
-        public int Delete(int replyId)
+        public bool Delete(int replyId)
         {
             if (!this.ReplyExists(replyId))
             {
-                throw new InvalidOperationException(NonExistingReplyExceptionMessage);
+                return false;
             }
 
             var reply = this.FindReply(replyId);
             
-            var articleId = this.GetArticleIdByReply(replyId);
-
             this.dbContext.Replies.Remove(reply);
             this.dbContext.SaveChanges();
 
-            return articleId;
+            return true;
         }
 
         public bool ReplyExists(int replyId)
@@ -70,11 +67,11 @@ namespace GamingWiki.Services
             => this.dbContext.Replies
                 .First(r => r.Id == replyId).ReplierId;
          
-        private int GetArticleIdByReply(int replyId)
+        public int GetArticleIdByReply(int replyId)
         => this.dbContext.Replies
             .Where(r => r.Id == replyId)
             .Select(r => r.Comment.ArticleId)
-            .FirstOrDefault();
+            .First();
         
         private int GetArticleIdByComment(int commentId)
         => this.dbContext.Comments

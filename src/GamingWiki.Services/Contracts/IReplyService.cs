@@ -9,9 +9,11 @@ namespace GamingWiki.Services.Contracts
 
         int Add(string content, int commentId, string replierId);
 
-        int Delete(int replyId);
+        bool Delete(int replyId);
 
         bool ReplyExists(int replyId);
+
+        int GetArticleIdByReply(int replyId);
 
         string GetReplyAuthorId(int replyId);
     }

@@ -124,7 +124,12 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl, model.SupportedPlatforms);
+            var edited = this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl, model.SupportedPlatforms);
+
+            if (!edited)
+            {
+                return this.BadRequest();
+            }
 
             return this.RedirectToAction(nameof(this.Details),
                 new { gameId });
@@ -138,7 +143,13 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
-            this.helper.Delete(gameId);
+            var deleted = this.helper.Delete(gameId);
+
+            if (!deleted)
+            {
+                return this.BadRequest();
+            }
+
             return this.Redirect(nameof(this.All));
         }
 

@@ -14,9 +14,9 @@ namespace GamingWiki.Services.Contracts
 
         ArticleServiceDetailsModel Details(int articleId);
 
-        void Edit(int articleId, ArticleServiceEditModel model);
+        bool Edit(int articleId, ArticleServiceEditModel model);
 
-        void Delete(int articleId);
+        bool Delete(int articleId);
 
         bool CategoryExists(int categoryId);
 

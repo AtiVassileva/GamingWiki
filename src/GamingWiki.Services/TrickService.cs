@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -9,7 +8,6 @@ using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Tricks;
 using static GamingWiki.Services.Common.ServiceConstants;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -49,11 +47,11 @@ namespace GamingWiki.Services
         public bool TrickExists(int trickId)
             => this.dbContext.Tricks.Any(t => t.Id == trickId);
 
-        public void Edit(int trickId, string heading, string content, string pictureUrl)
+        public bool Edit(int trickId, string heading, string content, string pictureUrl)
         {
             if (!this.TrickExists(trickId))
             {
-                throw new InvalidOperationException(NonExistingTrickExceptionMessage);
+                return false;
             }
 
             var trick = this.FindTrick(trickId);
@@ -63,19 +61,23 @@ namespace GamingWiki.Services
             trick.PictureUrl = pictureUrl;
 
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
-        public void Delete(int trickId)
+        public bool Delete(int trickId)
         {
             if (!this.TrickExists(trickId))
             {
-                throw new InvalidOperationException(NonExistingTrickExceptionMessage);
+                return false;
             }
 
             var trick = this.FindTrick(trickId);
 
             this.dbContext.Tricks.Remove(trick);
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
         public IQueryable<TrickServiceListingModel> Search(string searchCriteria)

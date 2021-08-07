@@ -15,9 +15,9 @@ namespace GamingWiki.Services.Contracts
 
         bool TrickExists(int trickId);
 
-        void Edit(int trickId, string heading, string content, string pictureUrl);
+        bool Edit(int trickId, string heading, string content, string pictureUrl);
 
-        void Delete(int trickId);
+        bool Delete(int trickId);
 
         IQueryable<TrickServiceListingModel> Search(string searchCriteria);
 

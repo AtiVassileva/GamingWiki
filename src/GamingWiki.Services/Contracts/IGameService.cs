@@ -24,9 +24,9 @@ namespace GamingWiki.Services.Contracts
 
         GameServiceDetailsModel Details(int gameId);
 
-        void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, IEnumerable<int> platforms);
+        bool Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, IEnumerable<int> platforms);
 
-        void Delete(int gameId);
+        bool Delete(int gameId);
 
         IQueryable<GameServiceListingModel> Search(string letter);
 

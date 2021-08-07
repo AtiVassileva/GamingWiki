@@ -105,7 +105,12 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            this.helper.Edit(articleId, model);
+            var edited = this.helper.Edit(articleId, model);
+
+            if (!edited)
+            {
+                return this.BadRequest();
+            }
 
             return this.RedirectToAction(nameof(this.Details),
                 new { articleId = $"{articleId}" });
@@ -125,7 +130,13 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            this.helper.Delete(articleId);
+            var deleted = this.helper.Delete(articleId);
+
+            if (!deleted)
+            {
+                return this.BadRequest();
+            }
+
             return this.RedirectToAction(nameof(this.All));
         }
 

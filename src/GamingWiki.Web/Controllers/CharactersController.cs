@@ -76,7 +76,7 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Details(int characterId)
             => this.helper.CharacterExists(characterId) ?
                 this.View(this.helper.Details(characterId)) :
-                 this.View("Error", CreateError(NonExistingGameExceptionMessage));
+                 this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
 
         [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(int characterId)
@@ -117,7 +117,12 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            this.helper.Edit(characterId, model);
+            var edited = this.helper.Edit(characterId, model);
+
+            if (!edited)
+            {
+                return this.BadRequest();
+            }
 
             return this.RedirectToAction(nameof(this.Details),
                 new { characterId });
@@ -131,7 +136,13 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
             }
 
-            this.helper.Delete(characterId);
+            var deleted = this.helper.Delete(characterId);
+
+            if (!deleted)
+            {
+                return this.BadRequest();
+            }
+
             return this.RedirectToAction(nameof(this.All));
         }
         

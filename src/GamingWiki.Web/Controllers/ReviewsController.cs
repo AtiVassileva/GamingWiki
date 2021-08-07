@@ -87,7 +87,12 @@ namespace GamingWiki.Web.Controllers
                 return this.View(reviewDetails);
             }
 
-            this.helper.Edit(reviewId, model.PriceRate, model.LevelsRate, model.GraphicsRate, model.DifficultyRate, model.Description);
+            var edited = this.helper.Edit(reviewId, model.PriceRate, model.LevelsRate, model.GraphicsRate, model.DifficultyRate, model.Description);
+
+            if (!edited)
+            {
+                return this.BadRequest();
+            }
 
             return RedirectToAction(nameof(GamesController.Details), "Games", new { gameId = model.Game.Id});
         }
@@ -106,7 +111,12 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            this.helper.Delete(reviewId);
+            var deleted = this.helper.Delete(reviewId);
+
+            if (!deleted)
+            {
+                return this.BadRequest();
+            }
 
             return this.Redirect(nameof(this.All));
         }

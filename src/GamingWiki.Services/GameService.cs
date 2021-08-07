@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -14,7 +13,6 @@ using GamingWiki.Services.Models.Platforms;
 using GamingWiki.Services.Models.Reviews;
 using Microsoft.EntityFrameworkCore;
 using static GamingWiki.Services.Common.ServiceConstants;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -102,11 +100,6 @@ namespace GamingWiki.Services
 
         public GameServiceDetailsModel Details(int gameId)
         {
-            if (!this.GameExists(gameId))
-            {
-                throw new InvalidOperationException(NonExistingGameExceptionMessage);
-            }
-
             var game = this.FindGame(gameId);
 
             var gameDetails = this.mapper
@@ -122,12 +115,12 @@ namespace GamingWiki.Services
             return gameDetails;
         }
 
-        public void Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, 
+        public bool Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, 
             IEnumerable<int> platforms)
         {
             if (!this.GameExists(gameId))
             {
-                throw new InvalidOperationException(NonExistingGameExceptionMessage);
+                return false;
             }
 
             var game = this.FindGame(gameId);
@@ -148,19 +141,22 @@ namespace GamingWiki.Services
             }
 
             this.dbContext.SaveChanges();
+            return true;
         }
 
-        public void Delete(int gameId)
+        public bool Delete(int gameId)
         {
             if (!this.GameExists(gameId))
             {
-                throw new InvalidOperationException(NonExistingGameExceptionMessage);
+                return false;
             }
 
             var game = this.FindGame(gameId);
 
             this.dbContext.Games.Remove(game);
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
         public IQueryable<GameServiceListingModel> Search(string letter) 

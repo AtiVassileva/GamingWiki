@@ -24,9 +24,9 @@ namespace GamingWiki.Services.Contracts
 
         IQueryable<CharacterAllServiceModel> All();
 
-        void Edit(int characterId, CharacterServiceEditModel model);
+        bool Edit(int characterId, CharacterServiceEditModel model);
 
-        void Delete(int characterId);
+        bool Delete(int characterId);
 
         IQueryable<CharacterAllServiceModel> Search(string letter);
 

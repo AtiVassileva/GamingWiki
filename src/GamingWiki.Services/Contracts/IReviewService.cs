@@ -17,9 +17,9 @@ namespace GamingWiki.Services.Contracts
 
         ReviewDetailsServiceModel Details(int reviewId);
 
-        void Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description);
+        bool Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description);
 
-        void Delete(int reviewId);
+        bool Delete(int reviewId);
 
         bool GameExists(int gameId);
 

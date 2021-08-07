@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -10,7 +9,6 @@ using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Games;
 using Microsoft.EntityFrameworkCore;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -71,11 +69,11 @@ namespace GamingWiki.Services
         => this.dbContext.Characters
                 .ProjectTo<CharacterAllServiceModel>(this.configuration);
 
-        public void Edit(int characterId, CharacterServiceEditModel model)
+        public bool Edit(int characterId, CharacterServiceEditModel model)
         {
             if (!this.CharacterExists(characterId))
             {
-                throw new InvalidOperationException(NonExistingCharacterExceptionMessage);
+                return false;
             }
 
             var character = this.FindCharacter(characterId);
@@ -85,19 +83,23 @@ namespace GamingWiki.Services
             character.ClassId = model.ClassId;
 
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
-        public void Delete(int characterId)
+        public bool Delete(int characterId)
         {
             if (!this.CharacterExists(characterId))
             {
-                throw new InvalidOperationException(NonExistingCharacterExceptionMessage);
+                return false;
             }
 
             var character = this.FindCharacter(characterId);
 
             this.dbContext.Characters.Remove(character);
             this.dbContext.SaveChanges();
+
+            return true;
         }
 
         public IQueryable<CharacterAllServiceModel> Search(string letter)

@@ -92,7 +92,12 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            this.helper.Edit(trickId, model.Heading, model.Content, model.PictureUrl);
+            var edited = this.helper.Edit(trickId, model.Heading, model.Content, model.PictureUrl);
+
+            if (!edited)
+            {
+                return this.BadRequest();
+            }
 
             return this.RedirectToAction(nameof(this.All));
         }
@@ -111,7 +116,13 @@ namespace GamingWiki.Web.Controllers
                 return this.Unauthorized();
             }
 
-            this.helper.Delete(trickId);
+            var deleted = this.helper.Delete(trickId);
+
+            if (!deleted)
+            {
+                return this.BadRequest();
+            }
+
             return this.RedirectToAction(nameof(this.All));
         }
 

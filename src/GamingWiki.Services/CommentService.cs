@@ -7,7 +7,6 @@ using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Comments;
 using Microsoft.EntityFrameworkCore;
-using static GamingWiki.Services.Common.ExceptionMessages;
 
 namespace GamingWiki.Services
 {
@@ -58,21 +57,19 @@ namespace GamingWiki.Services
             return comment.Id;
         }
 
-        public int Delete(int commentId)
+        public bool Delete(int commentId)
         {
             if (!this.CommentExists(commentId))
             {
-                throw new InvalidOperationException(NonExistingCommentExceptionMessage);
+                return false;
             }
 
             var comment = this.FindComment(commentId);
 
-            var articleId = this.GetArticleId(commentId);
-
             this.dbContext.Comments.Remove(comment);
             this.dbContext.SaveChanges();
 
-            return articleId;
+            return true;
         }
 
         public bool CommentExists(int commentId)
