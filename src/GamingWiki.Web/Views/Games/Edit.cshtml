@@ -1,5 +1,9 @@
 ﻿@model GameServiceEditModel
 
+@{
+    ViewBag.Title = "Edit Game";
+}
+
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
     <div class="page-info">
         <h2>@Model.Name / Edit</h2>
@@ -42,7 +46,7 @@
                             @foreach (var platform in Model.AllPlatforms)
                             {
                                 var isChecked = Model.SupportedPlatforms.Contains(platform.Id)
-                                ? "checked": string.Empty;
+                                ? "checked" : string.Empty;
 
                                 <input type="checkbox" name="supportedPlatforms" value="@platform.Id" @isChecked />
                                 <label>@platform.Name&nbsp;</label>

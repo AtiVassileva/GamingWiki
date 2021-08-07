@@ -1,5 +1,9 @@
 ﻿@model GameFullModel
 
+@{
+    ViewBag.Title = "Games";
+}
+
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
     <div class="page-info">
         <h2>Games</h2>
@@ -74,7 +78,7 @@
                                asp-route-pageIndex="@i"
                                class="btn btn-success">@i</a>
                         }
-                        
+
                         @if (Model.Games.NextPage)
                         {
                             <a asp-controller="Games" asp-action="@Model.Tokens.Key"
@@ -84,7 +88,7 @@
                         }
                     </div>
                 }
-                
+
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">

@@ -1,5 +1,9 @@
 ﻿@model CharacterFullModel
 
+@{
+    ViewBag.Title = "Characters";
+}
+
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/4.jpg">
     <div class="page-info">
         <h2>Characters</h2>
@@ -55,7 +59,7 @@
                 @if (Model.Characters.Any())
                 {
                     <div class="site-pagination">
-                        
+
                         @if (Model.Characters.PreviousPage)
                         {
                             <a asp-controller="Characters" asp-action="@Model.Tokens.Key"

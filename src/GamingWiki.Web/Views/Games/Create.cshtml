@@ -1,5 +1,9 @@
 ﻿@model GameFormModel
 
+@{
+    ViewBag.Title = "New Game";
+}
+
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/1.jpg">
     <div class="page-info">
         <h2>New game</h2>
@@ -59,7 +63,7 @@
                             <label asp-for="SupportedPlatforms"></label>
                             @foreach (var platform in Model.Platforms)
                             {
-                                <input type="checkbox" name="supportedSupportedPlatforms" value="@platform.Id"/>
+                                <input type="checkbox" name="supportedSupportedPlatforms" value="@platform.Id" />
                                 <label>@platform.Name&nbsp;</label>
                             }
                         </div>

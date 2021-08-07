@@ -1,6 +1,10 @@
 ﻿@using GamingWiki.Web.Infrastructure
 @model GameServiceDetailsModel
 
+@{
+    ViewBag.Title = "Game Details";
+}
+
 <div id="preloder">
     <div class="loader"></div>
 </div>
@@ -37,7 +41,7 @@
                 }
                 <br />
                 <br />
-                <h4 style="color: white;">Supported SupportedPlatforms: </h4>
+                <h4 style="color: white;">Supported Platforms: </h4>
                 <ul class="blog-filter">
                     @foreach (var platform in Model.Platforms)
                     {
@@ -46,7 +50,7 @@
                 </ul>
                 @if (Model.Characters.Any())
                 {
-                    <br/>
+                    <br />
                     <h4 style="color: white;">Characters: </h4>
                     <ul class="blog-filter">
                         @foreach (var character in Model.Characters)
@@ -54,7 +58,7 @@
                             <li><a asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" style="background-color: darkgreen;">@character.Name</a></li>
                         }
                     </ul>
-                    <br/>
+                    <br />
                 }
                 <section class="intro-video-section set-bg d-flex align-items-end " data-setbg="@Model.PictureUrl">
                     <a href="@Model.TrailerUrl" class="video-play-btn video-popup"><img src="/img/icons/solid-right-arrow.png" alt="#"></a>
@@ -64,9 +68,9 @@
                         </div>
                     </div>
                 </section>
-                <br/>
+                <br />
                 <h3 style="color: white">Reviews: (@Model.Reviews.Count())</h3>
-                <br/>
+                <br />
                 @foreach (var review in Model.Reviews)
                 {
 

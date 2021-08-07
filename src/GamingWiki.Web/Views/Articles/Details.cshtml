@@ -1,6 +1,10 @@
 ﻿@using GamingWiki.Web.Infrastructure
 @model ArticleServiceDetailsModel
 
+@{
+    ViewBag.Title = "Article Details";
+}
+
 <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
     <div class="page-info">
         <h2>@Model.Heading</h2>
@@ -25,8 +29,8 @@
                     <a asp-controller="Articles" asp-action="Edit" asp-route-articleId="@Model.Id" class="btn btn-warning">Edit</a>
                     <a asp-controller="Articles" asp-action="Delete" asp-route-articleId="@Model.Id" class="btn btn-danger">Delete</a>
                 }
-            <br />
-            <br />
+                <br />
+                <br />
                 <h4 style="color: white;">Comments (@Model.Comments.Count())</h4>
                 @if (!Model.Comments.Any())
                 {
