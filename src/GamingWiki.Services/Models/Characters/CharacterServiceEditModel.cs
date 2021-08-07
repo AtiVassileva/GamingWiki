@@ -24,6 +24,8 @@ namespace GamingWiki.Services.Models.Characters
         public int ClassId { get; set; }
 
         public string ClassName { get; set; }
+        
+        public string ContributorId { get; set; }
 
         public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }

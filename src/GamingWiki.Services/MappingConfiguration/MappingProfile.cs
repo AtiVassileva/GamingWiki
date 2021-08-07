@@ -44,6 +44,9 @@ namespace GamingWiki.Services.MappingConfiguration
             this.CreateMap<Character, CharacterAllServiceModel>();
             this.CreateMap<CharacterServiceDetailsModel, CharacterServiceEditModel>();
             this.CreateMap<Character, CharacterGameServiceModel>();
+            this.CreateMap<Character, CharacterPendingModel>()
+                .ForMember(c => c.ContributorName, cfg => 
+                    cfg.MapFrom(c => c.Contributor.UserName));
 
             //Categories
             this.CreateMap<Category, CategoryServiceModel>();

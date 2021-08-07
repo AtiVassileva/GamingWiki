@@ -31,7 +31,7 @@
             </h2>
             <h4>Class: @Model.ClassName</h4>
             <p>@Model.Description</p>
-            @if (this.User.IsAdmin())
+            @if (this.User.IsAdmin() || this.User.GetId() == Model.ContributorId)
             {
                 <a asp-controller="Characters" asp-action="Edit" asp-route-characterId="@Model.Id" class="btn btn-warning">Edit</a>
                 <a asp-controller="Characters" asp-action="Delete" asp-route-characterId="@Model.Id" class="btn btn-danger">Delete</a>

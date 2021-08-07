@@ -1,0 +1,47 @@
+﻿@model IEnumerable<GamingWiki.Services.Models.Characters.CharacterPendingModel>
+
+    @{
+    ViewBag.Title = "Pending Characters";
+    }
+
+    <section class="page-top-section set-bg" data-setbg="/img/page-top-bg/4.jpg">
+        <div class="page-info">
+            <h2>Pending Characters</h2>
+            <div class="site-breadcrumb">
+                <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Characters" asp-action="All">Characters</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="games-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-8 col-md-7">
+                    <div class="row">
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Contributor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var character in Model)
+                            {
+                                <tr>
+                                    <td scope="col">@character.Id</td>
+                                    <td scope="col">@character.Name</td>
+                                    <td scope="col">@character.ContributorName</td>
+                                    <td scope="col">
+                                        <a asp-area="Admin" asp-controller="Characters" asp-action="Approve" asp-route-characterId="@character.Id" class="btn btn-success float-right ml-3">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

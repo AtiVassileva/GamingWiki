@@ -2,6 +2,7 @@
 using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Characters;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Common.WebConstants;
@@ -83,6 +84,13 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
+            var contributorId = this.helper.GetContributorId(characterId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != contributorId)
+            {
+                return this.Unauthorized();
+            }
+
             var dbModel = this.helper.Details(characterId);
 
             var characterModel = this.mapper
@@ -131,6 +139,13 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
             }
 
+            var contributorId = this.helper.GetContributorId(characterId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != contributorId)
+            {
+                return this.Unauthorized();
+            }
+
             var deleted = this.helper.Delete(characterId);
 
             if (!deleted)
@@ -160,6 +175,16 @@ namespace GamingWiki.Web.Controllers
                         pageIndex, CharactersPerPage),
                 Classes = this.helper.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("Filter", classId)
+            });
+
+        public IActionResult Mine(int pageIndex = 1)
+            => this.View(nameof(this.All), new CharacterFullModel
+            {
+                Characters = PaginatedList<CharacterAllServiceModel>
+                    .Create(this.helper.Mine(this.User.GetId()),
+                        pageIndex, CharactersPerPage),
+                Classes = this.helper.GetClasses(),
+                Tokens = new KeyValuePair<object, object>("Mine", null)
             });
     }
 }

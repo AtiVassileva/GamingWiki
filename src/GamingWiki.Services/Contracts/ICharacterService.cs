@@ -28,9 +28,17 @@ namespace GamingWiki.Services.Contracts
 
         bool Delete(int characterId);
 
+        string GetContributorId(int characterId);
+
+        void ApproveCharacter(int characterId);
+
+        IQueryable<CharacterAllServiceModel> Mine(string contributorId);
+
         IQueryable<CharacterAllServiceModel> Search(string letter);
 
         IQueryable<CharacterAllServiceModel> Filter(int classId);
+
+        IEnumerable<CharacterPendingModel> GetPending();
 
         IEnumerable<ClassSimpleServiceModel> GetClasses();
 

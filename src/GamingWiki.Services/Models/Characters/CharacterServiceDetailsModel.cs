@@ -11,5 +11,7 @@
         public string GameName { get; set; }
 
         public int GameId { get; set; }
+
+        public string ContributorId { get; set; }
     }
 }

@@ -95,6 +95,7 @@ namespace GamingWiki.Services
 
         public IQueryable<GameServiceListingModel> All()
             => this.dbContext.Games
+                .Where(g => g.IsApproved)
                 .ProjectTo<GameServiceListingModel>(this.configuration)
                 .OrderBy(g => g.Name);
 

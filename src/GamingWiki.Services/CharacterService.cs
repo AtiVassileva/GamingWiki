@@ -46,7 +46,8 @@ namespace GamingWiki.Services
                 PictureUrl = pictureUrl,
                 Description = description,
                 ClassId = classId,
-                GameId = gameId
+                GameId = gameId,
+                IsApproved = false
             };
 
             this.dbContext.Characters.Add(character);
@@ -67,7 +68,8 @@ namespace GamingWiki.Services
 
         public IQueryable<CharacterAllServiceModel> All()
         => this.dbContext.Characters
-                .ProjectTo<CharacterAllServiceModel>(this.configuration);
+            .Where(c => c.IsApproved)
+            .ProjectTo<CharacterAllServiceModel>(this.configuration);
 
         public bool Edit(int characterId, CharacterServiceEditModel model)
         {
@@ -81,6 +83,7 @@ namespace GamingWiki.Services
             character.PictureUrl = model.PictureUrl;
             character.Description = model.Description;
             character.ClassId = model.ClassId;
+            character.IsApproved = false;
 
             this.dbContext.SaveChanges();
 
@@ -102,6 +105,27 @@ namespace GamingWiki.Services
             return true;
         }
 
+        public string GetContributorId(int characterId)
+            => this.dbContext.Characters
+                .Where(c => c.Id == characterId)
+                .Select(c => c.ContributorId)
+                .First();
+
+        public void ApproveCharacter(int characterId)
+        {
+            var character = this.FindCharacter(characterId);
+
+            character.IsApproved = true;
+
+            this.dbContext.SaveChanges();
+        }
+
+        public IQueryable<CharacterAllServiceModel> Mine(string contributorId)
+            => this.dbContext.Characters
+                .Where(c => c.ContributorId == contributorId)
+                .ProjectTo<CharacterAllServiceModel>(this.configuration)
+                .OrderBy(c => c.Id);
+
         public IQueryable<CharacterAllServiceModel> Search(string letter)
             => this.dbContext.Characters
                 .Where(c => c.Name.ToUpper()
@@ -114,6 +138,12 @@ namespace GamingWiki.Services
                 .Where(c => c.ClassId == classId)
                 .ProjectTo<CharacterAllServiceModel>(this.configuration)
                 .OrderBy(c => c.Name);
+
+        public IEnumerable<CharacterPendingModel> GetPending()
+            => this.dbContext.Characters
+                .Where(c => !c.IsApproved)
+                .ProjectTo<CharacterPendingModel>(this.configuration)
+                .ToList();
 
         public IEnumerable<ClassSimpleServiceModel> GetClasses()
             => this.dbContext.Classes
