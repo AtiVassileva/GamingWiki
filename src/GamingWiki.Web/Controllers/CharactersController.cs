@@ -35,8 +35,7 @@ namespace GamingWiki.Web.Controllers
                 Classes = this.helper.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("All", null)
             });
-
-        [Authorize(Roles = AdministratorRoleName)]
+        
         public IActionResult Create()
             => this.View(new CharacterFormModel
             {
@@ -45,7 +44,6 @@ namespace GamingWiki.Web.Controllers
             });
 
         [HttpPost]
-        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create(CharacterFormModel model)
         {
             if (!this.helper.GameExists(model.GameId))
@@ -77,8 +75,7 @@ namespace GamingWiki.Web.Controllers
             => this.helper.CharacterExists(characterId) ?
                 this.View(this.helper.Details(characterId)) :
                  this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
-
-        [Authorize(Roles = AdministratorRoleName)]
+        
         public IActionResult Edit(int characterId)
         {
             if (!this.helper.CharacterExists(characterId))
@@ -97,7 +94,6 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(CharacterServiceEditModel model, int characterId)
         {
             if (!this.helper.ClassExists(model.ClassId))
@@ -127,8 +123,7 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.Details),
                 new { characterId });
         }
-
-        [Authorize(Roles = AdministratorRoleName)]
+        
         public IActionResult Delete(int characterId)
         {
             if (!this.helper.CharacterExists(characterId))

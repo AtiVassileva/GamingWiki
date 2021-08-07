@@ -33,8 +33,7 @@ namespace GamingWiki.Web.Controllers
                 Tokens = new KeyValuePair<object, object>
                     ("All", null)
             });
-
-        [Authorize(Roles = AdministratorRoleName)]
+        
         public IActionResult Create() 
             => this.View(new GameFormModel
             {
@@ -44,7 +43,6 @@ namespace GamingWiki.Web.Controllers
             });
 
         [HttpPost]
-        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Create(GameFormModel model)
         {
             if (this.helper.GameExists(model.Name))
@@ -83,8 +81,7 @@ namespace GamingWiki.Web.Controllers
             => this.helper.GameExists(gameId)
                 ? this.View(this.helper.Details(gameId))
                 : this.View("Error", CreateError(NonExistingGameExceptionMessage));
-
-        [Authorize(Roles = AdministratorRoleName)]
+        
         public IActionResult Edit(int gameId)
         {
             if (!this.helper.GameExists(gameId))
@@ -106,7 +103,6 @@ namespace GamingWiki.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Edit(GameServiceEditModel model, int gameId)
         {
             if (!this.helper.AreaExists(model.AreaId))
@@ -135,7 +131,6 @@ namespace GamingWiki.Web.Controllers
                 new { gameId });
         }
 
-        [Authorize(Roles = AdministratorRoleName)]
         public IActionResult Delete(int gameId)
         {
             if (!this.helper.GameExists(gameId))
