@@ -9,8 +9,6 @@ namespace GamingWiki.Services.Contracts
 {
     public interface ICharacterService
     {
-        Game ParseGame(string gameName);
-
         bool GameExists(int gameId);
 
         bool ClassExists(int classId);
@@ -18,11 +16,12 @@ namespace GamingWiki.Services.Contracts
         bool CharacterExists(int characterId);
 
         int Create(string name, string pictureUrl,
-            string description, int classId, int gameId);
+            string description, int classId, int gameId, 
+            bool isApproved, string contributorId);
 
         CharacterServiceDetailsModel Details(int characterId);
 
-        IQueryable<CharacterAllServiceModel> All();
+        IQueryable<CharacterAllServiceModel> All(bool approvedOnly = true);
 
         bool Edit(int characterId, CharacterServiceEditModel model);
 

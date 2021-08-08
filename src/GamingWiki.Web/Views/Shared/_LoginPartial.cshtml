@@ -1,21 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using GamingWiki.Web.Infrastructure
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
 
 @{
     ViewBag.Title = "Account";
 }
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (signInManager.IsSignedIn(User))
     {
-        if (this.User.IsAdmin())
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Characters" asp-action="Pending">Administration</a>
-            </li>
-        }
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
         </li>

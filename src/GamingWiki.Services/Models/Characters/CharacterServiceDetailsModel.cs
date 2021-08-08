@@ -13,5 +13,7 @@
         public int GameId { get; set; }
 
         public string ContributorId { get; set; }
+
+        public bool IsApproved { get; set; }
     }
 }

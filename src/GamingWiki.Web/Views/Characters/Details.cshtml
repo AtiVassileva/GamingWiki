@@ -18,6 +18,10 @@
     </div>
 </section>
 
+@{
+    var status = Model.IsApproved ? "Approved" : "Not Approved";
+    var color = Model.IsApproved ? "green" : "red";
+}
 <section class="games-single-page">
     <div class="container">
         <div class="game-single-preview">
@@ -26,10 +30,18 @@
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
                 <div class="gs-meta">Game: <a asp-controller="Games" asp-action="Details" asp-route-gameId="@Model.GameId">@Model.GameName</a></div>
-                <h2 class="gs-title">
-                    @Model.Name
-            </h2>
-            <h4>Class: @Model.ClassName</h4>
+                @if (this.User.IsAdmin() || this.User.GetId() == @Model.ContributorId)
+                {
+                    <h3 style="color: @color">[ @status ]
+                    @if (status == "Not Approved" && this.User.IsAdmin())
+                    {
+                        <a asp-area="Admin" asp-controller="Characters" asp-action="Approve" asp-route-characterId="@Model.Id" class="btn btn-success">Approve</a>
+                    }
+                    </h3>
+                }
+                <h2 class="gs-title">@Model.Name
+                </h2>
+                <h4>Class: @Model.ClassName</h4>
             <p>@Model.Description</p>
             @if (this.User.IsAdmin() || this.User.GetId() == Model.ContributorId)
             {

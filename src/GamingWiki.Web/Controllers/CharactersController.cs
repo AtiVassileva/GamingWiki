@@ -31,7 +31,8 @@ namespace GamingWiki.Web.Controllers
             => this.View(new CharacterFullModel
             {
                 Characters = PaginatedList<CharacterAllServiceModel>
-                    .Create(this.helper.All(),
+                    .Create(this.helper.All(approvedOnly: 
+                            !this.User.IsAdmin()),
                         pageIndex, CharactersPerPage),
                 Classes = this.helper.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("All", null)
@@ -66,7 +67,8 @@ namespace GamingWiki.Web.Controllers
             }
 
             var characterId = this.helper.Create(model.Name, model.PictureUrl,
-                model.Description, model.ClassId, model.GameId);
+                model.Description, model.ClassId, model.GameId,
+                isApproved: this.User.IsAdmin(), contributorId:this.User.GetId());
 
             return this.RedirectToAction(nameof(this.Details),
                 new {characterId});
@@ -115,11 +117,13 @@ namespace GamingWiki.Web.Controllers
 
                 model = this.mapper
                     .Map<CharacterServiceEditModel>(dbModel);
-
+                
                 model.Classes = this.helper.GetClasses();
 
                 return this.View(model);
             }
+
+            model.IsApproved = this.User.IsAdmin();
 
             var edited = this.helper.Edit(characterId, model);
 

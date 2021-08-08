@@ -27,6 +27,8 @@ namespace GamingWiki.Services.Models.Characters
         
         public string ContributorId { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public IEnumerable<ClassSimpleServiceModel> Classes { get; set; }
     }
 }

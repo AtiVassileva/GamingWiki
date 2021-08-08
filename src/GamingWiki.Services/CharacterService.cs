@@ -25,9 +25,6 @@ namespace GamingWiki.Services
             this.configuration = mapper.ConfigurationProvider;
         }
 
-        public Game ParseGame(string gameName)
-            => this.dbContext.Games.First(g => g.Name == gameName);
-
         public bool GameExists(int gameId)
             => this.dbContext.Games.Any(g => g.Id == gameId);
 
@@ -38,7 +35,8 @@ namespace GamingWiki.Services
             => this.dbContext.Characters.Any(c => c.Id == characterId);
 
         public int Create(string name, string pictureUrl,
-            string description, int classId, int gameId)
+            string description, int classId, int gameId, 
+            bool isApproved, string contributorId)
         {
             var character = new Character
             {
@@ -47,7 +45,8 @@ namespace GamingWiki.Services
                 Description = description,
                 ClassId = classId,
                 GameId = gameId,
-                IsApproved = false
+                IsApproved = isApproved,
+                ContributorId = contributorId
             };
 
             this.dbContext.Characters.Add(character);
@@ -66,10 +65,22 @@ namespace GamingWiki.Services
             return detailsModel;
         }
 
-        public IQueryable<CharacterAllServiceModel> All()
-        => this.dbContext.Characters
-            .Where(c => c.IsApproved)
-            .ProjectTo<CharacterAllServiceModel>(this.configuration);
+        public IQueryable<CharacterAllServiceModel> All(
+            bool approvedOnly = true)
+        {
+            var charactersQuery = this.dbContext.Characters
+                .AsQueryable();
+
+            if (approvedOnly)
+            {
+                charactersQuery = charactersQuery
+                    .Where(c => c.IsApproved);
+
+            }
+
+            return charactersQuery
+                .ProjectTo<CharacterAllServiceModel>(this.configuration);
+        }
 
         public bool Edit(int characterId, CharacterServiceEditModel model)
         {
@@ -83,7 +94,7 @@ namespace GamingWiki.Services
             character.PictureUrl = model.PictureUrl;
             character.Description = model.Description;
             character.ClassId = model.ClassId;
-            character.IsApproved = false;
+            character.IsApproved = model.IsApproved;
 
             this.dbContext.SaveChanges();
 

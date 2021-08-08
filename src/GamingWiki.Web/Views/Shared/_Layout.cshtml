@@ -35,58 +35,67 @@
                 <nav class="top-nav-area w-100">
                     <ul class="main-menu primary-menu">
                         <li>
-                            <a asp-controller="Home" asp-action="Index">Home</a>
+                            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a asp-controller="Home" asp-action="About">About us</a>
+                                    <a asp-area="" asp-controller="Home" asp-action="About">About us</a>
                                 </li>
                             </ul>
                         </li>
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <a asp-controller="Games" asp-action="All">Games</a>
+                                <a asp-area="" asp-controller="Games" asp-action="All">Games</a>
                                 <ul class="sub-menu">
-                                    <li><a asp-controller="Games" asp-action="All">List</a></li>
+                                    <li><a asp-area="" asp-controller="Games" asp-action="All">List</a></li>
                                     @if (this.User.IsAdmin())
                                     {
-                                        <li><a asp-controller="Games" asp-action="Create">New Game</a></li>
+                                        <li><a asp-area="" asp-controller="Games" asp-action="Create">New Game</a></li>
                                     }
                                 </ul>
                             </li>
                             <li>
-                                <a asp-controller="Characters" asp-action="All">Characters</a>
+                                <a asp-area="" asp-controller="Characters" asp-action="All">Characters</a>
                                 <ul class="sub-menu">
-                                    <li><a asp-controller="Characters" asp-action="All">List</a></li>
-                                    <li><a asp-controller="Characters" asp-action="Create">New Character</a></li>
-                                    <li><a asp-controller="Characters" asp-action="Mine">My Characters</a></li>
+                                    <li><a asp-area="" asp-controller="Characters" asp-action="All">List</a></li>
+                                    <li><a asp-area="" asp-controller="Characters" asp-action="Create">New Character</a></li>
+                                    <li><a asp-area="" asp-controller="Characters" asp-action="Mine">My Characters</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a asp-controller="Reviews" asp-action="All">Reviews</a>
+                                <a asp-area="" asp-controller="Reviews" asp-action="All">Reviews</a>
                                 <ul class="sub-menu">
-                                    <li><a asp-controller="Reviews" asp-action="All">List</a></li>
-                                    <li><a asp-controller="Reviews" asp-action="Mine">My Reviews</a></li>
+                                    <li><a asp-area="" asp-controller="Reviews" asp-action="All">List</a></li>
+                                    <li><a asp-area="" asp-controller="Reviews" asp-action="Mine">My Reviews</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a asp-controller="Articles" asp-action="All">Articles</a>
+                                <a asp-area="" asp-controller="Articles" asp-action="All">Articles</a>
                                 <ul class="sub-menu">
-                                    <li><a asp-controller="Articles" asp-action="All">List</a></li>
-                                    <li><a asp-controller="Articles" asp-action="Mine">My Articles</a></li>
-                                    <li><a asp-controller="Articles" asp-action="Create">New Article</a></li>
+                                    <li><a asp-area="" asp-controller="Articles" asp-action="All">List</a></li>
+                                    <li><a asp-area="" asp-controller="Articles" asp-action="Mine">My Articles</a></li>
+                                    <li><a asp-area="" asp-controller="Articles" asp-action="Create">New Article</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a asp-controller="Tricks" asp-action="All">Tips & Tricks</a>
+                                <a asp-area="" asp-controller="Tricks" asp-action="All">Tips & Tricks</a>
                                 <ul class="sub-menu">
-                                    <li><a asp-controller="Tricks" asp-action="All">List</a></li>
-                                    <li><a asp-controller="Tricks" asp-action="Mine">My Tricks</a></li>
-                                    <li><a asp-controller="Tricks" asp-action="Create">New Trick</a></li>
+                                    <li><a asp-area="" asp-controller="Tricks" asp-action="All">List</a></li>
+                                    <li><a asp-area="" asp-controller="Tricks" asp-action="Mine">My Tricks</a></li>
+                                    <li><a asp-area="" asp-controller="Tricks" asp-action="Create">New Trick</a></li>
                                 </ul>
                             </li>
                         }
-                        
+
+                        @if (this.User.IsAdmin())
+                        {
+                            <li>
+                                <a asp-area="Admin" asp-controller="Characters" asp-action="Pending">Administration</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-area="Admin" asp-controller="Characters" asp-action="Pending">Pending Characters</a></li>
+                                </ul>
+                            </li>
+                        }
                         <li>
                             <a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a>
                             <ul class="sub-menu">
