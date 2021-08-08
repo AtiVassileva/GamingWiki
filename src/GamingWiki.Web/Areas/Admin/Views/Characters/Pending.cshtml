@@ -20,8 +20,9 @@
                 <div class="row">
                     @if (!Model.Any())
                     {
-                        <h3 style="color: white">No pending characters!
-                            <br/>
+                        <h3 style="color: white">
+                            No pending characters!
+                            <br />
                             <a asp-area="" asp-controller="Characters" asp-action="All" class="btn btn-info">Back to full list</a>
                         </h3>
                     }
@@ -29,28 +30,28 @@
                     {
                         <table class="table table-hover table-dark">
                             <thead>
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">Character</th>
-                                <th scope="col">Contributor</th>
-                                <th scope="col">&nbsp;&nbsp;&nbsp;Actions</th>
-                            </tr>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Character</th>
+                                    <th scope="col">Contributor</th>
+                                    <th scope="col">&nbsp;&nbsp;&nbsp;Actions</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            @foreach (var character in Model)
-                            {
-                                <tr>
-                                    <th scope="row">@character.Id</th>
-                                    <td>@character.Name</td>
-                                    <td>@character.ContributorName</td>
-                                    <td>
-                                        <a asp-area="" asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" class="btn btn-info float-left ml-2">Details</a>
-                                        <a asp-area="Admin" asp-controller="Characters" asp-action="Approve" asp-route-characterId="@character.Id" class="btn btn-success float-left ml-2">Approve</a>
-                                        <a asp-area="" asp-controller="Characters" asp-action="Edit" asp-route-characterId="@character.Id" class="btn btn-warning float-left ml-2">Edit</a>
-                                        <a asp-area="" asp-controller="Characters" asp-action="Delete" asp-route-characterId="@character.Id" class="btn btn-danger float-left ml-2">Delete</a>
-                                    </td>
-                                </tr>
-                            }
+                                @foreach (var character in Model)
+                                {
+                                    <tr>
+                                        <th scope="row">@character.Id</th>
+                                        <td>@character.Name</td>
+                                        <td>@character.ContributorName</td>
+                                        <td>
+                                            <a asp-area="" asp-controller="Characters" asp-action="Details" asp-route-characterId="@character.Id" class="btn btn-info float-left ml-2">Details</a>
+                                            <a asp-area="Admin" asp-controller="Characters" asp-action="Approve" asp-route-characterId="@character.Id" class="btn btn-success float-left ml-2">Approve</a>
+                                            <a asp-area="" asp-controller="Characters" asp-action="Edit" asp-route-characterId="@character.Id" class="btn btn-warning float-left ml-2">Edit</a>
+                                            <a asp-area="" asp-controller="Characters" asp-action="Delete" asp-route-characterId="@character.Id" class="btn btn-danger float-left ml-2">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     }
