@@ -11,7 +11,7 @@
         public const int HeadingMaxLength = 100;
         public const int CategoryNameMaxLength = 25;
 
-        public const int CharacterNameMaxLength = 30;
+        public const int CharacterNameMaxLength = 100;
         public const int CharacterClassMaxLength = 25;
 
         public const int ContentMaxLength = 10000;
@@ -23,7 +23,7 @@
 
         public const int CreatorNameMaxLength = 80;
 
-        public const int GameNameMaxLength = 30;
+        public const int GameNameMaxLength = 100;
         public const int AreaNameMaxLength = 25;
         public const int GenreNameMaxLength = 40;
 

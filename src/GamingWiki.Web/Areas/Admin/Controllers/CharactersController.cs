@@ -17,10 +17,7 @@ namespace GamingWiki.Web.Areas.Admin.Controllers
                 new { area = "" });
         }
 
-        public IActionResult Pending()
-        {
-            var pendingCharacters = this.helper.GetPending();
-            return this.View(pendingCharacters);
-        }
+        public IActionResult Pending() 
+            => this.View(this.helper.GetPending());
     }
 }

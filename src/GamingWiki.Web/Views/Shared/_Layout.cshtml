@@ -48,10 +48,8 @@
                                 <a asp-area="" asp-controller="Games" asp-action="All">Games</a>
                                 <ul class="sub-menu">
                                     <li><a asp-area="" asp-controller="Games" asp-action="All">List</a></li>
-                                    @if (this.User.IsAdmin())
-                                    {
-                                        <li><a asp-area="" asp-controller="Games" asp-action="Create">New Game</a></li>
-                                    }
+                                    <li><a asp-area="" asp-controller="Games" asp-action="Create">New Game</a></li>
+                                    <li><a asp-area="" asp-controller="Games" asp-action="Mine">My Games</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -92,6 +90,7 @@
                             <li>
                                 <a asp-area="Admin" asp-controller="Characters" asp-action="Pending">Administration</a>
                                 <ul class="sub-menu">
+                                    <li><a asp-area="Admin" asp-controller="Games" asp-action="Pending">Pending Games</a></li>
                                     <li><a asp-area="Admin" asp-controller="Characters" asp-action="Pending">Pending Characters</a></li>
                                 </ul>
                             </li>

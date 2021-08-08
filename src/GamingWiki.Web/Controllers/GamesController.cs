@@ -2,6 +2,7 @@
 using AutoMapper;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Games;
+using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Web.Common.WebConstants;
@@ -18,6 +19,7 @@ namespace GamingWiki.Web.Controllers
 
         private readonly IGameService helper;
         private readonly IMapper mapper;
+
         public GamesController(IGameService helper, IMapper mapper)
         {
             this.helper = helper;
@@ -28,7 +30,8 @@ namespace GamingWiki.Web.Controllers
             => this.View(new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.All(), pageIndex, GamesPerPage),
+                    .Create(this.helper.All(approvedOnly: 
+                        !this.User.IsAdmin()), pageIndex, GamesPerPage),
                 Genres = this.helper.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
                     ("All", null)
@@ -71,6 +74,8 @@ namespace GamingWiki.Web.Controllers
 
             var gameId = this.helper.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
                 model.GenreId, model.CreatorsNames,
+                contributorId:this.User.GetId(),
+                isApproved: this.User.IsAdmin(),
                 model.SupportedPlatforms);
 
             return this.RedirectToAction(nameof(this.Details),
@@ -120,7 +125,9 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            var edited = this.helper.Edit(gameId, model.Description, model.PictureUrl, model.AreaId, model.TrailerUrl, model.SupportedPlatforms);
+            model.IsApproved = this.User.IsAdmin();
+
+            var edited = this.helper.Edit(gameId, model);
 
             if (!edited)
             {
@@ -170,6 +177,16 @@ namespace GamingWiki.Web.Controllers
                 Genres = this.helper.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
                 ("Filter", genreId)
+            });
+
+        public IActionResult Mine(int pageIndex = 1)
+            => this.View(nameof(this.All), new GameFullModel
+            {
+                Games = PaginatedList<GameServiceListingModel>
+                    .Create(this.helper.Mine(this.User.GetId()),
+                        pageIndex, GamesPerPage),
+                Genres = this.helper.GetGenres(),
+                Tokens = new KeyValuePair<object, object>("Mine", null)
             });
 
     }

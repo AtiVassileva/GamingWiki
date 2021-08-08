@@ -154,6 +154,7 @@ namespace GamingWiki.Services
             => this.dbContext.Characters
                 .Where(c => !c.IsApproved)
                 .ProjectTo<CharacterPendingModel>(this.configuration)
+                .OrderByDescending(c => c.Id)
                 .ToList();
 
         public IEnumerable<ClassSimpleServiceModel> GetClasses()

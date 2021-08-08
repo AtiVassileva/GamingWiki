@@ -63,7 +63,7 @@
                             <label asp-for="SupportedPlatforms"></label>
                             @foreach (var platform in Model.Platforms)
                             {
-                                <input type="checkbox" name="supportedSupportedPlatforms" value="@platform.Id" />
+                                <input type="checkbox" name="supportedPlatforms" value="@platform.Id" />
                                 <label>@platform.Name&nbsp;</label>
                             }
                         </div>

@@ -30,6 +30,8 @@ namespace GamingWiki.Services.Models.Games
 
         public string Area { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public IEnumerable<AreaServiceModel> Areas { get; set; }
 
         [Display(Name = "Supported Platforms")]

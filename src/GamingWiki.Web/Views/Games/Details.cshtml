@@ -18,6 +18,11 @@
     </div>
 </section>
 
+@{
+    var status = Model.IsApproved ? "Approved" : "Not Approved";
+    var color = Model.IsApproved ? "green" : "red";
+}
+
 <section class="games-single-page">
     <div class="container">
         <div class="game-single-preview">
@@ -26,11 +31,21 @@
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
                 <div class="gs-meta">Developed by: <a href="" style="pointer-events: none; cursor: default;">@string.Join(", ", Model.Creators)</a></div>
+                @if (this.User.IsAdmin() || this.User.GetId() == Model.ContributorId)
+                {
+                    <h3 style="color: @color">
+                        [ @status ]
+                        @if (status == "Not Approved" && this.User.IsAdmin())
+                        {
+                            <a asp-area="Admin" asp-controller="Games" asp-action="Approve" asp-route-gameId="@Model.Id" class="btn btn-success">Approve</a>
+                        }
+                    </h3>
+                }
                 <h2 class="gs-title">@Model.Name.ToUpper()</h2>
                 <h4>Genre: @Model.Genre&nbsp;&nbsp;&nbsp;Area: @Model.Area</h4>
                 <p>@Model.Description</p>
 
-                @if (this.User.IsAdmin())
+                @if (this.User.IsAdmin() || this.User.GetId() == Model.ContributorId)
                 {
                     <a asp-controller="Games" asp-action="Edit" asp-route-gameId="@Model.Id" class="btn btn-warning">Edit</a>
                     <a asp-controller="Games" asp-action="Delete" asp-route-gameId="@Model.Id" class="btn btn-danger">Delete</a>
@@ -68,33 +83,38 @@
                         </div>
                     </div>
                 </section>
-                <br />
-                <h3 style="color: white">Reviews: (@Model.Reviews.Count())</h3>
-                <br />
-                @foreach (var review in Model.Reviews)
+                @if (Model.Reviews.Any())
                 {
-
-                    var yellowStars = (int)new[]
+                    <br/>
+                    <h3 style="color: white">Reviews: (@Model.Reviews.Count())</h3>
+                    <br/>
+                    @foreach (var review in Model.Reviews)
                     {
-                        review.DifficultyRate, review.PriceRate,
-                        review.GraphicsRate, review.LevelsRate
-                    }.Average();
 
-                    var yellowStarsString = new string('⭐', yellowStars);
+                        var yellowStars = (int) new[]
+                        {
+                            review.DifficultyRate, review.PriceRate,
+                            review.GraphicsRate, review.LevelsRate
+                        }.Average();
 
-                    <div class="big-blog-item">
-                        <div class="blog-content text-box text-white">
-                            <div class="top-meta">
-                                <i class="fa fa-user-o"></i> @review.Author
-                                <div>@yellowStarsString</div>
+                        var yellowStarsString = new string('⭐', yellowStars);
+
+                        <div class="big-blog-item">
+                            <div class="blog-content text-box text-white">
+                                <div class="top-meta">
+                                    <i class="fa fa-user-o"></i> @review.Author
+                                    <div>@yellowStarsString</div>
+                                </div>
+                                <p>@(review.Description ?? string.Empty)</p>
+                                @if (this.User.IsAdmin() || this.User.GetId() == review.AuthorId)
+                                {
+                                    <a asp-controller="Reviews" asp-action="Edit" asp-route-reviewId="@review.Id" class="btn btn-warning">Edit</a>
+                                    <a asp-controller="Reviews" asp-action="Delete" asp-route-reviewId="@review.Id" class="btn btn-danger">Delete</a>
+                                }
                             </div>
-                            <p>@(review.Description ?? string.Empty)</p>
-                            @if (this.User.IsAdmin() || this.User.GetId() == review.AuthorId)
-                            {
-                                <a asp-controller="Reviews" asp-action="Edit" asp-route-reviewId="@review.Id" class="btn btn-warning">Edit</a>
-                                <a asp-controller="Reviews" asp-action="Delete" asp-route-reviewId="@review.Id" class="btn btn-danger">Delete</a>}
                         </div>
-                    </div>}
+                    }
+                }
                 <partial name="_SharePartial" />
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">

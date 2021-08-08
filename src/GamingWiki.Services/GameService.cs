@@ -65,7 +65,9 @@ namespace GamingWiki.Services
         public bool GameExists(string gameName)
             => this.dbContext.Games.Any(g => g.Name == gameName);
 
-        public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, IEnumerable<int> supportedPlatforms)
+        public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, string contributorId,
+            bool isApproved,
+            IEnumerable<int> supportedPlatforms)
         {
             var game = new Game
             {
@@ -74,7 +76,9 @@ namespace GamingWiki.Services
                 TrailerUrl = trailerUrl,
                 Description = description,
                 AreaId = areaId,
-                GenreId = genreId
+                GenreId = genreId,
+                ContributorId = contributorId,
+                IsApproved = isApproved
             };
 
             this.dbContext.Games.Add(game);
@@ -93,11 +97,19 @@ namespace GamingWiki.Services
             return game.Id;
         }
 
-        public IQueryable<GameServiceListingModel> All()
-            => this.dbContext.Games
-                .Where(g => g.IsApproved)
+        public IQueryable<GameServiceListingModel> All(bool approvedOnly = true)
+        {
+            var gamesQuery = this.dbContext.Games.AsQueryable();
+
+            if (approvedOnly)
+            {
+                gamesQuery = gamesQuery.Where(g => g.IsApproved);
+            }
+
+            return gamesQuery
                 .ProjectTo<GameServiceListingModel>(this.configuration)
                 .OrderBy(g => g.Name);
+        }
 
         public GameServiceDetailsModel Details(int gameId)
         {
@@ -116,8 +128,7 @@ namespace GamingWiki.Services
             return gameDetails;
         }
 
-        public bool Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, 
-            IEnumerable<int> platforms)
+        public bool Edit(int gameId, GameServiceEditModel model)
         {
             if (!this.GameExists(gameId))
             {
@@ -126,13 +137,14 @@ namespace GamingWiki.Services
 
             var game = this.FindGame(gameId);
 
-            game.Description = description;
-            game.PictureUrl = pictureUrl;
-            game.AreaId = areaId;
-            game.TrailerUrl = trailerUrl;
+            game.Description = model.Description;
+            game.PictureUrl = model.PictureUrl;
+            game.AreaId = model.AreaId;
+            game.TrailerUrl = model.TrailerUrl;
+            game.IsApproved = model.IsApproved;
 
             var oldPlatforms = this.GetGamePlatforms(game.Id).ToList();
-            var newPlatforms = platforms.ToList();
+            var newPlatforms = model.SupportedPlatforms.ToList();
 
             if ((!oldPlatforms.All(newPlatforms.Contains) 
                 || !newPlatforms.All(oldPlatforms.Contains)) 
@@ -160,6 +172,19 @@ namespace GamingWiki.Services
             return true;
         }
 
+        public void Approve(int gameId)
+        {
+            var game = this.FindGame(gameId);
+            game.IsApproved = true;
+            this.dbContext.SaveChanges();
+        }
+
+        public IQueryable<GameServiceListingModel> Mine(string contributorId)
+            => this.dbContext.Games
+                .Where(g => g.ContributorId == contributorId)
+                .ProjectTo<GameServiceListingModel>(this.configuration)
+                .OrderByDescending(g => g.Id);
+
         public IQueryable<GameServiceListingModel> Search(string letter) 
             => this.dbContext.Games
                 .Where(g => g.Name.ToUpper()
@@ -172,6 +197,13 @@ namespace GamingWiki.Services
                 .Where(g => g.GenreId == genreId)
                 .ProjectTo<GameServiceListingModel>(this.configuration)
                 .OrderBy(g => g.Name);
+
+        public IEnumerable<GamePendingModel> GetPending()
+            => this.dbContext.Games
+                .Where(g => !g.IsApproved)
+                .ProjectTo<GamePendingModel>(this.configuration)
+                .OrderByDescending(g => g.Id)
+                .ToList();
 
         public IEnumerable<AreaServiceModel> GetAreas()
             => this.dbContext

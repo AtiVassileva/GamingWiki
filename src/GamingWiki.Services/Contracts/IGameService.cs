@@ -18,19 +18,26 @@ namespace GamingWiki.Services.Contracts
 
         bool GameExists(string gameName);
 
-        int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, IEnumerable<int> supportedPlatforms);
+        int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, string contributorId, bool isApproved,
+            IEnumerable<int> supportedPlatforms);
 
-        IQueryable<GameServiceListingModel> All();
+        IQueryable<GameServiceListingModel> All(bool approvedOnly = true);
 
         GameServiceDetailsModel Details(int gameId);
 
-        bool Edit(int gameId, string description, string pictureUrl, int areaId, string trailerUrl, IEnumerable<int> platforms);
+        bool Edit(int gameId, GameServiceEditModel model);
 
         bool Delete(int gameId);
+
+        void Approve(int gameId);
+
+        IQueryable<GameServiceListingModel> Mine(string contributorId);
 
         IQueryable<GameServiceListingModel> Search(string letter);
 
         IQueryable<GameServiceListingModel> Filter(int genreId);
+
+        IEnumerable<GamePendingModel> GetPending();
 
         IEnumerable<AreaServiceModel> GetAreas();
 

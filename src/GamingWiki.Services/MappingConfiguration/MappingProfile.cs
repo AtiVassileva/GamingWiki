@@ -65,6 +65,9 @@ namespace GamingWiki.Services.MappingConfiguration
             this.CreateMap<Game, GameServiceSimpleModel>();
             this.CreateMap<Game, GameServiceListingModel>();
             this.CreateMap<GameServiceDetailsModel, GameServiceEditModel>();
+            this.CreateMap<Game, GamePendingModel>()
+                .ForMember(g => g.ContributorName, cfg => 
+                    cfg.MapFrom(g => g.Contributor.UserName));
             this.CreateMap<Game, GameServiceDetailsModel>()
                 .ForMember(g => g.Area, cfg => cfg
                     .MapFrom(g => g.Area.Name))

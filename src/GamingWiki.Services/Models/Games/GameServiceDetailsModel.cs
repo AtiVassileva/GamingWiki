@@ -19,6 +19,10 @@ namespace GamingWiki.Services.Models.Games
 
         public int AreaId { get; set; }
 
+        public bool IsApproved { get; set; }
+
+        public string ContributorId { get; set; }
+
         public IEnumerable<string> Creators { get; set; }
 
         public IDictionary<string, double> Ratings { get; set; }
