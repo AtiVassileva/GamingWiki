@@ -6,6 +6,8 @@ using GamingWiki.Web.Infrastructure;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.AlertMessages;
+using static GamingWiki.Web.Common.AlertColors;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +63,11 @@ namespace GamingWiki.Web.Controllers
             var articleId = this.helper.Create(model.Heading, model.Content, model.CategoryId, model.PictureUrl,
                 authorId);
 
+            TempData[GlobalMessageKey] =
+                SuccessfullyAddedArticleAlertMessage;
+
+            TempData[ColorKey] = SuccessAlertColor;
+            
             return this.RedirectToAction(nameof(this.Details),
                 new { articleId = $"{articleId}" });
         }

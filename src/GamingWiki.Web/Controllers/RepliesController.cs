@@ -44,6 +44,7 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.Unauthorized();
             }
+            var articleId = this.helper.GetArticleIdByReply(replyId);
 
             var deleted = this.helper.Delete(replyId);
 
@@ -51,8 +52,6 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.BadRequest();
             }
-
-            var articleId = this.helper.GetArticleIdByReply(replyId);
 
             return RedirectToAction(nameof(ArticlesController.Details), "Articles", new { articleId });
         }
