@@ -73,5 +73,15 @@
 
          public const string DeletedReviewMessage =
              "Review deleted successfully!";
+         
+         //Tricks
+         public const string SuccessfullyAddedTrickMessage =
+             "Trick added successfully!";
+
+         public const string SuccessfullyEditedTrickMessage =
+             "Trick edited successfully!";
+
+         public const string DeletedTrickMessage =
+             "Trick deleted successfully!";
     }
 }

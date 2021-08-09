@@ -8,6 +8,7 @@ using GamingWiki.Web.Models.Tricks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.AlertMessages;
 using static GamingWiki.Web.Common.WebConstants;
 
 namespace GamingWiki.Web.Controllers
@@ -58,6 +59,8 @@ namespace GamingWiki.Web.Controllers
 
             this.helper.Create(model.Heading, model.Content, authorId, model.PictureUrl, model.GameId);
 
+            TempData[GlobalMessageKey] = SuccessfullyAddedTrickMessage;
+
             return this.RedirectToAction(nameof(this.All));
         }
         
@@ -99,6 +102,8 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
+            TempData[GlobalMessageKey] = SuccessfullyEditedTrickMessage;
+
             return this.RedirectToAction(nameof(this.All));
         }
         
@@ -122,6 +127,8 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.BadRequest();
             }
+
+            TempData[GlobalMessageKey] = DeletedTrickMessage;
 
             return this.RedirectToAction(nameof(this.All));
         }
