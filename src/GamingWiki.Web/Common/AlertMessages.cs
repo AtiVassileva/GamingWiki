@@ -27,5 +27,15 @@
 
          public const string DeletedCharacterMessage =
              "Character deleted successfully!";
+
+         //Comments 
+         public const string SuccessfullyAddedCommentMessage =
+             "Comment added successfully!";
+
+         public const string UnsuccessfullyAddedCommentMessage =
+             "Comment could not be added. Please try again!";
+
+         public const string DeletedCommentMessage =
+             "Comment deleted successfully!";
     }
 }

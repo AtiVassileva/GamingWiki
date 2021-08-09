@@ -111,7 +111,10 @@
     <div>
         @if (TempData.ContainsKey(WebConstants.GlobalMessageKey))
         {
-            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            var color = TempData.ContainsKey(WebConstants.ColorKey) ? 
+                TempData[WebConstants.ColorKey] : "success";
+
+            <div class="alert alert-@color alert-dismissible fade show text-center" role="alert">
                 @TempData[WebConstants.GlobalMessageKey]
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

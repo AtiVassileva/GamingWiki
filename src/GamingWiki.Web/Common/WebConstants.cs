@@ -10,6 +10,8 @@ namespace GamingWiki.Web.Common
 
         public const string ColorKey = "Color";
 
+        public const string DangerAlertColor = "danger";
+
         public static ErrorViewModel CreateError(string message)
             => new() { Message = message };
     }
