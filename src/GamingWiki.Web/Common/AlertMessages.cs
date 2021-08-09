@@ -53,5 +53,15 @@
 
          public const string DeletedGameMessage =
              "Game deleted successfully!";
+
+         //Replies 
+         public const string SuccessfullyAddedReplyMessage =
+             "Reply added successfully!";
+
+         public const string UnsuccessfullyAddedReplyMessage =
+             "Reply could not be added. Please try again!";
+
+         public const string DeletedReplyMessage =
+             "Reply deleted successfully!";
     }
 }

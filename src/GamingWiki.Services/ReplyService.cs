@@ -40,9 +40,7 @@ namespace GamingWiki.Services
             this.dbContext.Replies.Add(reply);
             this.dbContext.SaveChanges();
 
-            var articleId = this.GetArticleIdByComment(commentId);
-
-            return articleId;
+            return reply.Id;
         }
 
         public bool Delete(int replyId)
