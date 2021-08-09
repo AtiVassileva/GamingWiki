@@ -49,8 +49,9 @@ delete comments and replies no matter who added them.
 - Implemented search by search term for tips & tricks.✅
 - Implemented pagination in all listing pages.✅
 - Implemented navigations in header, footer and body of listing pages.✅
-- Success alerts upon a success action (add, edit, delete).✅
+- Success and warning alerts upon specific actions (add, edit, delete).✅
 - Implemented custom user-friendly error page with an appropriate message.✅
+- Implemented different pages for entities added by users (eg. My Games, My Articles).✅
 
 # Technology stack
 
@@ -82,7 +83,7 @@ delete comments and replies no matter who added them.
 
 ![image](https://user-images.githubusercontent.com/65487762/128739948-4da75eb2-9f46-42f0-b9ef-df53ba15ec90.png)
 
-_ Home page - Administrator
+- Home page - Administrator
 
 ![image](https://user-images.githubusercontent.com/65487762/128741708-9f6ffede-541b-473a-8f32-ddc7bd09d1b3.png)
 
@@ -97,5 +98,11 @@ _ Home page - Administrator
 ![image](https://user-images.githubusercontent.com/65487762/128742082-235b0f1d-a9da-4f38-9e35-c009e9f06af1.png)
 
 ![image](https://user-images.githubusercontent.com/65487762/128742143-71ff8de9-ea88-40cd-82b9-458af1bf3383.png)
+
+- Administrator - Pending Pages 
+
+![image](https://user-images.githubusercontent.com/65487762/128743443-a3cea499-b1c9-46cf-b237-af9051dabb5f.png)
+
+![image](https://user-images.githubusercontent.com/65487762/128744051-c0023d1d-a5bc-4005-9691-20cd8fafe6f5.png)
 
 
