@@ -63,5 +63,15 @@
 
          public const string DeletedReplyMessage =
              "Reply deleted successfully!";
+
+         //Reviews
+         public const string SuccessfullyAddedReviewMessage =
+             "Review added successfully!";
+
+         public const string SuccessfullyEditedReviewMessage =
+             "Review edited successfully!";
+
+         public const string DeletedReviewMessage =
+             "Review deleted successfully!";
     }
 }

@@ -7,6 +7,7 @@ using GamingWiki.Web.Models.Reviews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.AlertMessages;
 using static GamingWiki.Web.Common.WebConstants;
 
 namespace GamingWiki.Web.Controllers
@@ -52,6 +53,8 @@ namespace GamingWiki.Web.Controllers
             this.helper.Create(gameId, this.User.GetId(), model.PriceRate, model.LevelsRate, model.GraphicsRate,
                 model.DifficultyRate, model.Description);
 
+            TempData[GlobalMessageKey] = SuccessfullyAddedReviewMessage;
+
             return RedirectToAction(nameof(GamesController.Details), "Games", new { gameId });
         }
         
@@ -94,6 +97,8 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
+            TempData[GlobalMessageKey] = SuccessfullyEditedReviewMessage;
+
             return RedirectToAction(nameof(GamesController.Details), "Games", new { gameId = model.Game.Id});
         }
         
@@ -118,6 +123,7 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
+            TempData[GlobalMessageKey] = DeletedReviewMessage;
             return this.Redirect(nameof(this.All));
         }
 
