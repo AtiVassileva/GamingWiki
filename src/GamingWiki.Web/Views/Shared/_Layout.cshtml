@@ -112,7 +112,7 @@
         @if (TempData.ContainsKey(WebConstants.GlobalMessageKey))
         {
             var color = TempData.ContainsKey(WebConstants.ColorKey) ? 
-                WebConstants.ColorKey : "primary";
+                TempData[WebConstants.ColorKey] : "primary";
 
             <div class="alert alert-@color alert-dismissible fade show text-center" role="alert">
                 @TempData[WebConstants.GlobalMessageKey]
