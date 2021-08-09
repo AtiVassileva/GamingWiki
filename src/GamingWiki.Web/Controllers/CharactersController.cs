@@ -7,6 +7,7 @@ using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.AlertMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +71,10 @@ namespace GamingWiki.Web.Controllers
                 model.Description, model.ClassId, model.GameId,
                 isApproved: this.User.IsAdmin(), contributorId:this.User.GetId());
 
+            TempData[GlobalMessageKey] = this.User.IsAdmin() 
+                ? SuccessfullyAddedCharacterAdminMessage 
+                    : SuccessfullyAddedCharacterUserMessage;
+
             return this.RedirectToAction(nameof(this.Details),
                 new {characterId});
         }
@@ -132,6 +137,10 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
+            TempData[GlobalMessageKey] = this.User.IsAdmin()
+                ? SuccessfullyEditedCharacterAdminMessage
+                : SuccessfullyEditedCharacterUserMessage;
+
             return this.RedirectToAction(nameof(this.Details),
                 new { characterId });
         }
@@ -156,6 +165,8 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.BadRequest();
             }
+
+            TempData[GlobalMessageKey] = DeletedCharacterMessage;
 
             return this.RedirectToAction(nameof(this.All));
         }
@@ -190,5 +201,11 @@ namespace GamingWiki.Web.Controllers
                 Classes = this.helper.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("Mine", null)
             });
+
+        private void CreateAlertMessage(string message, string color)
+        {
+            TempData[GlobalMessageKey] = message;
+            TempData[ColorKey] = color;
+        }
     }
 }

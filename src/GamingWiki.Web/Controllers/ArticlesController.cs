@@ -7,7 +7,6 @@ using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Common.AlertMessages;
-using static GamingWiki.Web.Common.AlertColors;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,8 +62,8 @@ namespace GamingWiki.Web.Controllers
             var articleId = this.helper.Create(model.Heading, model.Content, model.CategoryId, model.PictureUrl,
                 authorId);
 
-            this.CreateAlertMessage(SuccessfullyAddedArticleMessage, SuccessAlertColor);
-            
+            TempData[GlobalMessageKey] = SuccessfullyAddedArticleMessage;
+
             return this.RedirectToAction(nameof(this.Details),
                 new { articleId = $"{articleId}" });
         }
@@ -116,7 +115,7 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
-            this.CreateAlertMessage(SuccessfullyEditedArticleMessage, SuccessAlertColor);
+            TempData[GlobalMessageKey] = SuccessfullyEditedArticleMessage;
 
             return this.RedirectToAction(nameof(this.Details),
                 new { articleId = $"{articleId}" });
@@ -143,7 +142,7 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
-            this.CreateAlertMessage(DeletedArticleMessage, InfoAlertColor);
+            TempData[GlobalMessageKey] = DeletedArticleMessage;
 
             return this.RedirectToAction(nameof(this.All));
         }
@@ -190,11 +189,5 @@ namespace GamingWiki.Web.Controllers
                         pageIndex, ArticlesPerPage),
                 Tokens = new KeyValuePair<object, object>("Mine", null)
             });
-
-        private void CreateAlertMessage(string message, string color)
-        {
-            TempData[GlobalMessageKey] = message;
-            TempData[ColorKey] = color;
-        }
     }
 }
