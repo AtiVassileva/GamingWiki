@@ -52,7 +52,7 @@ delete comments and replies no matter who added them.
 - Success alerts upon a success action (add, edit, delete).✅
 - Implemented custom user-friendly error page with an appropriate message.✅
 
-# Technology stack:
+# Technology stack
 
     ASP.NET Core 5.0
 
@@ -71,3 +71,8 @@ delete comments and replies no matter who added them.
 	CSS 3
 	
     FontAwesome
+
+# Screenshots 
+
+- Home page - Guest
+![Alt text](https://pasteboard.co/Kf6OUKd.png "Optional title")
