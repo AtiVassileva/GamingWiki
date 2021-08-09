@@ -117,4 +117,4 @@ delete comments and replies no matter who added them.
 ![image](https://user-images.githubusercontent.com/65487762/128745095-c50e883b-a422-4914-b8d6-45e2f0908b13.png)
 
 # Credits
-Used End Game Bootstrap template : https://themewagon.com/themes/free-bootstrap-4-html5-gaming-website-template-endgame/
+- End Game Bootstrap template : https://themewagon.com/themes/free-bootstrap-4-html5-gaming-website-template-endgame/ 
