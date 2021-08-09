@@ -81,3 +81,21 @@ delete comments and replies no matter who added them.
 - Home page - Logged In User
 
 ![image](https://user-images.githubusercontent.com/65487762/128739948-4da75eb2-9f46-42f0-b9ef-df53ba15ec90.png)
+
+_ Home page - Administrator
+
+![image](https://user-images.githubusercontent.com/65487762/128741708-9f6ffede-541b-473a-8f32-ddc7bd09d1b3.png)
+
+- Listing pages - Games, Characters, Reviews, Blog, Tips & Tricks
+
+![image](https://user-images.githubusercontent.com/65487762/128741842-7662bf96-5a3f-45e6-88c3-2f4bb0a06a0f.png)
+
+![image](https://user-images.githubusercontent.com/65487762/128741907-62a8fb47-12a9-4826-8617-8ade815284d9.png)
+
+![image](https://user-images.githubusercontent.com/65487762/128742005-26a168cb-2154-4dee-8d84-583de28e4854.png)
+
+![image](https://user-images.githubusercontent.com/65487762/128742082-235b0f1d-a9da-4f38-9e35-c009e9f06af1.png)
+
+![image](https://user-images.githubusercontent.com/65487762/128742143-71ff8de9-ea88-40cd-82b9-458af1bf3383.png)
+
+
