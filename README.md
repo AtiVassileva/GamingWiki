@@ -75,4 +75,7 @@ delete comments and replies no matter who added them.
 # Screenshots 
 
 - Home page - Guest
-![Alt text](https://pasteboard.co/Kf6OUKd.png "Optional title")
+![image](https://user-images.githubusercontent.com/65487762/128738664-8edbe878-b3ad-4788-8822-ca271f837d9d.png)
+
+- Home page - Logged In User
+![image](https://user-images.githubusercontent.com/65487762/128739948-4da75eb2-9f46-42f0-b9ef-df53ba15ec90.png)
