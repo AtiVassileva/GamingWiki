@@ -37,5 +37,21 @@
 
          public const string DeletedCommentMessage =
              "Comment deleted successfully!";
+
+         //Games
+         public const string SuccessfullyAddedGameUserMessage =
+             "Game added successfully and awaiting for approval!";
+
+         public const string SuccessfullyAddedGameAdminMessage =
+             "Game added successfully!";
+
+         public const string SuccessfullyEditedGameUserMessage =
+             "Game edited successfully and awaiting for approval!";
+
+         public const string SuccessfullyEditedGameAdminMessage =
+             "Game edited successfully!";
+
+         public const string DeletedGameMessage =
+             "Game deleted successfully!";
     }
 }

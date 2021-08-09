@@ -7,6 +7,7 @@ using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Common.ExceptionMessages;
+using static GamingWiki.Web.Common.AlertMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -78,6 +79,10 @@ namespace GamingWiki.Web.Controllers
                 isApproved: this.User.IsAdmin(),
                 model.SupportedPlatforms);
 
+            TempData[GlobalMessageKey] = this.User.IsAdmin()
+                ? SuccessfullyAddedGameAdminMessage
+                : SuccessfullyAddedGameUserMessage;
+
             return this.RedirectToAction(nameof(this.Details),
                 new { gameId });
         }
@@ -134,6 +139,10 @@ namespace GamingWiki.Web.Controllers
                 return this.BadRequest();
             }
 
+            TempData[GlobalMessageKey] = this.User.IsAdmin()
+                ? SuccessfullyEditedGameAdminMessage
+                : SuccessfullyEditedGameUserMessage;
+
             return this.RedirectToAction(nameof(this.Details),
                 new { gameId });
         }
@@ -151,6 +160,8 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.BadRequest();
             }
+
+            TempData[GlobalMessageKey] =  DeletedGameMessage;
 
             return this.Redirect(nameof(this.All));
         }
