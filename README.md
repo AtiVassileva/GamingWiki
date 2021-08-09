@@ -49,9 +49,10 @@ delete comments and replies no matter who added them.
 - Implemented search by search term for tips & tricks.✅
 - Implemented pagination in all listing pages.✅
 - Implemented navigations in header, footer and body of listing pages.✅
-- Success and warning alerts upon specific actions (add, edit, delete).✅
 - Implemented custom user-friendly error page with an appropriate message.✅
 - Implemented different pages for entities added by users (eg. My Games, My Articles).✅
+- Success and warning alerts upon specific actions (add, edit, delete).✅
+- Added some motivational gaming quotes.
 
 # Technology stack
 
@@ -105,4 +106,13 @@ delete comments and replies no matter who added them.
 
 ![image](https://user-images.githubusercontent.com/65487762/128744051-c0023d1d-a5bc-4005-9691-20cd8fafe6f5.png)
 
+- Alerts
+
+![image](https://user-images.githubusercontent.com/65487762/128744990-a85d3838-cdde-4508-9ed1-2827066416fb.png)
+
+![image](https://user-images.githubusercontent.com/65487762/128745017-6aa71ccc-530a-4d16-8f55-2f205ac34b4b.png)
+
+- Error Page 
+
+![image](https://user-images.githubusercontent.com/65487762/128745095-c50e883b-a422-4914-b8d6-45e2f0908b13.png)
 
