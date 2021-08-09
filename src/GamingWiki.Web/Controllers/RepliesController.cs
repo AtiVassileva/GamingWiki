@@ -1,6 +1,5 @@
 ﻿using GamingWiki.Services.Contracts;
 using GamingWiki.Web.Infrastructure;
-using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Replies;
 using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Common.AlertMessages;

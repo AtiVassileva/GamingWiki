@@ -18,13 +18,13 @@ namespace GamingWiki.Web.Controllers
     {
         private const int CharactersPerPage = 3;
 
-        private readonly ICharacterService helper;
+        private readonly ICharacterService characterService;
         private readonly IMapper mapper;
 
         public CharactersController(ICharacterService helper, 
             IMapper mapper)
         {
-            this.helper = helper;
+            this.characterService = helper;
             this.mapper = mapper;
         }
 
@@ -32,42 +32,42 @@ namespace GamingWiki.Web.Controllers
             => this.View(new CharacterFullModel
             {
                 Characters = PaginatedList<CharacterAllServiceModel>
-                    .Create(this.helper.All(approvedOnly: 
+                    .Create(this.characterService.All(approvedOnly: 
                             !this.User.IsAdmin()),
                         pageIndex, CharactersPerPage),
-                Classes = this.helper.GetClasses(),
+                Classes = this.characterService.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("All", null)
             });
         
         public IActionResult Create()
             => this.View(new CharacterFormModel
             {
-                Classes = this.helper.GetClasses(),
-                Games = this.helper.GetGames()
+                Classes = this.characterService.GetClasses(),
+                Games = this.characterService.GetGames()
             });
 
         [HttpPost]
         public IActionResult Create(CharacterFormModel model)
         {
-            if (!this.helper.GameExists(model.GameId))
+            if (!this.characterService.GameExists(model.GameId))
             {
                 this.ModelState.AddModelError(nameof(model.GameId), NonExistingGameExceptionMessage);
             }
 
-            if (!this.helper.ClassExists(model.ClassId))
+            if (!this.characterService.ClassExists(model.ClassId))
             {
                 this.ModelState.AddModelError(nameof(model.ClassId), NonExistingClassExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
-                model.Games = this.helper.GetGames();
-                model.Classes = this.helper.GetClasses();
+                model.Games = this.characterService.GetGames();
+                model.Classes = this.characterService.GetClasses();
 
                 return this.View(model);
             }
 
-            var characterId = this.helper.Create(model.Name, model.PictureUrl,
+            var characterId = this.characterService.Create(model.Name, model.PictureUrl,
                 model.Description, model.ClassId, model.GameId,
                 isApproved: this.User.IsAdmin(), contributorId:this.User.GetId());
 
@@ -80,30 +80,30 @@ namespace GamingWiki.Web.Controllers
         }
         
         public IActionResult Details(int characterId)
-            => this.helper.CharacterExists(characterId) ?
-                this.View(this.helper.Details(characterId)) :
+            => this.characterService.CharacterExists(characterId) ?
+                this.View(this.characterService.Details(characterId)) :
                  this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
         
         public IActionResult Edit(int characterId)
         {
-            if (!this.helper.CharacterExists(characterId))
+            if (!this.characterService.CharacterExists(characterId))
             {
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
-            var contributorId = this.helper.GetContributorId(characterId);
+            var contributorId = this.characterService.GetContributorId(characterId);
 
             if (!this.User.IsAdmin() && this.User.GetId() != contributorId)
             {
                 return this.Unauthorized();
             }
 
-            var dbModel = this.helper.Details(characterId);
+            var dbModel = this.characterService.Details(characterId);
 
             var characterModel = this.mapper
                 .Map<CharacterServiceEditModel>(dbModel);
 
-            characterModel.Classes = this.helper.GetClasses();
+            characterModel.Classes = this.characterService.GetClasses();
 
             return this.View(characterModel);
         }
@@ -111,26 +111,26 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Edit(CharacterServiceEditModel model, int characterId)
         {
-            if (!this.helper.ClassExists(model.ClassId))
+            if (!this.characterService.ClassExists(model.ClassId))
             {
                 this.ModelState.AddModelError(nameof(model.ClassId), NonExistingClassExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
-                var dbModel = this.helper.Details(characterId);
+                var dbModel = this.characterService.Details(characterId);
 
                 model = this.mapper
                     .Map<CharacterServiceEditModel>(dbModel);
                 
-                model.Classes = this.helper.GetClasses();
+                model.Classes = this.characterService.GetClasses();
 
                 return this.View(model);
             }
 
             model.IsApproved = this.User.IsAdmin();
 
-            var edited = this.helper.Edit(characterId, model);
+            var edited = this.characterService.Edit(characterId, model);
 
             if (!edited)
             {
@@ -147,19 +147,19 @@ namespace GamingWiki.Web.Controllers
         
         public IActionResult Delete(int characterId)
         {
-            if (!this.helper.CharacterExists(characterId))
+            if (!this.characterService.CharacterExists(characterId))
             {
                 return this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
             }
 
-            var contributorId = this.helper.GetContributorId(characterId);
+            var contributorId = this.characterService.GetContributorId(characterId);
 
             if (!this.User.IsAdmin() && this.User.GetId() != contributorId)
             {
                 return this.Unauthorized();
             }
 
-            var deleted = this.helper.Delete(characterId);
+            var deleted = this.characterService.Delete(characterId);
 
             if (!deleted)
             {
@@ -175,9 +175,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new CharacterFullModel
             {
                 Characters = PaginatedList<CharacterAllServiceModel>
-                    .Create(this.helper.Search(letter),
+                    .Create(this.characterService.Search(letter),
                         pageIndex, CharactersPerPage),
-                Classes = this.helper.GetClasses(),
+                Classes = this.characterService.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("Search", letter)
             });
         
@@ -186,9 +186,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new CharacterFullModel
             {
                 Characters = PaginatedList<CharacterAllServiceModel>
-                    .Create(this.helper.Filter(classId),
+                    .Create(this.characterService.Filter(classId),
                         pageIndex, CharactersPerPage),
-                Classes = this.helper.GetClasses(),
+                Classes = this.characterService.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("Filter", classId)
             });
 
@@ -196,9 +196,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new CharacterFullModel
             {
                 Characters = PaginatedList<CharacterAllServiceModel>
-                    .Create(this.helper.Mine(this.User.GetId()),
+                    .Create(this.characterService.Mine(this.User.GetId()),
                         pageIndex, CharactersPerPage),
-                Classes = this.helper.GetClasses(),
+                Classes = this.characterService.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("Mine", null)
             });
 

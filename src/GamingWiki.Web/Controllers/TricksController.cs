@@ -18,12 +18,12 @@ namespace GamingWiki.Web.Controllers
     {
         private const int TricksPerPage = 3;
 
-        private readonly ITrickService helper;
+        private readonly ITrickService trickService;
         private readonly IMapper mapper;
 
         public TricksController(ITrickService helper, IMapper mapper)
         {
-            this.helper = helper;
+            this.trickService = helper;
             this.mapper = mapper;
         }
 
@@ -31,7 +31,7 @@ namespace GamingWiki.Web.Controllers
             => this.View(new TrickFullModel
             {
                 Tricks = PaginatedList<TrickServiceListingModel>
-                    .Create(this.helper.All(),
+                    .Create(this.trickService.All(),
                         pageIndex, TricksPerPage),
                 Tokens = new KeyValuePair<object, object>("All", null)
             });
@@ -39,13 +39,13 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Create()
             => this.View(new TrickFormModel
             {
-                Games = this.helper.GetGames()
+                Games = this.trickService.GetGames()
             });
 
         [HttpPost]
         public IActionResult Create(TrickFormModel model)
         {
-            if (!this.helper.GameExists(model.GameId))
+            if (!this.trickService.GameExists(model.GameId))
             {
                 this.ModelState.AddModelError(nameof(model.GameId), NonExistingGameExceptionMessage);
             }
@@ -57,7 +57,7 @@ namespace GamingWiki.Web.Controllers
 
             var authorId = this.User.GetId();
 
-            this.helper.Create(model.Heading, model.Content, authorId, model.PictureUrl, model.GameId);
+            this.trickService.Create(model.Heading, model.Content, authorId, model.PictureUrl, model.GameId);
 
             TempData[GlobalMessageKey] = SuccessfullyAddedTrickMessage;
 
@@ -66,12 +66,12 @@ namespace GamingWiki.Web.Controllers
         
         public IActionResult Edit(int trickId)
         {
-            if (!this.helper.TrickExists(trickId))
+            if (!this.trickService.TrickExists(trickId))
             {
                 return this.View("Error", CreateError(NonExistingTrickExceptionMessage));
             }
 
-            var detailsModel = this.helper.Details(trickId);
+            var detailsModel = this.trickService.Details(trickId);
 
             if (!this.User.IsAdmin() && this.User.GetId() != detailsModel.AuthorId)
             {
@@ -87,7 +87,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                var detailsModel = this.helper.Details(trickId);
+                var detailsModel = this.trickService.Details(trickId);
 
                 model = this.mapper
                     .Map<TrickServiceEditModel>(detailsModel);
@@ -95,7 +95,7 @@ namespace GamingWiki.Web.Controllers
                 return this.View(model);
             }
 
-            var edited = this.helper.Edit(trickId, model.Heading, model.Content, model.PictureUrl);
+            var edited = this.trickService.Edit(trickId, model.Heading, model.Content, model.PictureUrl);
 
             if (!edited)
             {
@@ -109,19 +109,19 @@ namespace GamingWiki.Web.Controllers
         
         public IActionResult Delete(int trickId)
         {
-            if (!this.helper.TrickExists(trickId))
+            if (!this.trickService.TrickExists(trickId))
             {
                 return this.View("Error", CreateError(NonExistingTrickExceptionMessage));
             }
 
-            var trickAuthorId = this.helper.GetTrickAuthorId(trickId);
+            var trickAuthorId = this.trickService.GetTrickAuthorId(trickId);
 
             if (!this.User.IsAdmin() && this.User.GetId() != trickAuthorId)
             {
                 return this.Unauthorized();
             }
 
-            var deleted = this.helper.Delete(trickId);
+            var deleted = this.trickService.Delete(trickId);
 
             if (!deleted)
             {
@@ -138,7 +138,7 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new TrickFullModel
             {
                 Tricks = PaginatedList<TrickServiceListingModel>
-                    .Create(this.helper.Search(parameter),
+                    .Create(this.trickService.Search(parameter),
                         pageIndex, TricksPerPage),
                 Tokens = new KeyValuePair<object, object>("Search", parameter)
             });
@@ -149,7 +149,7 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new TrickFullModel
             {
                 Tricks = PaginatedList<TrickServiceListingModel>
-                    .Create(this.helper.Search(searchCriteria),
+                    .Create(this.trickService.Search(searchCriteria),
                         pageIndex, TricksPerPage),
                 Tokens = new KeyValuePair<object, object>("Search", searchCriteria)
             });
@@ -158,7 +158,7 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new TrickFullModel
             {
                 Tricks = PaginatedList<TrickServiceListingModel>
-                    .Create(this.helper
+                    .Create(this.trickService
                             .GetTricksByUser(this.User.GetId()),
                         pageIndex, TricksPerPage),
                 Tokens = new KeyValuePair<object, object>("Mine", null)

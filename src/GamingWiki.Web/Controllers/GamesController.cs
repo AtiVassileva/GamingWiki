@@ -18,12 +18,12 @@ namespace GamingWiki.Web.Controllers
     {
         private const int GamesPerPage = 3;
 
-        private readonly IGameService helper;
+        private readonly IGameService gameService;
         private readonly IMapper mapper;
 
         public GamesController(IGameService helper, IMapper mapper)
         {
-            this.helper = helper;
+            this.gameService = helper;
             this.mapper = mapper;
         }
 
@@ -31,9 +31,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.All(approvedOnly: 
+                    .Create(this.gameService.All(approvedOnly: 
                         !this.User.IsAdmin()), pageIndex, GamesPerPage),
-                Genres = this.helper.GetGenres(),
+                Genres = this.gameService.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
                     ("All", null)
             });
@@ -41,39 +41,39 @@ namespace GamingWiki.Web.Controllers
         public IActionResult Create() 
             => this.View(new GameFormModel
             {
-                Areas = this.helper.GetAreas(),
-                Genres = this.helper.GetGenres(),
-                Platforms = this.helper.GetPlatforms()
+                Areas = this.gameService.GetAreas(),
+                Genres = this.gameService.GetGenres(),
+                Platforms = this.gameService.GetPlatforms()
             });
 
         [HttpPost]
         public IActionResult Create(GameFormModel model)
         {
-            if (this.helper.GameExists(model.Name))
+            if (this.gameService.GameExists(model.Name))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), AlreadyExistingGameExceptionMessage);
             }
 
-            if (!this.helper.AreaExists(model.AreaId))
+            if (!this.gameService.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), NonExistingAreaExceptionMessage);
             }
 
-            if (!this.helper.GenreExists(model.GenreId))
+            if (!this.gameService.GenreExists(model.GenreId))
             {
                 this.ModelState.AddModelError(nameof(model.GenreId), NonExistingGenreExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
-                model.Areas = this.helper.GetAreas();
-                model.Genres = this.helper.GetGenres();
-                model.Platforms = this.helper.GetPlatforms();
+                model.Areas = this.gameService.GetAreas();
+                model.Genres = this.gameService.GetGenres();
+                model.Platforms = this.gameService.GetPlatforms();
 
                 return this.View(model);
             }
 
-            var gameId = this.helper.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
+            var gameId = this.gameService.Create(model.Name, model.PictureUrl, model.TrailerUrl, model.Description, model.AreaId, 
                 model.GenreId, model.CreatorsNames,
                 contributorId:this.User.GetId(),
                 isApproved: this.User.IsAdmin(),
@@ -88,26 +88,26 @@ namespace GamingWiki.Web.Controllers
         }
         
         public IActionResult Details(int gameId)
-            => this.helper.GameExists(gameId)
-                ? this.View(this.helper.Details(gameId))
+            => this.gameService.GameExists(gameId)
+                ? this.View(this.gameService.Details(gameId))
                 : this.View("Error", CreateError(NonExistingGameExceptionMessage));
         
         public IActionResult Edit(int gameId)
         {
-            if (!this.helper.GameExists(gameId))
+            if (!this.gameService.GameExists(gameId))
             {
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
-            var dbModel = this.helper.Details(gameId);
+            var dbModel = this.gameService.Details(gameId);
 
             var viewModel = this.mapper
                 .Map<GameServiceEditModel>(dbModel);
 
-            viewModel.Areas = this.helper.GetAreas();
-            viewModel.SupportedPlatforms = this.helper
+            viewModel.Areas = this.gameService.GetAreas();
+            viewModel.SupportedPlatforms = this.gameService
                 .GetGamePlatforms(gameId);
-            viewModel.AllPlatforms = this.helper.GetPlatforms();
+            viewModel.AllPlatforms = this.gameService.GetPlatforms();
 
             return this.View(viewModel);
         }
@@ -115,24 +115,24 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Edit(GameServiceEditModel model, int gameId)
         {
-            if (!this.helper.AreaExists(model.AreaId))
+            if (!this.gameService.AreaExists(model.AreaId))
             {
                 this.ModelState.AddModelError(nameof(model.AreaId), NonExistingAreaExceptionMessage);
             }
 
             if (!this.ModelState.IsValid)
             {
-                var dbModel = this.helper.Details(gameId);
+                var dbModel = this.gameService.Details(gameId);
 
                 model = this.mapper.Map<GameServiceEditModel>(dbModel);
-                model.Areas = this.helper.GetAreas();
+                model.Areas = this.gameService.GetAreas();
 
                 return this.View(model);
             }
 
             model.IsApproved = this.User.IsAdmin();
 
-            var edited = this.helper.Edit(gameId, model);
+            var edited = this.gameService.Edit(gameId, model);
 
             if (!edited)
             {
@@ -149,12 +149,12 @@ namespace GamingWiki.Web.Controllers
 
         public IActionResult Delete(int gameId)
         {
-            if (!this.helper.GameExists(gameId))
+            if (!this.gameService.GameExists(gameId))
             {
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
-            var deleted = this.helper.Delete(gameId);
+            var deleted = this.gameService.Delete(gameId);
 
             if (!deleted)
             {
@@ -171,9 +171,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.Search(letter), 
+                    .Create(this.gameService.Search(letter), 
                         pageIndex, GamesPerPage),
-                Genres = this.helper.GetGenres(),
+                Genres = this.gameService.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
                     ("Search", letter)
             });
@@ -183,9 +183,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.Filter(genreId), 
+                    .Create(this.gameService.Filter(genreId), 
                         pageIndex, GamesPerPage),
-                Genres = this.helper.GetGenres(),
+                Genres = this.gameService.GetGenres(),
                 Tokens = new KeyValuePair<object, object>
                 ("Filter", genreId)
             });
@@ -194,9 +194,9 @@ namespace GamingWiki.Web.Controllers
             => this.View(nameof(this.All), new GameFullModel
             {
                 Games = PaginatedList<GameServiceListingModel>
-                    .Create(this.helper.Mine(this.User.GetId()),
+                    .Create(this.gameService.Mine(this.User.GetId()),
                         pageIndex, GamesPerPage),
-                Genres = this.helper.GetGenres(),
+                Genres = this.gameService.GetGenres(),
                 Tokens = new KeyValuePair<object, object>("Mine", null)
             });
 
