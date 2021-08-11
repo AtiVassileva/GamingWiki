@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Web", "GamingWik
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingWiki.Models", "GamingWiki.Models\GamingWiki.Models.csproj", "{BC6EC045-D00C-4D9C-A308-81332B7A4663}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingWiki.Tests", "GamingWiki.Tests\GamingWiki.Tests.csproj", "{C4E9D6A5-1EF1-41CA-B2E9-2C5BD2F75F20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{BC6EC045-D00C-4D9C-A308-81332B7A4663}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC6EC045-D00C-4D9C-A308-81332B7A4663}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC6EC045-D00C-4D9C-A308-81332B7A4663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E9D6A5-1EF1-41CA-B2E9-2C5BD2F75F20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E9D6A5-1EF1-41CA-B2E9-2C5BD2F75F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E9D6A5-1EF1-41CA-B2E9-2C5BD2F75F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E9D6A5-1EF1-41CA-B2E9-2C5BD2F75F20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

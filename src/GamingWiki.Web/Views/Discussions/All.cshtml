@@ -1,0 +1,113 @@
+﻿@model DiscussionFullModel
+
+@{ ViewBag.Title = "Discussions"; }
+
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/2.jpg">
+    <div class="page-info">
+        <h2>Discussions</h2>
+        <div class="site-breadcrumb">
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Discussions" asp-action="All">Discussions</a>
+        </div>
+    </div>
+</section>
+
+<section class="blog-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8 col-md-7">
+                
+                @if (!Model.Discussions.Any())
+                {
+    <div class="blog-content text-box text-white">
+        <h5>No discussions match your search.</h5>
+        <br />
+        <a class="btn btn btn-info" asp-controller="Discussions" asp-action="Create">New Article</a>
+        <a class="btn btn btn-success" asp-controller="Discussions" asp-action="All">Back to full list</a>
+    </div>
+                    <br /> }
+                else
+                {
+                    <table class="table table-hover table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Character</th>
+                            <th scope="col">Contributor</th>
+                            <th scope="col">&nbsp;&nbsp;&nbsp;Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var discussion in Model.Discussions)
+                        {
+                            <tr>
+                                <th scope="row">@discussion.Id</th>
+                                <td>@discussion.Name</td>
+                                <td>@discussion.CreatorName</td>
+                                <td>
+                                    <a asp-area="" asp-controller="Discussions" asp-action="Details" asp-route-discussionId="@discussion.Id" class="btn btn-info float-left ml-2">Details</a>
+                                    @*<a asp-area="Admin" asp-controller="Characters" asp-action="Approve" asp-route-characterId="@character.Id" class="btn btn-success float-left ml-2">Join</a>*@
+                                    <a asp-area="" asp-controller="Discussions" asp-action="Edit" asp-route-discussionId="@discussion.Id" class="btn btn-warning float-left ml-2">Edit</a>
+                                    <a asp-area="" asp-controller="Discussions" asp-action="Delete" asp-route-discussionId="@discussion.Id" class="btn btn-danger float-left ml-2">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                @if (Model.Discussions.Any())
+                {
+    <div class="site-pagination">
+
+        @if (Model.Discussions.PreviousPage)
+        {
+<a asp-controller="Discussions" asp-action="@Model.Tokens.Key"
+   asp-route-parameter="@Model.Tokens.Value"
+   asp-route-pageIndex="@(Model.Discussions.PageIndex - 1)"
+   class="btn btn-success">&lt;&lt;</a>}
+
+        @for (var i = 1; i <= Model.Discussions.TotalPages; i++)
+        {
+<a asp-controller="Discussions" asp-action="@Model.Tokens.Key"
+   asp-route-parameter="@Model.Tokens.Value"
+   asp-route-pageIndex="@i"
+   class="btn btn-success">@i</a>}
+
+        @if (Model.Discussions.NextPage)
+        {
+<a asp-controller="Discussions" asp-action="@Model.Tokens.Key"
+   asp-route-parameter="@Model.Tokens.Value"
+   asp-route-pageIndex="@(Model.Discussions.PageIndex + 1)"
+   class="btn btn-success">&gt;&gt;</a>}
+    </div>}
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-5 sidebar">
+                <div id="stickySidebar">
+                    <div class="widget-item">
+                        <form class="search-widget" asp-controller="Articles"
+                              asp-action="Search"
+                              method="post">
+                            <input type="text" name="searchCriteria">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                    <div class="widget-item">
+                        <div class="categories-widget">
+                            <h4 class="widget-title">Navigation</h4>
+                            <ul>
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li><a asp-controller="Games" asp-action="All">Games</a></li>
+                                <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
+                                <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
+                                <li><a asp-controller="Tricks" asp-action="All">Tips & Tricks</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Models
 {
@@ -13,6 +14,14 @@ namespace GamingWiki.Models
         public string CreatorId { get; set; }
 
         public IdentityUser Creator { get; set; }
+
+        [Required]
+        [MaxLength(DefaultMaxLength)]
+        public string Name { get; set; }
+
+        [Required]
+        [MaxLength(DescriptionMaxLength)]
+        public string Description { get; set; }
 
         public ICollection<Message> Messages { get; set; }
         = new HashSet<Message>();

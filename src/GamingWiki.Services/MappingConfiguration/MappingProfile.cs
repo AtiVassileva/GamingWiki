@@ -6,6 +6,7 @@ using GamingWiki.Services.Models.Categories;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Comments;
+using GamingWiki.Services.Models.Discussions;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
 using GamingWiki.Services.Models.Platforms;
@@ -100,6 +101,15 @@ namespace GamingWiki.Services.MappingConfiguration
                 .ForMember(t => t.Author, cfg => cfg
                     .MapFrom(t => t.Author.UserName));
             this.CreateMap<TrickServiceListingModel, TrickServiceEditModel>();
+
+            //Discussions
+            this.CreateMap<Discussion, DiscussionAllServiceModel>()
+                .ForMember(d => d.CreatorName, cfg =>
+                    cfg.MapFrom(d => d.Creator.UserName));
+
+            this.CreateMap<Discussion, DiscussionServiceDetailsModel>()
+                .ForMember(d => d.CreatorName, cfg =>
+                    cfg.MapFrom(d => d.Creator.UserName));
         }
     }
 }

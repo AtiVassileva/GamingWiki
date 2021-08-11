@@ -37,5 +37,8 @@
 
         public const string AlreadyExistingGameExceptionMessage =
             "Game already exists!";
+
+        public const string NonExistingDiscussionExceptionMessage
+            = "Discussion does not exist!";
     }
 }

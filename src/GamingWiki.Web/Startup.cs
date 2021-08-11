@@ -52,6 +52,7 @@ namespace GamingWiki.Web
             services.AddTransient<IReplyService, ReplyService>();
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<ITrickService, TrickService>();
+            services.AddTransient<IDiscussionService, DiscussionService>();
 
             services.AddAutoMapper(typeof(MappingProfile));
         }
