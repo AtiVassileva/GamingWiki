@@ -9,6 +9,8 @@ namespace GamingWiki.Services.Models.Discussions
 
         public string Name { get; set; }
 
+        public string CreatorId { get; set; }
+
         public IEnumerable<MessageServiceModel> Messages { get; set; }
     }
 }

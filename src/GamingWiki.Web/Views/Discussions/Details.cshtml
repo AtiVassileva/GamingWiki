@@ -47,10 +47,6 @@
                     <a asp-controller="Discussions" asp-action="Edit" asp-route-discussionId="@Model.Id" class="btn btn-warning">Edit</a>
                     <a asp-controller="Discussions" asp-action="Delete" asp-route-discussionId="@Model.Id" class="btn btn-danger">Delete</a>
                 }
-                else
-                {
-                    <a asp-area="" asp-controller="Discussions" asp-action="Join" asp-route-discussionId="@Model.Id" class="btn btn-success float-left ml-2">Join</a>
-                }
             </div>
             <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
                 <div id="stickySidebar">

@@ -112,6 +112,16 @@ namespace GamingWiki.Services
             this.dbContext.SaveChanges();
         }
 
+        public void RemoveUserFromDiscussion(int discussionId, string userId)
+        {
+            var userDiscussion = this.dbContext.UserDiscussion
+                .First(ud => ud.DiscussionId == discussionId
+                             && ud.UserId == userId);
+
+            this.dbContext.UserDiscussion.Remove(userDiscussion);
+            this.dbContext.SaveChanges();
+        }
+
         public bool UserParticipatesInDiscussion(int discussionId, string userId)
             => this.dbContext.UserDiscussion
                 .Any(ud => ud.UserId == userId 
@@ -122,6 +132,13 @@ namespace GamingWiki.Services
                 .Where(d => d.Name.ToLower()
                     .Contains(searchCriteria.ToLower()))
                 .ProjectTo<DiscussionAllServiceModel>(this.configuration);
+
+        public IQueryable<DiscussionAllServiceModel> GetDiscussionsByUser(string userId)
+            => this.dbContext.UserDiscussion
+                .Where(ud => ud.UserId == userId)
+                .ProjectTo<DiscussionAllServiceModel>(this.configuration)
+                .OrderByDescending(d => d.Id);
+
 
         public IEnumerable<MessageServiceModel> GetMessagesForDiscussion(int discussionId)
             => this.dbContext.Messages

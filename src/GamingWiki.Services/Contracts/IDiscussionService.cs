@@ -25,9 +25,13 @@ namespace GamingWiki.Services.Contracts
 
         void JoinUserToDiscussion(int discussionId, string userId);
 
+        void RemoveUserFromDiscussion(int discussionId, string userId);
+
         bool UserParticipatesInDiscussion(int discussionId, string userId);
 
         IQueryable<DiscussionAllServiceModel> Search(string searchCriteria);
+        
+        IQueryable<DiscussionAllServiceModel> GetDiscussionsByUser(string userId);
 
         IEnumerable<MessageServiceModel> GetMessagesForDiscussion
             (int discussionId);

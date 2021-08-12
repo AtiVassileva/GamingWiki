@@ -120,6 +120,16 @@ namespace GamingWiki.Services.MappingConfiguration
                     .MapFrom(m => m.Sender.UserName))
                 .ForMember(m => m.SentOn, cfg => cfg
                     .MapFrom(m => m.SentOn.ToString("t")));
+
+            this.CreateMap<UserDiscussion, DiscussionAllServiceModel>()
+                .ForMember(d => d.CreatorId, cfg => cfg
+                    .MapFrom(ud => ud.Discussion.CreatorId))
+                .ForMember(d => d.CreatorName, cfg => cfg
+                    .MapFrom(ud => ud.Discussion.Creator.UserName))
+                .ForMember(d => d.Id, cfg => cfg
+                    .MapFrom(ud => ud.DiscussionId))
+                .ForMember(d => d.Name, cfg => cfg
+                    .MapFrom(ud => ud.Discussion.Name));
         }
     }
 }

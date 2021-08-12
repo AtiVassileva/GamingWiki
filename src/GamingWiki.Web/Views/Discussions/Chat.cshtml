@@ -40,7 +40,12 @@
                                             <p>@Model.Messages.Count() messages</p>
                                         </div>
                                     </div>
-                                    <span id="action_menu_btn"><i style="color: red;" class="fa fa-sign-out"></i></span>
+                                    @if (this.User.GetId() != Model.CreatorId)
+                                    {
+                                    <a asp-controller="Discussions" asp-action="Leave" asp-route-discussionId="@Model.Id">
+                                        <span id="action_menu_btn"><i style="color: red;" class="fa fa-sign-out"></i></span>
+                                    </a>
+                                    }
                                 </div>
                                 <div id="messagesList" class="card-body msg_card_body">
                                     @foreach (var message in @Model.Messages)

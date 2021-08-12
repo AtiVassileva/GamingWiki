@@ -183,8 +183,32 @@ namespace GamingWiki.Web.Controllers
 
             this.discussionService.JoinUserToDiscussion(discussionId, userId: this.User.GetId());
 
-            return this.RedirectToAction(nameof(this.Details),
+            TempData[GlobalMessageKey] = "You successfully joined a discussion!";
+
+            return this.RedirectToAction(nameof(this.Chat),
                 new { discussionId });
+        }
+
+        public IActionResult Leave(int discussionId)
+        {
+            if (!this.discussionService.DiscussionExists(discussionId))
+            {
+                return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
+            }
+
+            var userId = this.User.GetId();
+
+            if (!this.discussionService.UserParticipatesInDiscussion(discussionId, userId))
+            {
+                TempData[GlobalMessageKey] = "You are not a member of this discussion";
+                TempData[ColorKey] = "danger";
+
+                return RedirectToAction(nameof(this.Details), discussionId);
+            }
+
+            this.discussionService.RemoveUserFromDiscussion(discussionId, userId);
+
+            return this.RedirectToAction(nameof(this.All));
         }
 
         public IActionResult Chat(int discussionId)
@@ -205,5 +229,15 @@ namespace GamingWiki.Web.Controllers
                     .GetMessagesForDiscussion(discussionId)
             });
         }
+
+        public IActionResult Mine(int pageIndex = 1)
+            => this.View(nameof(this.All), new DiscussionFullModel
+            {
+                Discussions = PaginatedList<DiscussionAllServiceModel>
+                    .Create(this.discussionService
+                            .GetDiscussionsByUser(this.User.GetId()),
+                        pageIndex, DiscussionsPerPage),
+                Tokens = new KeyValuePair<object, object>("Mine", null)
+            });
     }
 }
