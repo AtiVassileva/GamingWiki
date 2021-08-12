@@ -1,12 +1,12 @@
-﻿@model DiscussionFormModel
+﻿@model DiscussionServiceEditModel
 
 @{
-    ViewBag.Title = "New Discussion";
+    ViewBag.Title = "Edit Discussion";
 }
 
 <section class="page-top-section set-bg" data-setbg="/img/games/big.jpg">
     <div class="page-info">
-        <h2>New discussion</h2>
+        <h2>Edit discussion</h2>
         <div class="site-breadcrumb">
             <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Discussions" asp-action="All">Discussions</a>
         </div>
@@ -29,12 +29,12 @@
                         <div class="form-group">
                             <label asp-for="Description"></label>
                             <textarea asp-for="Description" msg cols="100" rows="5" class="form-control"
-                                      style="background-color: black;"></textarea>
+                                      style="background-color: black;">@Model.Description</textarea>
                             <span asp-validation-for="Description" class="small text-danger"></span>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-block">
-                                Create Discussion
+                                Edit Discussion
                             </button>
                         </div>
                     </form>

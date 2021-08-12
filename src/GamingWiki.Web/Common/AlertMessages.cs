@@ -83,5 +83,15 @@
 
          public const string DeletedTrickMessage =
              "Trick deleted successfully!";
+
+         // Discussions
+         public const string SuccessfullyAddedDiscussionMessage =
+             "Discussion added successfully!";
+         
+         public const string SuccessfullyEditedDiscussionMessage =
+             "Discussion edited successfully!";
+         
+         public const string DeletedDiscussionMessage =
+             "Discussion deleted successfully!";
     }
 }

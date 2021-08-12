@@ -45,6 +45,8 @@ namespace GamingWiki.Data
 
         public DbSet<Trick> Tricks { get; set; }
 
+        public DbSet<UserDiscussion> UserDiscussion { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

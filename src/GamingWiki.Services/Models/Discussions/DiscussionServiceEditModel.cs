@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using static GamingWiki.Models.Common.DataConstants;
 
 namespace GamingWiki.Services.Models.Discussions
 {
-    class DiscussionServiceEditModel
+    public class DiscussionServiceEditModel
     {
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(DefaultMaxLength, MinimumLength = DefaultMinLength)]
+        public string Name { get; set; }
+
+        [Required]
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
+        public string Description { get; set; }
     }
 }

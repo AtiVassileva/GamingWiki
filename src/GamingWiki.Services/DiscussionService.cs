@@ -28,10 +28,11 @@ namespace GamingWiki.Services
                 .ProjectTo<DiscussionAllServiceModel>(this.configuration)
                 .OrderByDescending(d => d.Id);
 
-        public int Create(string creatorId, string description)
+        public int Create(string creatorId, string name, string description)
         {
             var discussion = new Discussion
             {
+                Name = name,
                 CreatorId = creatorId,
                 Description = description
             };
@@ -39,7 +40,20 @@ namespace GamingWiki.Services
             this.dbContext.Discussions.Add(discussion);
             this.dbContext.SaveChanges();
 
+            AddDiscussionToUser(discussion.Id, creatorId);
             return discussion.Id;
+        }
+
+        private void AddDiscussionToUser(int discussionId, string creatorId)
+        {
+            var userDiscussion = new UserDiscussion
+            {
+                UserId = creatorId,
+                DiscussionId = discussionId
+            };
+
+            this.dbContext.UserDiscussion.Add(userDiscussion);
+            this.dbContext.SaveChanges();
         }
 
         public DiscussionServiceDetailsModel Details(int discussionId)
@@ -56,6 +70,50 @@ namespace GamingWiki.Services
         public bool DiscussionExists(int discussionId)
             => this.dbContext.Discussions
                 .Any(d => d.Id == discussionId);
+
+        public string GetCreatorId(int discussionId)
+            => this.dbContext.Discussions
+                .Where(d => d.Id == discussionId)
+                .Select(d => d.CreatorId)
+                .FirstOrDefault();
+
+        public bool Edit(int discussionId, DiscussionServiceEditModel model)
+        {
+            if (!this.DiscussionExists(discussionId))
+            {
+                return false;
+            }
+
+            var discussion = this.FindDiscussion(discussionId);
+
+            discussion.Name = model.Name;
+            discussion.Description = model.Description;
+
+            this.dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool Delete(int discussionId)
+        {
+            if (!this.DiscussionExists(discussionId))
+            {
+                return false;
+            }
+
+            var discussion = this.FindDiscussion(discussionId);
+
+            this.dbContext.Discussions.Remove(discussion);
+            this.dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public IQueryable<DiscussionAllServiceModel> Search(string searchCriteria)
+            => this.dbContext.Discussions
+                .Where(d => d.Name.ToLower()
+                    .Contains(searchCriteria.ToLower()))
+                .ProjectTo<DiscussionAllServiceModel>(this.configuration);
 
         private Discussion FindDiscussion(int discussionId)
             => this.dbContext.Discussions

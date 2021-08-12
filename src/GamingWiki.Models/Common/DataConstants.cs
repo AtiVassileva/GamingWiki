@@ -32,6 +32,6 @@
 
         public const int PlatformNameMaxLength = 50;
 
-        public const int ReviewDescriptionMaxLength = 1000;
+        public const int ReviewDescriptionMaxLength = 2000;
     }
 }

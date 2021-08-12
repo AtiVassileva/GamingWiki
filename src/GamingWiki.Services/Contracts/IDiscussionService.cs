@@ -7,10 +7,18 @@ namespace GamingWiki.Services.Contracts
     {
         IQueryable<DiscussionAllServiceModel> All();
 
-        int Create(string creatorId, string description);
+        int Create(string creatorId, string name, string description);
 
         DiscussionServiceDetailsModel Details(int discussionId);
 
         bool DiscussionExists(int discussionId);
+
+        string GetCreatorId(int discussionId);
+
+        bool Edit(int discussionId, DiscussionServiceEditModel model);
+
+        bool Delete(int discussionId);
+
+        IQueryable<DiscussionAllServiceModel> Search(string searchCriteria);
     }
 }

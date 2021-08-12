@@ -485,7 +485,7 @@ namespace GamingWiki.Data.Migrations
 
                     b.HasIndex("DiscussionId");
 
-                    b.ToTable("UserDiscussion");
+                    b.ToTable("UsersDiscussions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

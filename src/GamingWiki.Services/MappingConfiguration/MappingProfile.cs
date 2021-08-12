@@ -110,6 +110,8 @@ namespace GamingWiki.Services.MappingConfiguration
             this.CreateMap<Discussion, DiscussionServiceDetailsModel>()
                 .ForMember(d => d.CreatorName, cfg =>
                     cfg.MapFrom(d => d.Creator.UserName));
+
+            this.CreateMap<DiscussionServiceDetailsModel, DiscussionServiceEditModel>();
         }
     }
 }
