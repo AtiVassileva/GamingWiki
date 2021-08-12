@@ -13,7 +13,7 @@
     <div class="page-info">
         <h2>@Model.Name</h2>
         <div class="site-breadcrumb">
-            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Discussions" asp-action="All">Discussions</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Discussions" asp-action="Details" asp-route-discussionId="@Model.Id">Details</a>
         </div>
     </div>
 </section>

@@ -10,7 +10,7 @@
     <div class="loader"></div>
 </div>
 
-<section class="page-top-section set-bg" data-setbg="/img/page-top-bg/4.jpg">
+<section class="page-top-section set-bg" data-setbg="/img/promo-bg.jpg">
     <div class="page-info">
         <h2>@Model.Name</h2>
         <div class="site-breadcrumb">
@@ -27,9 +27,14 @@
                     @Model.Name
                     @if (ViewBag.IsUserMemberOfDiscussion)
                     {
+                        <br/>
                         <a asp-area="" asp-controller="Discussions" asp-action="Chat" asp-route-discussionId="@Model.Id" class="btn btn-success btn-lg">
                             Chat
                             <i class="fa fa-sign-in"></i>
+                        </a>
+                        <a asp-area="" asp-controller="Discussions" asp-action="Leave" asp-route-discussionId="@Model.Id" class="btn btn-danger btn-lg">
+                            Leave
+                            <i class="fa fa-sign-out"></i>
                         </a>
                     }
                     else

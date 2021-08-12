@@ -142,15 +142,15 @@
             <div class="footer-right-pic">
                 <img src="/img/footer-right-pic.png" alt="">
             </div>
-            <a asp-controller="Home" asp-action="Index" class="footer-logo" style="color: white; font-weight: bold;">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="footer-logo" style="color: white; font-weight: bold;">
                 <img src="/img/controller.png" style="width: 70px; height: 45px;" alt=""> <br />Gaming Wiki
             </a>
             @if (this.User.Identity.IsAuthenticated)
             {
                 <ul class="main-menu footer-menu">
-                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-controller="Games" asp-action="All">Games</a></li>
                     <li><a asp-controller="Characters" asp-action="All">Characters</a></li>
+                    <li><a asp-controller="Discussions" asp-action="All">Discussions</a></li>
                     <li><a asp-controller="Reviews" asp-action="All">Reviews</a></li>
                     <li><a asp-controller="Articles" asp-action="All">Articles</a></li>
                     <li><a asp-controller="Tricks" asp-action="All">Tips & Tricks</a></li>
