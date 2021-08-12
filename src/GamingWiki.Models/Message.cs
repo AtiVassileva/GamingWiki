@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace GamingWiki.Models
 {
@@ -19,5 +20,7 @@ namespace GamingWiki.Models
         public string SenderId { get; set; }
 
         public IdentityUser Sender { get; set; }
+
+        public DateTime SentOn { get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Services.Models.Discussions;
+using GamingWiki.Services.Models.Messages;
 
 namespace GamingWiki.Services.Contracts
 {
@@ -19,6 +21,15 @@ namespace GamingWiki.Services.Contracts
 
         bool Delete(int discussionId);
 
+        int AddMessage(int discussionId, string content, string senderId);
+
+        void JoinUserToDiscussion(int discussionId, string userId);
+
+        bool UserParticipatesInDiscussion(int discussionId, string userId);
+
         IQueryable<DiscussionAllServiceModel> Search(string searchCriteria);
+
+        IEnumerable<MessageServiceModel> GetMessagesForDiscussion
+            (int discussionId);
     }
 }

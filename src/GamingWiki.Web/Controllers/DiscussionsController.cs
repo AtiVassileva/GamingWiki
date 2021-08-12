@@ -56,9 +56,18 @@ namespace GamingWiki.Web.Controllers
         }
 
         public IActionResult Details(int discussionId)
-            => this.discussionService.DiscussionExists(discussionId) ?
-                this.View(this.discussionService.Details(discussionId)) :
-                this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
+        {
+            if (!this.discussionService.DiscussionExists(discussionId))
+            {
+                return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
+            }
+
+            ViewBag.IsUserMemberOfDiscussion = this.discussionService
+                .UserParticipatesInDiscussion(discussionId, this.User.GetId());
+
+            return this.View(this.discussionService
+                .Details(discussionId));
+        }
 
         public IActionResult Edit(int discussionId)
         {
@@ -157,7 +166,44 @@ namespace GamingWiki.Web.Controllers
                 Tokens = new KeyValuePair<object, object>("Search", searchCriteria)
             });
 
-        public IActionResult Join(int discussionId) => this.View();
+        public IActionResult Join(int discussionId)
+        {
+            if (!this.discussionService.DiscussionExists(discussionId))
+            {
+                return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
+            }
 
+            var userId = this.User.GetId();
+
+            if (this.discussionService.UserParticipatesInDiscussion(discussionId, userId))
+            {
+                TempData[GlobalMessageKey] = "You are already a member of this discussion";
+                return RedirectToAction(nameof(this.Chat), discussionId);
+            }
+
+            this.discussionService.JoinUserToDiscussion(discussionId, userId: this.User.GetId());
+
+            return this.RedirectToAction(nameof(this.Details),
+                new { discussionId });
+        }
+
+        public IActionResult Chat(int discussionId)
+        {
+            if (!this.discussionService.DiscussionExists(discussionId))
+            {
+                return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
+            }
+
+            var discussion = this.discussionService
+                .Details(discussionId);
+
+            return this.View(new DiscussionChatServiceModel
+            {
+                Id = discussion.Id,
+                Name = discussion.Name,
+                Messages = this.discussionService
+                    .GetMessagesForDiscussion(discussionId)
+            });
+        }
     }
 }

@@ -1,15 +1,17 @@
-﻿@{
+﻿@using GamingWiki.Web.Infrastructure
+@model DiscussionChatServiceModel
+
+@{
     ViewBag.Title = "Discussion";
 }
 
-@section Styles
-{
+@section Styles {
     <link href="/css/chat.css" rel="stylesheet" />
 }
 
 <section class="page-top-section set-bg" data-setbg="/img/games/big.jpg">
     <div class="page-info">
-        <h2>Discussion</h2>
+        <h2>@Model.Name</h2>
         <div class="site-breadcrumb">
             <a asp-controller="Home" asp-action="Index">Home</a>  / <a asp-controller="Discussions" asp-action="All">Discussions</a>
         </div>
@@ -31,40 +33,51 @@
                                             <span class="online_icon"></span>
                                         </div>
                                         <div class="user_info">
-                                            <span>Discussion Name</span>
-                                            <p>Count Messages</p>
+                                            <select id="discussionId">
+                                                <option value="@Model.Id">@Model.Id</option>
+                                            </select>
+                                            <span>@Model.Name</span>
+                                            <p>@Model.Messages.Count() messages</p>
                                         </div>
-
                                     </div>
                                     <span id="action_menu_btn"><i style="color: red;" class="fa fa-sign-out"></i></span>
                                 </div>
-                                <div class="card-body msg_card_body">
+                                <div id="messagesList" class="card-body msg_card_body">
+                                    @foreach (var message in @Model.Messages)
+                                    {
+                                    if (message.SenderId == this.User.GetId())
+                                    {
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            @message.Content
+                                            <span class="msg_time_send">@message.SentOn</span>
+                                        </div>
+                                        <div class="img_cont_msg">
+                                        </div>
+                                    </div>
+                                    }
+                                    else
+                                    {
                                     <div class="d-flex justify-content-start mb-4">
                                         <div class="img_cont_msg">
                                             <img src="/img/icons/gamer-icon.jpg" class="rounded-circle user_img_msg">
                                         </div>
                                         <div class="msg_cotainer">
-                                            I am looking for your next templates
-                                            <span class="msg_time">Some User - 9:07 AM, Today</span>
+                                            @message.Content
+                                            <span class="msg_time">@message.Sender - @message.SentOn</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-end mb-4">
-                                        <div class="msg_cotainer_send">
-                                            Ok, thank you have a good day
-                                            <span class="msg_time_send">9:10 AM, Today</span>
-                                        </div>
-                                        <div class="img_cont_msg">
-                                        </div>
-                                    </div>
+                                    }
+                                    }
                                 </div>
                                 <div class="card-footer">
                                     <div class="input-group">
                                         <div class="input-group-append">
-                                            <span class="input-group-text attach_btn"><i class="fa fa-paperclip"></i></span>
+                                            <button class="input-group-text attach_btn"><i class="fa fa-paperclip"></i></button>
                                         </div>
-                                        <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                                        <textarea id="messageInput" class="form-control type_msg" placeholder="Type your message..."></textarea>
                                         <div class="input-group-append">
-                                            <span class="input-group-text send_btn"><i class="fa fa-location-arrow"></i></span>
+                                            <button id="sendButton" class="input-group-text send_btn"><i class="fa fa-location-arrow"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -76,3 +89,8 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="~/lib/aspnet/signalr/dist/browser/signalr.js"></script>
+    <script src="/js/chat.js"></script>
+}

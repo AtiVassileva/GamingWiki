@@ -9,6 +9,7 @@ using GamingWiki.Services.Models.Comments;
 using GamingWiki.Services.Models.Discussions;
 using GamingWiki.Services.Models.Games;
 using GamingWiki.Services.Models.Genres;
+using GamingWiki.Services.Models.Messages;
 using GamingWiki.Services.Models.Platforms;
 using GamingWiki.Services.Models.Replies;
 using GamingWiki.Services.Models.Reviews;
@@ -112,6 +113,13 @@ namespace GamingWiki.Services.MappingConfiguration
                     cfg.MapFrom(d => d.Creator.UserName));
 
             this.CreateMap<DiscussionServiceDetailsModel, DiscussionServiceEditModel>();
+
+            // Message 
+            this.CreateMap<Message, MessageServiceModel>()
+                .ForMember(m => m.Sender, cfg => cfg
+                    .MapFrom(m => m.Sender.UserName))
+                .ForMember(m => m.SentOn, cfg => cfg
+                    .MapFrom(m => m.SentOn.ToString("t")));
         }
     }
 }

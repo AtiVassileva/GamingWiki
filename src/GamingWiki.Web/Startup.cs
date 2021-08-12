@@ -9,6 +9,7 @@ using GamingWiki.Data;
 using GamingWiki.Services;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.MappingConfiguration;
+using GamingWiki.Web.Hubs;
 using GamingWiki.Web.Infrastructure;
 using static GamingWiki.Web.Common.WebConstants;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,9 @@ namespace GamingWiki.Web
             services.AddTransient<ITrickService, TrickService>();
             services.AddTransient<IDiscussionService, DiscussionService>();
 
+            services.AddSignalR(options =>
+                options.EnableDetailedErrors = true
+            );
             services.AddAutoMapper(typeof(MappingProfile));
         }
 
@@ -80,6 +84,7 @@ namespace GamingWiki.Web
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapHub<ChatHub>("/Chat");
                     endpoints.MapDefaultAreaRoute();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();

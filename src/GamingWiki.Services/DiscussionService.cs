@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using GamingWiki.Data;
 using GamingWiki.Models;
 using GamingWiki.Services.Contracts;
 using GamingWiki.Services.Models.Discussions;
+using GamingWiki.Services.Models.Messages;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamingWiki.Services
@@ -40,20 +43,8 @@ namespace GamingWiki.Services
             this.dbContext.Discussions.Add(discussion);
             this.dbContext.SaveChanges();
 
-            AddDiscussionToUser(discussion.Id, creatorId);
+            JoinUserToDiscussion(discussion.Id, creatorId);
             return discussion.Id;
-        }
-
-        private void AddDiscussionToUser(int discussionId, string creatorId)
-        {
-            var userDiscussion = new UserDiscussion
-            {
-                UserId = creatorId,
-                DiscussionId = discussionId
-            };
-
-            this.dbContext.UserDiscussion.Add(userDiscussion);
-            this.dbContext.SaveChanges();
         }
 
         public DiscussionServiceDetailsModel Details(int discussionId)
@@ -109,11 +100,51 @@ namespace GamingWiki.Services
             return true;
         }
 
+        public void JoinUserToDiscussion(int discussionId, string userId)
+        {
+            var userDiscussion = new UserDiscussion
+            {
+                UserId = userId,
+                DiscussionId = discussionId
+            };
+
+            this.dbContext.UserDiscussion.Add(userDiscussion);
+            this.dbContext.SaveChanges();
+        }
+
+        public bool UserParticipatesInDiscussion(int discussionId, string userId)
+            => this.dbContext.UserDiscussion
+                .Any(ud => ud.UserId == userId 
+                           && ud.DiscussionId == discussionId);
+
         public IQueryable<DiscussionAllServiceModel> Search(string searchCriteria)
             => this.dbContext.Discussions
                 .Where(d => d.Name.ToLower()
                     .Contains(searchCriteria.ToLower()))
                 .ProjectTo<DiscussionAllServiceModel>(this.configuration);
+
+        public IEnumerable<MessageServiceModel> GetMessagesForDiscussion(int discussionId)
+            => this.dbContext.Messages
+                .Where(m => m.DiscussionId == discussionId)
+                .OrderBy(m => m.Id)
+                .ProjectTo<MessageServiceModel>(this.configuration)
+                .ToList();
+
+        public int AddMessage(int discussionId, string content, string senderId)
+        {
+            var message = new Message
+            {
+                DiscussionId = discussionId,
+                Content = content,
+                SenderId = senderId,
+                SentOn = DateTime.UtcNow
+            };
+
+            this.dbContext.Messages.Add(message);
+            this.dbContext.SaveChanges();
+
+            return message.Id;
+        }
 
         private Discussion FindDiscussion(int discussionId)
             => this.dbContext.Discussions

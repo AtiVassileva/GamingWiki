@@ -23,7 +23,23 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
-                <h2 class="gs-title">@Model.Name</h2>
+                <h2 class="gs-title">
+                    @Model.Name
+                    @if (ViewBag.IsUserMemberOfDiscussion)
+                    {
+                        <a asp-area="" asp-controller="Discussions" asp-action="Chat" asp-route-discussionId="@Model.Id" class="btn btn-success btn-lg">
+                            Chat
+                            <i class="fa fa-sign-in"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-area="" asp-controller="Discussions" asp-action="Join" asp-route-discussionId="@Model.Id" class="btn btn-success btn-lg">
+                            Join
+                            <i class="fa fa-sign-in"></i>
+                        </a>
+                    }
+                </h2>
                 <h4>Creator: @Model.CreatorName</h4>
                 <p>@Model.Description</p>
                 @if (this.User.IsAdmin() || this.User.GetId() == Model.CreatorId)
@@ -33,25 +49,24 @@
                 }
                 else
                 {
-                    
                     <a asp-area="" asp-controller="Discussions" asp-action="Join" asp-route-discussionId="@Model.Id" class="btn btn-success float-left ml-2">Join</a>
                 }
             </div>
-        <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
-            <div id="stickySidebar">
-                <div class="widget-item">
-                </div>
-                <div class="widget-item">
-                    <div class="testimonials-widget">
-                        <h4 class="widget-title">Quotes</h4>
-                        <div class="testim-text">
-                            <p>"Everyone thinks they’re the hero of their own story." </p>
-                            <h6><span>Handsome Jack, </span>Borderlands</h6>
+            <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
+                <div id="stickySidebar">
+                    <div class="widget-item">
+                    </div>
+                    <div class="widget-item">
+                        <div class="testimonials-widget">
+                            <h4 class="widget-title">Quotes</h4>
+                            <div class="testim-text">
+                                <p>"Everyone thinks they’re the hero of their own story." </p>
+                                <h6><span>Handsome Jack, </span>Borderlands</h6>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </section>
