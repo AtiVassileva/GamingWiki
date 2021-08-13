@@ -18,6 +18,8 @@ Feel satisfied or disappointed by a game? Feel free to write a review and help o
 Stuck on a difficult level? Go and search for a solution in our Tips & Tricks section or 
 help other "stuck" gamers by sharing your tips and tricks.😉
 
+Keep in touch with gamers all around the world with real-time chat discussions.😎💻
+
 # Features
 
 1. Regular User
@@ -28,6 +30,7 @@ help other "stuck" gamers by sharing your tips and tricks.😉
 articles or their own and reply to comments.
 - 📡Reviews - add, edit or delete reviews written by them.
 - 🤑Tips & Tricks - add, edit or delete tips & tricks written by them.
+- 📱 Discussions - add, edit, delete discussions created by them & join discussions and chat with other members in real time. 
 
 2. Administrator 
 - ✅ Approval - approve, edit or delete games and characters added by regular users.
@@ -40,6 +43,7 @@ Comment under other users' articles or their own and reply to comments,
 delete comments and replies no matter who added them.
 - 📡Reviews - add, edit or delete reviews no matter who wrote them.
 - 🤑Tips & Tricks - add, edit or delete tips & tricks no matter who wrote them.
+- 📱 Discussions - add, edit, delete discussions no matter who added them & join discussions and chat with other members in real time.
 
 # Helpers
 - Implemented filtration by genre for games and search by first letter.✅
@@ -47,12 +51,13 @@ delete comments and replies no matter who added them.
 - Implemented filtration by category for articles and search by search term.✅
 - Implemented search by search term for reviews.✅
 - Implemented search by search term for tips & tricks.✅
+- Implemented search by search term for discussions.✅
 - Implemented pagination in all listing pages.✅
 - Implemented navigations in header, footer and body of listing pages.✅
 - Implemented custom user-friendly error page with an appropriate message.✅
 - Implemented different pages for entities added by users (eg. My Games, My Articles).✅
 - Success and warning alerts upon specific actions (add, edit, delete).✅
-- Added some motivational gaming quotes.
+- Added some motivational gaming quotes.✅
 
 # Technology stack
 
@@ -65,6 +70,8 @@ delete comments and replies no matter who added them.
     JavaScript
 
     jQuery
+    
+    SignalR
 
     Bootstrap 4
 	
@@ -82,13 +89,13 @@ delete comments and replies no matter who added them.
 
 - Home page - Logged In User
 
-![image](https://user-images.githubusercontent.com/65487762/128739948-4da75eb2-9f46-42f0-b9ef-df53ba15ec90.png)
+![image](https://user-images.githubusercontent.com/65487762/129330510-06882743-1065-4824-b77c-a6c567b34c4f.png)
 
 - Home page - Administrator
 
-![image](https://user-images.githubusercontent.com/65487762/128741708-9f6ffede-541b-473a-8f32-ddc7bd09d1b3.png)
+![image](https://user-images.githubusercontent.com/65487762/129330591-25220d6d-2780-4d89-8835-5d3c4045fc32.png)
 
-- Listing pages - Games, Characters, Reviews, Blog, Tips & Tricks
+- Listing pages - Games, Characters, Reviews, Blog, Tips & Tricks, Discussions
 
 ![image](https://user-images.githubusercontent.com/65487762/128741842-7662bf96-5a3f-45e6-88c3-2f4bb0a06a0f.png)
 
@@ -100,11 +107,16 @@ delete comments and replies no matter who added them.
 
 ![image](https://user-images.githubusercontent.com/65487762/128742143-71ff8de9-ea88-40cd-82b9-458af1bf3383.png)
 
+![image](https://user-images.githubusercontent.com/65487762/129331142-a8651862-acba-4b1e-b9ac-9a3424470027.png)
+
 - Administrator - Pending Pages 
 
 ![image](https://user-images.githubusercontent.com/65487762/128743443-a3cea499-b1c9-46cf-b237-af9051dabb5f.png)
 
 ![image](https://user-images.githubusercontent.com/65487762/128744051-c0023d1d-a5bc-4005-9691-20cd8fafe6f5.png)
+
+- Real Time Chat 
+![image](https://user-images.githubusercontent.com/65487762/129331391-55fc4b25-4a24-4e2a-bce8-677b0b88c035.png)
 
 - Alerts
 
