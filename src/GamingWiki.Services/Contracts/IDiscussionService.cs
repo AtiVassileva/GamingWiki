@@ -9,7 +9,8 @@ namespace GamingWiki.Services.Contracts
     {
         IQueryable<DiscussionAllServiceModel> All();
 
-        int Create(string creatorId, string name, string description);
+        int Create(string creatorId, string name, string description,
+            string pictureUrl, int membersLimit);
 
         DiscussionServiceDetailsModel Details(int discussionId);
 

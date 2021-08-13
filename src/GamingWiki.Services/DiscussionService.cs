@@ -31,12 +31,14 @@ namespace GamingWiki.Services
                 .ProjectTo<DiscussionAllServiceModel>(this.configuration)
                 .OrderByDescending(d => d.Id);
 
-        public int Create(string creatorId, string name, string description)
+        public int Create(string creatorId, string name, string description, string pictureUrl, int membersLimit)
         {
             var discussion = new Discussion
             {
                 Name = name,
                 CreatorId = creatorId,
+                PictureUrl = pictureUrl,
+                MembersLimit = membersLimit,
                 Description = description
             };
 

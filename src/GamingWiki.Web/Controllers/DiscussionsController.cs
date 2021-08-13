@@ -47,7 +47,8 @@ namespace GamingWiki.Web.Controllers
             }
 
             var creatorId = this.User.GetId();
-            var discussionId = this.discussionService.Create(creatorId, model.Name, model.Description);
+            var discussionId = this.discussionService.Create(creatorId, model.Name, model.Description, model.PictureUrl, 
+                model.MembersLimit);
 
             TempData[GlobalMessageKey] = SuccessfullyAddedDiscussionMessage;
 
