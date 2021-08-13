@@ -181,7 +181,7 @@ namespace GamingWiki.Web.Controllers
             });
 
         public IActionResult Mine(int pageIndex = 1) 
-            => this.View(nameof(this.All), new ArticleFullModel()
+            => this.View(nameof(this.All), new ArticleFullModel
             {
                 Articles = PaginatedList<ArticleAllServiceModel>
                     .Create(this.articleService.GetArticlesByUser
