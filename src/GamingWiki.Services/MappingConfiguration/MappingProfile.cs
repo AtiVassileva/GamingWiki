@@ -114,6 +114,9 @@ namespace GamingWiki.Services.MappingConfiguration
 
             this.CreateMap<DiscussionServiceDetailsModel, DiscussionServiceEditModel>();
 
+            this.CreateMap<DiscussionServiceDetailsModel, DiscussionChatServiceModel>();
+
+
             // Message 
             this.CreateMap<Message, MessageServiceModel>()
                 .ForMember(m => m.Sender, cfg => cfg

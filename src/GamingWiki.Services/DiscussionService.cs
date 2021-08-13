@@ -55,6 +55,8 @@ namespace GamingWiki.Services
             var detailsModel = this.mapper
                 .Map<DiscussionServiceDetailsModel>(discussion);
 
+            detailsModel.CurrentMembersCount = this.GetMembersCount(discussionId);
+
             return detailsModel;
         }
 
@@ -79,6 +81,8 @@ namespace GamingWiki.Services
 
             discussion.Name = model.Name;
             discussion.Description = model.Description;
+            discussion.PictureUrl = model.PictureUrl;
+            discussion.MembersLimit = model.MembersLimit;
 
             this.dbContext.SaveChanges();
 
@@ -126,6 +130,17 @@ namespace GamingWiki.Services
             => this.dbContext.UserDiscussion
                 .Any(ud => ud.UserId == userId 
                            && ud.DiscussionId == discussionId);
+
+        public bool DiscussionFull(int discussionId)
+        {
+            var discussion = this.FindDiscussion(discussionId);
+            return discussion.MembersLimit == 
+                   this.GetMembersCount(discussionId);
+        }
+
+        public int GetMembersCount(int discussionId) 
+            => this.dbContext.UserDiscussion
+                .Count(ud => ud.DiscussionId == discussionId);
 
         public IQueryable<DiscussionAllServiceModel> Search(string searchCriteria)
             => this.dbContext.Discussions

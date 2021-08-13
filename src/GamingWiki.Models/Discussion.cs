@@ -23,6 +23,11 @@ namespace GamingWiki.Models
         [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; }
 
+        [Required]
+        public string PictureUrl { get; set; }
+
+        public int MembersLimit { get; set; }
+
         public ICollection<Message> Messages { get; set; }
         = new HashSet<Message>();
 

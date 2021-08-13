@@ -11,6 +11,8 @@ namespace GamingWiki.Services.Models.Discussions
 
         public string CreatorId { get; set; }
 
+        public string PictureUrl { get; set; }
+        
         public IEnumerable<MessageServiceModel> Messages { get; set; }
     }
 }

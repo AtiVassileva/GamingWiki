@@ -29,6 +29,10 @@ namespace GamingWiki.Services.Contracts
 
         bool UserParticipatesInDiscussion(int discussionId, string userId);
 
+        bool DiscussionFull(int discussionId);
+
+        int GetMembersCount(int discussionId);
+
         IQueryable<DiscussionAllServiceModel> Search(string searchCriteria);
         
         IQueryable<DiscussionAllServiceModel> GetDiscussionsByUser(string userId);

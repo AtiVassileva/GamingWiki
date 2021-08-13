@@ -172,6 +172,14 @@ namespace GamingWiki.Web.Controllers
             {
                 return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
             }
+            
+            if (this.discussionService.DiscussionFull(discussionId))
+            {
+                TempData[GlobalMessageKey] = FullDiscussionExceptionMessage;
+                TempData[ColorKey] = "danger";
+
+                return RedirectToAction(nameof(this.Details), discussionId);
+            }
 
             var userId = this.User.GetId();
 
@@ -183,7 +191,7 @@ namespace GamingWiki.Web.Controllers
 
             this.discussionService.JoinUserToDiscussion(discussionId, userId: this.User.GetId());
 
-            TempData[GlobalMessageKey] = "You successfully joined a discussion!";
+            TempData[GlobalMessageKey] = SuccessfullyJoinedDiscussionMessage;
 
             return this.RedirectToAction(nameof(this.Chat),
                 new { discussionId });
@@ -200,7 +208,7 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.discussionService.UserParticipatesInDiscussion(discussionId, userId))
             {
-                TempData[GlobalMessageKey] = "You are not a member of this discussion";
+                TempData[GlobalMessageKey] = NotDiscussionMemberExceptionMessage;
                 TempData[ColorKey] = "danger";
 
                 return RedirectToAction(nameof(this.Details), discussionId);
@@ -218,16 +226,16 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
             }
 
-            var discussion = this.discussionService
+            var detailsModel = this.discussionService
                 .Details(discussionId);
 
-            return this.View(new DiscussionChatServiceModel
-            {
-                Id = discussion.Id,
-                Name = discussion.Name,
-                Messages = this.discussionService
-                    .GetMessagesForDiscussion(discussionId)
-            });
+            var discussionChatModel = this.mapper
+                .Map<DiscussionChatServiceModel>(detailsModel);
+
+            discussionChatModel.Messages = this.discussionService
+                .GetMessagesForDiscussion(discussionId);
+
+            return this.View(discussionChatModel);
         }
 
         public IActionResult Mine(int pageIndex = 1)

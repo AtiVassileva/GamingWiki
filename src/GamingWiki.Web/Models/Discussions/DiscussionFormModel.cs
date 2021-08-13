@@ -12,5 +12,14 @@ namespace GamingWiki.Web.Models.Discussions
         [Required]
         [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; }
+
+        [Url]
+        [Required]
+        [Display(Name = "Profile Picture URL")]
+        public string PictureUrl { get; set; }
+
+        [Range(MinDiscussionMembers, MaxDiscussionMembers)]
+        [Display(Name = "Members Limit")]
+        public int MembersLimit { get; set; }
     }
 }

@@ -23,19 +23,30 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
+                <img src="@Model.PictureUrl" alt=""/>
                 <h2 class="gs-title">
                     @Model.Name
                     @if (ViewBag.IsUserMemberOfDiscussion)
                     {
-                        <br/>
+                        <br />
                         <a asp-area="" asp-controller="Discussions" asp-action="Chat" asp-route-discussionId="@Model.Id" class="btn btn-success btn-lg">
                             Chat
                             <i class="fa fa-sign-in"></i>
                         </a>
-                        <a asp-area="" asp-controller="Discussions" asp-action="Leave" asp-route-discussionId="@Model.Id" class="btn btn-danger btn-lg">
-                            Leave
-                            <i class="fa fa-sign-out"></i>
-                        </a>
+                        @if (this.User.GetId() != @Model.CreatorId)
+                        {
+                            <a asp-area="" asp-controller="Discussions" asp-action="Leave" asp-route-discussionId="@Model.Id" class="btn btn-danger btn-lg">
+                                Leave
+                                <i class="fa fa-sign-out"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-area="" asp-controller="Discussions" asp-action="Delete" asp-route-discussionId="@Model.Id" class="btn btn-danger btn-lg">
+                                Delete
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        }
                     }
                     else
                     {
@@ -46,6 +57,7 @@
                     }
                 </h2>
                 <h4>Creator: @Model.CreatorName</h4>
+                <h5 style="color: white;">Members: @Model.CurrentMembersCount / @Model.MembersLimit</h5>
                 <p>@Model.Description</p>
                 @if (this.User.IsAdmin() || this.User.GetId() == Model.CreatorId)
                 {

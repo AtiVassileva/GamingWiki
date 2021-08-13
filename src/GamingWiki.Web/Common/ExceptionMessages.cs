@@ -38,7 +38,15 @@
         public const string AlreadyExistingGameExceptionMessage =
             "Game already exists!";
 
-        public const string NonExistingDiscussionExceptionMessage
-            = "Discussion does not exist!";
+        public const string NonExistingDiscussionExceptionMessage = "Discussion does not exist!";
+
+        public const string FullDiscussionExceptionMessage = 
+            "You cannot join this discussion, it is already full";
+
+        public const string NotDiscussionMemberExceptionMessage =
+            "You are not a member of this discussion";
+
+        public const string NonExistingMessageExceptionMessage = 
+            "Message does not exist!";
     }
 }

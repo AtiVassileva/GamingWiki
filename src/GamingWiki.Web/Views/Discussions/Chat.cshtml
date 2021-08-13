@@ -29,11 +29,11 @@
                                 <div class="card-header msg_head">
                                     <div class="d-flex bd-highlight">
                                         <div class="img_cont">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuRQPYYQ7XqUM8NYojaOt9LnjqfT2bbtM6uA&usqp=CAU" class="rounded-circle user_img">
+                                            <img src="@Model.PictureUrl" class="rounded-circle user_img">
                                             <span class="online_icon"></span>
                                         </div>
                                         <div class="user_info">
-                                            <select id="discussionId">
+                                            <select id="discussionId" style="display: none;">
                                                 <option value="@Model.Id">@Model.Id</option>
                                             </select>
                                             <span>@Model.Name</span>
@@ -48,16 +48,19 @@
                                     }
                                 </div>
                                 <div id="messagesList" class="card-body msg_card_body">
-                                    @foreach (var message in @Model.Messages)
+                                    @foreach (var message in Model.Messages)
                                     {
                                     if (message.SenderId == this.User.GetId())
                                     {
                                     <div class="d-flex justify-content-end mb-4">
                                         <div class="msg_cotainer_send">
                                             @message.Content
-                                            <span class="msg_time_send">@message.SentOn</span>
-                                        </div>
-                                        <div class="img_cont_msg">
+                                            <span class="msg_time_send">@message.SentOn
+                                                <a asp-controller="Messages" asp-action="Delete" asp-route-messageId="@message.Id">
+                                                    <span id="action_menu_btn"><i style="color: red;" class="fa fa-trash"></i></span>
+                                                </a>
+                                                <br />
+                                                </span>
                                         </div>
                                     </div>
                                     }

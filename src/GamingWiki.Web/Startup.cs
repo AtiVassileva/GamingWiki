@@ -54,6 +54,7 @@ namespace GamingWiki.Web
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<ITrickService, TrickService>();
             services.AddTransient<IDiscussionService, DiscussionService>();
+            services.AddTransient<IMessageService, MessageService>();
 
             services.AddSignalR(options =>
                 options.EnableDetailedErrors = true
