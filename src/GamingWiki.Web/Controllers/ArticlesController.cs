@@ -65,7 +65,7 @@ namespace GamingWiki.Web.Controllers
             TempData[GlobalMessageKey] = SuccessfullyAddedArticleMessage;
 
             return this.RedirectToAction(nameof(this.Details),
-                new { articleId = $"{articleId}" });
+                new { articleId });
         }
         
         public IActionResult Details(int articleId) 

@@ -201,11 +201,5 @@ namespace GamingWiki.Web.Controllers
                 Classes = this.characterService.GetClasses(),
                 Tokens = new KeyValuePair<object, object>("Mine", null)
             });
-
-        private void CreateAlertMessage(string message, string color)
-        {
-            TempData[GlobalMessageKey] = message;
-            TempData[ColorKey] = color;
-        }
     }
 }
