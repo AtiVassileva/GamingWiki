@@ -80,6 +80,8 @@ delete comments and replies no matter who added them.
 	CSS 3
 	
     FontAwesome
+    
+    MyTested.AspNetCore.Mvc
 
 # Screenshots 
 
