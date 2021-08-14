@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using static GamingWiki.Tests.Common.TestConstants;
 
 namespace GamingWiki.Tests.Data
 {
     public static class Users
-    {
-        private const string DefaultTestUserName = "TestUser";
+    { 
         public static IdentityUser TestUser 
             => new(DefaultTestUserName);
     }

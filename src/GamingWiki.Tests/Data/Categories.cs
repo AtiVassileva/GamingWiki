@@ -1,13 +1,13 @@
 ﻿using GamingWiki.Models;
+using static GamingWiki.Tests.Common.TestConstants;
 
 namespace GamingWiki.Tests.Data
 {
     public static class Categories
     {
-        private const int DefaultCategoryId = 3;
         public static Category TestCategory => new()
         {
-            Id = DefaultCategoryId
+            Id = DefaultId
         };
     }
 }

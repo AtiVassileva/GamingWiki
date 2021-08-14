@@ -1,10 +1,10 @@
 ﻿using GamingWiki.Models;
+using static GamingWiki.Tests.Common.TestConstants;
 
 namespace GamingWiki.Tests.Data
 {
     public static class Classes
     {
-        private const int DefaultId = 5;
         public static Class TestCharacterClass => new (){Id = DefaultId};
     }
 }

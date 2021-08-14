@@ -3,14 +3,12 @@ using GamingWiki.Models;
 using GamingWiki.Web.Models.Comments;
 using static GamingWiki.Tests.Data.Articles;
 using static GamingWiki.Tests.Data.Users;
+using static GamingWiki.Tests.Common.TestConstants;
 
 namespace GamingWiki.Tests.Data
 {
     public class Comments
     {
-        private const string DefaultContent = "Test content for articles";
-        private const int DefaultId = 9;
-
         public static CommentFormModel TestValidCommentFormModel =>
             new()
             {

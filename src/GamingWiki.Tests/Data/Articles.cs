@@ -5,24 +5,19 @@ using GamingWiki.Services.Models.Articles;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Tests.Data.Users;
 using static GamingWiki.Tests.Data.Categories;
+using static GamingWiki.Tests.Common.TestConstants;
 
 namespace GamingWiki.Tests.Data
 {
     public static class Articles
     {
-        private const int DefaultArticleId = 2;
-        private const string DefaultHeading = "Test Heading";
-        private const string DefaultContent = "Test content for articles";
-        private const string DefaultPictureUrl =
-            "https://techmonitor.ai/wp-content/uploads/sites/20/2016/06/what-is-URL.jpg";
-
         public static IEnumerable<Article> FiveArticles
             => Enumerable.Range(0, 5).Select(_ => new Article());
 
         public static Article TestArticle
             => new()
             {
-                Id = DefaultArticleId,
+                Id = DefaultId,
                 Author = TestUser
             };
 

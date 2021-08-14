@@ -252,7 +252,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<ArticlesController>
                 .Instance(instance =>
                     instance.WithData(FiveArticles))
-                .Calling(a => a.Filter(1, DefaultPageIndex))
+                .Calling(a => a.Filter(new Random().Next(), DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleFullModel>());

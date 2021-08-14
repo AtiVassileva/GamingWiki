@@ -35,8 +35,7 @@ namespace GamingWiki.Tests.Controllers
                     .WithSet<Comment>(comments =>
                         comments.Any(c =>
                             c.Content == TestValidCommentFormModel.Content
-                            && c.ArticleId == TestArticle.Id)
-                    ))
+                            && c.ArticleId == TestArticle.Id)))
                 .TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
@@ -67,7 +66,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CommentsController>
                 .Instance()
                 .Calling(c => c.Add(TestValidCommentFormModel, 
-                    new Random().Next()))
+                    TestComment.Id))
                 .ShouldReturn()
                 .View("Error");
 
@@ -101,7 +100,8 @@ namespace GamingWiki.Tests.Controllers
                 .Data(data => data
                     .WithSet<Comment>(comments => !comments
                         .Any(c =>
-                            c.Content == TestComment.Content)
+                            c.Content == TestComment.Content
+                            && c.ArticleId == TestArticle.Id)
                     )).TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
