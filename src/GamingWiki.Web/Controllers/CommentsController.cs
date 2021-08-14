@@ -57,7 +57,7 @@ namespace GamingWiki.Web.Controllers
 
             if (!this.User.IsAdmin() && this.User.GetId() != authorId)
             {
-                return this.Unauthorized("Forbidden");
+                return this.Unauthorized();
             }
 
             var articleId = this.commentService.GetArticleId(commentId);

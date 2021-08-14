@@ -30,7 +30,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance =>
                     instance.WithData(FiveCharacters))
-                .Calling(a => a.All(DefaultPageIndex))
+                .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterFullModel>());
@@ -39,13 +39,13 @@ namespace GamingWiki.Tests.Controllers
         public void GetCreateShouldReturnCorrectView()
             => MyController<CharactersController>
                 .Instance()
-                .Calling(a => a.Create())
+                .Calling(c => c.Create())
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterFormModel>());
 
         [Fact]
-        public void PostCreateShouldBeForAuthorizedUsersAndReturnRedirectWithValidModel()
+        public void PostCreateReturnRedirectWithValidModel()
             => MyController<CharactersController>
                 .Instance(controller => controller
                     .WithData(TestCharacterClass)
@@ -88,7 +88,7 @@ namespace GamingWiki.Tests.Controllers
         public void DetailsShouldReturnErrorViewWithInvalidCharacterId()
             => MyController<CharactersController>
                 .Instance()
-                .Calling(a => a.Details(new Random().Next()))
+                .Calling(c => c.Details(new Random().Next()))
                 .ShouldReturn()
                 .View("Error");
 
@@ -97,7 +97,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance => instance
                     .WithData(TestCharacter))
-                .Calling(a => a.Details(With.Value(TestCharacter.Id)))
+                .Calling(c => c.Details(With.Value(TestCharacter.Id)))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterServiceDetailsModel>());
@@ -106,7 +106,7 @@ namespace GamingWiki.Tests.Controllers
         public void GetEditShouldReturnErrorViewWithInvalidId()
             => MyController<CharactersController>
                 .Instance()
-                .Calling(a => a.Edit(new Random().Next()))
+                .Calling(c => c.Edit(new Random().Next()))
                 .ShouldReturn()
                 .View("Error");
 
@@ -117,7 +117,7 @@ namespace GamingWiki.Tests.Controllers
                     .WithUser(user => user
                         .InRole(AdministratorRoleName))
                     .WithData(TestCharacter))
-                .Calling(a => a.Edit(TestCharacter.Id))
+                .Calling(c => c.Edit(TestCharacter.Id))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterServiceEditModel>());
@@ -127,7 +127,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance => instance
                     .WithData(TestCharacter))
-                .Calling(a => a.Edit(TestCharacter.Id))
+                .Calling(c => c.Edit(TestCharacter.Id))
                 .ShouldReturn()
                 .Unauthorized();
 
@@ -198,7 +198,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance => instance
                     .WithData(TestCharacter))
-                .Calling(a => a.Delete(TestCharacter.Id))
+                .Calling(c => c.Delete(TestCharacter.Id))
                 .ShouldReturn()
                 .Unauthorized();
 
@@ -229,7 +229,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance =>
                     instance.WithData(FiveCharacters))
-                .Calling(a => a.Search(Guid.NewGuid()
+                .Calling(c => c.Search(Guid.NewGuid()
                     .ToString(), DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
@@ -240,7 +240,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance =>
                     instance.WithData(FiveCharacters))
-                .Calling(a => a.Filter(1, DefaultPageIndex))
+                .Calling(c => c.Filter(new Random().Next(), DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterFullModel>());
@@ -250,7 +250,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(instance =>
                     instance.WithData(FiveCharacters))
-                .Calling(a => a.Mine(DefaultPageIndex))
+                .Calling(c => c.Mine(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterFullModel>());
