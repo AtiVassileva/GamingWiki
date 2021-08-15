@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Services.Contracts;
+using GamingWiki.Web.Infrastructure;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Common.AlertMessages;
@@ -22,7 +23,15 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingMessageExceptionMessage));
             }
 
-            var discussionId = this.messageService.GetDiscussionId(messageId);
+            var senderId = this.messageService.GetSenderId(messageId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != senderId)
+            {
+                return this.Unauthorized();
+            }
+
+            var discussionId = this.messageService
+                .GetDiscussionId(messageId);
 
             var deleted = this.messageService.Delete(messageId);
 

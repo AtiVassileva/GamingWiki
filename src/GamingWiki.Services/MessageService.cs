@@ -38,6 +38,12 @@ namespace GamingWiki.Services
                 .Select(m => m.DiscussionId)
                 .FirstOrDefault();
 
+        public string GetSenderId(int messageId)
+            => this.dbContext.Messages
+                .Where(m => m.Id == messageId)
+                .Select(m => m.SenderId)
+                .First();
+
         private Message FindMessage(int messageId)
             => this.dbContext.Messages
                 .First(m => m.Id == messageId);
