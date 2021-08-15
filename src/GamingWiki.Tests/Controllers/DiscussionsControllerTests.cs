@@ -376,10 +376,6 @@ namespace GamingWiki.Tests.Controllers
                     .WithUser(TestUser.Identifier)
                     .WithData(TestUserDiscussionWithTestUser))
                 .Calling(c => c.Chat(TestDiscussion.Id))
-                .ShouldHave()
-                .TempData(tempData => tempData
-                    .ContainingEntryWithKey(GlobalMessageKey))
-                .AndAlso()
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<DiscussionChatServiceModel>());
