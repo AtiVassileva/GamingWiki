@@ -20,7 +20,7 @@ namespace GamingWiki.Tests.Data
             {
                 Name = DefaultName,
                 Description = DefaultDescription,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 MembersLimit = GenerateRandomLimit
             };
 
@@ -39,7 +39,7 @@ namespace GamingWiki.Tests.Data
                 Id = DefaultId,
                 Name = DefaultName,
                 Description = DefaultDescription,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 MembersLimit = DefaultMemberLimit,
                 Creator = TestUser
             };
@@ -50,7 +50,7 @@ namespace GamingWiki.Tests.Data
                 Id = DefaultId,
                 Name = DefaultName,
                 Description = DefaultDescription,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 MembersLimit = GenerateRandomLimit
             };
 

@@ -14,7 +14,7 @@
         public const string DefaultContent = "Test content for testing functionality";
         public const string DefaultDescription = "Test description for testing functionality";
 
-        public const string DefaultPictureUrl =
+        public const string DefaultUrl =
             "https://techmonitor.ai/wp-content/uploads/sites/20/2016/06/what-is-URL.jpg";
 
         public const int DefaultMemberLimit = 6;

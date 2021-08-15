@@ -65,6 +65,12 @@ namespace GamingWiki.Services
         public bool GameExists(string gameName)
             => this.dbContext.Games.Any(g => g.Name == gameName);
 
+        public string GetContributorId(int gameId)
+            => this.dbContext.Games
+                .Where(g => g.Id == gameId)
+                .Select(g => g.ContributorId)
+                .First();
+
         public int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, string contributorId,
             bool isApproved,
             IEnumerable<int> supportedPlatforms)

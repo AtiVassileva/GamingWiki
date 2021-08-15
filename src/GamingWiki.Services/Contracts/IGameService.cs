@@ -18,6 +18,8 @@ namespace GamingWiki.Services.Contracts
 
         bool GameExists(string gameName);
 
+        string GetContributorId(int gameId);
+
         int Create(string name, string pictureUrl, string trailerUrl, string description, int areaId, int genreId, string creatorsNames, string contributorId, bool isApproved,
             IEnumerable<int> supportedPlatforms);
 

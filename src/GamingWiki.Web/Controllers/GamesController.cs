@@ -99,6 +99,13 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
+            var contributorId = this.gameService.GetContributorId(gameId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != contributorId)
+            {
+                return this.Unauthorized();
+            }
+
             var dbModel = this.gameService.Details(gameId);
 
             var viewModel = this.mapper
@@ -154,6 +161,13 @@ namespace GamingWiki.Web.Controllers
                 return this.View("Error", CreateError(NonExistingGameExceptionMessage));
             }
 
+            var contributorId = this.gameService.GetContributorId(gameId);
+
+            if (!this.User.IsAdmin() && this.User.GetId() != contributorId)
+            {
+                return this.Unauthorized();
+            }
+
             var deleted = this.gameService.Delete(gameId);
 
             if (!deleted)
@@ -163,7 +177,7 @@ namespace GamingWiki.Web.Controllers
 
             TempData[GlobalMessageKey] =  DeletedGameMessage;
 
-            return this.Redirect(nameof(this.All));
+            return this.RedirectToAction(nameof(this.All));
         }
 
         public IActionResult Search([FromQuery(Name = "parameter") ]

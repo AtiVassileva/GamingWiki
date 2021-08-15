@@ -34,7 +34,7 @@ namespace GamingWiki.Tests.Data
             {
                 Name = DefaultName,
                 Description = DefaultDescription,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 ClassId = TestCharacterClass.Id,
                 GameId = TestGame.Id
             };
@@ -45,7 +45,7 @@ namespace GamingWiki.Tests.Data
                 Id = TestCharacter.Id,
                 Name = DefaultName,
                 Description = DefaultDescription,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 ClassId = TestCharacterClass.Id,
                 ClassName = TestCharacterClass.Name,
                 IsApproved = true
@@ -58,7 +58,7 @@ namespace GamingWiki.Tests.Data
                 Name = "a",
                 Description = "b",
                 ClassId = 6,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 ClassName = "c",
                 ContributorId = TestUser.Id,
                 IsApproved = false

@@ -26,7 +26,7 @@ namespace GamingWiki.Tests.Data
             {
                 Heading = DefaultHeading,
                 Content = DefaultContent,
-                PictureUrl = DefaultPictureUrl,
+                PictureUrl = DefaultUrl,
                 CategoryId = TestCategory.Id
             };
 
@@ -35,7 +35,7 @@ namespace GamingWiki.Tests.Data
             {
                 Heading = DefaultHeading,
                 Content = DefaultContent,
-                PictureUrl = DefaultPictureUrl
+                PictureUrl = DefaultUrl
             };
         
         public static ArticleServiceEditModel TestInvalidArticleEditModel
