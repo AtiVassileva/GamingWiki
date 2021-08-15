@@ -16,5 +16,7 @@
 
         public const string DefaultPictureUrl =
             "https://techmonitor.ai/wp-content/uploads/sites/20/2016/06/what-is-URL.jpg";
+
+        public const int DefaultMemberLimit = 6;
     }
 }

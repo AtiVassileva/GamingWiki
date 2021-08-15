@@ -97,7 +97,10 @@
          public const string SuccessfullyJoinedDiscussionMessage =
              "You successfully joined a discussion!";
 
-         public const string DeletedMessageAlertMessage
-             = "Message deleted successfully!";
+         public const string SuccessfullyLeftDiscussionAlertMessage =
+             "You successfully left discussion!";
+
+         public const string DeletedMessageAlertMessage = 
+             "Message deleted successfully!";
     }
 }

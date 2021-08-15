@@ -147,7 +147,8 @@ namespace GamingWiki.Web.Controllers
             return this.RedirectToAction(nameof(this.All));
         }
 
-        public IActionResult Search(string parameter, int pageIndex = 1, string name = null)
+        public IActionResult Search(string parameter, int pageIndex = 1, 
+            string name = null)
             => this.View(nameof(this.All), new DiscussionFullModel
             {
                 Discussions = PaginatedList<DiscussionAllServiceModel>
@@ -217,6 +218,7 @@ namespace GamingWiki.Web.Controllers
 
             this.discussionService.RemoveUserFromDiscussion(discussionId, userId);
 
+            TempData[GlobalMessageKey] = SuccessfullyLeftDiscussionAlertMessage;
             return this.RedirectToAction(nameof(this.All));
         }
 
@@ -225,6 +227,16 @@ namespace GamingWiki.Web.Controllers
             if (!this.discussionService.DiscussionExists(discussionId))
             {
                 return this.View("Error", CreateError(NonExistingDiscussionExceptionMessage));
+            }
+
+            var userId = this.User.GetId();
+
+            if (!this.discussionService.UserParticipatesInDiscussion(discussionId, userId))
+            {
+                TempData[GlobalMessageKey] = NotDiscussionMemberExceptionMessage;
+                TempData[ColorKey] = "danger";
+
+                return RedirectToAction(nameof(this.Details), discussionId);
             }
 
             var detailsModel = this.discussionService

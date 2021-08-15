@@ -87,7 +87,7 @@ namespace GamingWiki.Tests.Controllers
         public void DetailsShouldReturnErrorViewWithInvalidCharacterId()
             => MyController<CharactersController>
                 .Instance()
-                .Calling(c => c.Details(new Random().Next()))
+                .Calling(c => c.Details(TestCharacter.Id))
                 .ShouldReturn()
                 .View("Error");
 
@@ -105,7 +105,7 @@ namespace GamingWiki.Tests.Controllers
         public void GetEditShouldReturnErrorViewWithInvalidId()
             => MyController<CharactersController>
                 .Instance()
-                .Calling(c => c.Edit(new Random().Next()))
+                .Calling(c => c.Edit(TestCharacter.Id))
                 .ShouldReturn()
                 .View("Error");
 
@@ -224,7 +224,7 @@ namespace GamingWiki.Tests.Controllers
                         c.All(With.Any<int>())));
 
         [Fact]
-        public void GetSearchShouldReturnCorrectViewWithModel()
+        public void SearchShouldReturnCorrectViewWithModel()
             => MyController<CharactersController>
                 .Instance(instance =>
                     instance.WithData(FiveCharacters))
