@@ -10,14 +10,13 @@ using static GamingWiki.Tests.Data.Articles;
 using static GamingWiki.Tests.Data.Categories;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Tests.Common.TestConstants;
 using TestUser = MyTested.AspNetCore.Mvc.TestUser;
 
 namespace GamingWiki.Tests.Controllers
 {
-    public class ArticlesControllerTest
+    public class ArticlesControllerTests
     {
-        private const int DefaultPageIndex = 1;
-
         [Fact]
         public void ArticlesControllerShouldBeForAuthorizedUsersOnly()
         => MyController<ArticlesController>

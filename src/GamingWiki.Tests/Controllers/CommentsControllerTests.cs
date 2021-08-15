@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace GamingWiki.Tests.Controllers
 {
-    public class CommentsControllerTest
+    public class CommentsControllerTests
     {
         [Fact]
         public void CommentsControllerShouldBeForAuthorizedUsersOnly()

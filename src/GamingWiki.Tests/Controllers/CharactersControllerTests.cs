@@ -9,15 +9,14 @@ using static GamingWiki.Tests.Data.Classes;
 using static GamingWiki.Tests.Data.Games;
 using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Tests.Common.TestConstants;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
 namespace GamingWiki.Tests.Controllers
 {
-    public class CharacterControllerTest
+    public class CharactersControllerTests
     {
-        private const int DefaultPageIndex = 1;
-
         [Fact]
         public void CharactersControllerShouldBeForAuthorizedUsersOnly()
         => MyController<CharactersController>

@@ -2,6 +2,8 @@
 {
     public static class TestConstants
     {
+        public const int DefaultPageIndex = 1;
+
         public const string DefaultTestUserName = "TestUser";
 
         public const int DefaultId = 5;
