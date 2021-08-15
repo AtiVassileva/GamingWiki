@@ -122,13 +122,13 @@ delete comments and replies no matter who added them.
 
 - Alerts
 
-![image](https://user-images.githubusercontent.com/65487762/128744990-a85d3838-cdde-4508-9ed1-2827066416fb.png)
+![image](https://user-images.githubusercontent.com/65487762/129488274-61a943c6-d6ce-4eb1-8196-17e9b682da78.png)
 
-![image](https://user-images.githubusercontent.com/65487762/128745017-6aa71ccc-530a-4d16-8f55-2f205ac34b4b.png)
+![image](https://user-images.githubusercontent.com/65487762/129488284-2e911f1a-2b5f-47ef-a926-18bf60be8cc7.png)
 
 - Error Page 
 
-![image](https://user-images.githubusercontent.com/65487762/128745095-c50e883b-a422-4914-b8d6-45e2f0908b13.png)
+![image](https://user-images.githubusercontent.com/65487762/129488292-f5f81b6a-5e4f-4586-bbf3-69c7b9f5f875.png)
 
 # Credits
 - End Game Bootstrap template : https://themewagon.com/themes/free-bootstrap-4-html5-gaming-website-template-endgame/ 
