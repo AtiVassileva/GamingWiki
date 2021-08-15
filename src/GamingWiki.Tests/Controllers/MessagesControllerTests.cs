@@ -13,6 +13,13 @@ namespace GamingWiki.Tests.Controllers
     public class MessagesControllerTests
     {
         [Fact]
+        public void MessagesControllerShouldBeForAuthorizedUsersOnly()
+        => MyController<MessagesController>
+            .ShouldHave()
+            .Attributes(attributes => attributes
+                .RestrictingForAuthorizedRequests());
+
+        [Fact]
         public void DeleteShouldReturnErrorViewWithInvalidId()
             => MyController<MessagesController>
                 .Instance()
