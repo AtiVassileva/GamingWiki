@@ -12,9 +12,7 @@ namespace GamingWiki.Services.Contracts
         GameServiceListingModel GetGame(int gameId);
 
         void Create(int gameId, string authorId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description);
-
-        ReviewDetailsServiceModel GetReview(int reviewId);
-
+        
         ReviewDetailsServiceModel Details(int reviewId);
 
         bool Edit(int reviewId, int priceRate, int levelsRate, int graphicsRate, int difficultyRate, string description);

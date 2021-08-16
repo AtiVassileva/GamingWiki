@@ -73,6 +73,7 @@ namespace GamingWiki.Web.Controllers
             }
 
             var reviewDetails = this.reviewService.Details(reviewId);
+
             return this.View(reviewDetails);
         }
 
@@ -124,7 +125,8 @@ namespace GamingWiki.Web.Controllers
             }
 
             TempData[GlobalMessageKey] = DeletedReviewMessage;
-            return this.Redirect(nameof(this.All));
+
+            return this.RedirectToAction(nameof(this.All));
         }
 
         public IActionResult Search(string parameter, int pageIndex = 1, string name = null) 

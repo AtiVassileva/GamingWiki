@@ -159,7 +159,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<ArticlesController>
                 .Instance(controller => controller
                     .WithData(TestArticle)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestInvalidArticleEditModel, TestArticle.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -194,9 +194,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<ArticlesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestArticle))
-                .Calling(a => a.Delete(TestArticle.Id))
+                .Calling(c => c.Delete(TestArticle.Id))
                 .ShouldReturn()
                 .Unauthorized();
 
@@ -210,10 +210,10 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Delete(TestArticle.Id))
                 .ShouldHave()
                 .Data(data => data
-                    .WithSet<Article>(articles => !articles
-                        .Any(a =>
-                            a.Heading == TestArticleFormModel.Heading
-                            && a.Content == TestArticleFormModel.Content)
+                    .WithSet<Article>(articles => articles
+                        .All(a =>
+                            a.Heading != TestArticleFormModel.Heading
+                            && a.Content != TestArticleFormModel.Content)
                     )).TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
@@ -225,9 +225,10 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetSearchShouldReturnCorrectViewWithModel()
             => MyController<ArticlesController>
-                .Instance(instance =>
-                    instance.WithData(FiveArticles))
-                .Calling(a => a.Search(Guid.NewGuid().ToString(), DefaultPageIndex, null))
+                .Instance(controller => controller
+                        .WithData(FiveArticles))
+                .Calling(c => c.Search(Guid.NewGuid().ToString(), 
+                    DefaultPageIndex, null))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleFullModel>());
@@ -235,9 +236,10 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void PostSearchShouldReturnCorrectViewWithModel()
             => MyController<ArticlesController>
-                .Instance(instance =>
-                    instance.WithData(FiveArticles))
-                .Calling(a => a.Search(Guid.NewGuid().ToString(), DefaultPageIndex))
+                .Instance(controller => controller
+                        .WithData(FiveArticles))
+                .Calling(c => c.Search(Guid.NewGuid().ToString(), 
+                    DefaultPageIndex))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
                     .RestrictingForHttpMethod(HttpMethod.Post))
@@ -249,9 +251,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void FilterShouldReturnCorrectViewWithModel()
             => MyController<ArticlesController>
-                .Instance(instance =>
-                    instance.WithData(FiveArticles))
-                .Calling(a => a.Filter(new Random().Next(), DefaultPageIndex))
+                .Instance(controller => controller
+                    .WithData(FiveArticles))
+                .Calling(c => c.Filter(new Random().Next(), DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleFullModel>());
@@ -259,9 +261,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void MineShouldReturnCorrectViewWithModel()
             => MyController<ArticlesController>
-                .Instance(instance =>
-                    instance.WithData(FiveArticles))
-                .Calling(a => a.Mine(DefaultPageIndex))
+                .Instance(controller => controller
+                        .WithData(FiveArticles))
+                .Calling(c => c.Mine(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleFullModel>());

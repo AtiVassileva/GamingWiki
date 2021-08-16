@@ -43,18 +43,13 @@ namespace GamingWiki.Services
                 LevelsRate = levelsRate,
                 GraphicsRate = graphicsRate,
                 DifficultyRate = difficultyRate,
-                Description = description,
+                Description = description
             };
 
             this.dbContext.Reviews.Add(review);
             this.dbContext.SaveChanges();
         }
-
-        public ReviewDetailsServiceModel GetReview(int reviewId)
-            => this.GetReviews(this.dbContext.Reviews
-                .Where(r => r.Id == reviewId))
-                .FirstOrDefault();
-
+        
         public ReviewDetailsServiceModel Details(int reviewId)
         {
             var dbModel = this.FindReview(reviewId);
