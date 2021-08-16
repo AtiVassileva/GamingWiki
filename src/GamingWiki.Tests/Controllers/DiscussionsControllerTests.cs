@@ -25,8 +25,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void AllShouldReturnCorrectViewWithModel()
             => MyController<DiscussionsController>
-                .Instance(instance =>
-                    instance.WithData(FiveDiscussions))
+                .Instance(controller => controller
+                        .WithData(FiveDiscussions))
                 .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
@@ -44,7 +44,7 @@ namespace GamingWiki.Tests.Controllers
         public void PostCreateReturnRedirectWithValidModel()
             => MyController<DiscussionsController>
                 .Instance(controller => controller
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Create(TestValidDiscussionFormModel))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -68,7 +68,7 @@ namespace GamingWiki.Tests.Controllers
         public void PostCreateShouldReturnViewWithInvalidModelState()
             => MyController<DiscussionsController>
                 .Instance(controller => controller
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Create(TestInvalidDiscussionFormModel))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -90,9 +90,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidDiscussionId()
             => MyController<DiscussionsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestDiscussion))
-                .Calling(c => c.Details(With.Value(TestDiscussion.Id)))
+                .Calling(c => c.Details(TestDiscussion.Id))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<DiscussionServiceDetailsModel>());
@@ -108,7 +108,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
             => MyController<DiscussionsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithUser(user => user
                         .InRole(AdministratorRoleName))
                     .WithData(TestDiscussion))
@@ -120,7 +120,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<DiscussionsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestDiscussion))
                 .Calling(c => c.Edit(TestDiscussion.Id))
                 .ShouldReturn()
@@ -131,7 +131,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<DiscussionsController>
                 .Instance(controller => controller
                    .WithData(TestDiscussion)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c
          .Edit(TestValidDiscussionEditModel, TestDiscussion.Id))
                 .ShouldHave()
@@ -156,7 +156,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<DiscussionsController>
                 .Instance(controller => controller
                     .WithData(TestDiscussion)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestInvalidDiscussionEditModel, TestDiscussion.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -171,7 +171,7 @@ namespace GamingWiki.Tests.Controllers
         public void PostEditShouldReturnBadRequestUponUnsuccessfulEdition()
             => MyController<DiscussionsController>
                 .Instance(controller => controller
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestValidDiscussionEditModel, TestDiscussion.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -191,7 +191,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<DiscussionsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestDiscussion))
                 .Calling(c => c.Delete(TestDiscussion.Id))
                 .ShouldReturn()
@@ -207,11 +207,11 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Delete(TestDiscussion.Id))
                 .ShouldHave()
                 .Data(data => data
-                    .WithSet<Discussion>(discussions => !discussions
-                        .Any(d =>
-                            d.Name == TestValidDiscussionFormModel.Name
-                            && d.Description == TestValidDiscussionFormModel.Name
-                            && d.Id == TestDiscussion.Id)
+                    .WithSet<Discussion>(discussions => discussions
+                        .All(d =>
+                            d.Name != TestValidDiscussionFormModel.Name
+                            && d.Description != TestValidDiscussionFormModel.Name
+                            && d.Id != TestDiscussion.Id)
                     )).TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
@@ -223,8 +223,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetSearchShouldReturnCorrectViewWithModel()
             => MyController<DiscussionsController>
-                .Instance(instance =>
-                    instance.WithData(FiveDiscussions))
+                .Instance(controller => controller
+                        .WithData(FiveDiscussions))
                 .Calling(a => a.Search(Guid.NewGuid().ToString(),
                     DefaultPageIndex, null))
                 .ShouldReturn()
@@ -234,8 +234,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void PostSearchShouldReturnCorrectViewWithModel()
             => MyController<DiscussionsController>
-                .Instance(instance =>
-                    instance.WithData(FiveDiscussions))
+                .Instance(controller => controller
+                        .WithData(FiveDiscussions))
                 .Calling(a => a.Search(Guid.NewGuid().ToString(),
                     DefaultPageIndex))
                 .ShouldHave()
@@ -245,8 +245,7 @@ namespace GamingWiki.Tests.Controllers
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<DiscussionFullModel>());
-
-        // TODO : JOIN, LEAVE AND CHAT ACTIONS TESTS!
+        
         [Fact]
         public void JoinShouldReturnErrorViewWithInvalidDiscussionId()
             => MyController<DiscussionsController>
@@ -383,8 +382,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void MineShouldReturnCorrectViewWithModel()
     => MyController<DiscussionsController>
-        .Instance(instance =>
-            instance.WithData(FiveDiscussions))
+        .Instance(controller => controller
+                .WithData(FiveDiscussions))
         .Calling(c => c.Mine(DefaultPageIndex))
         .ShouldReturn()
         .View(view => view

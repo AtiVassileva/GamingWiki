@@ -27,8 +27,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void AllShouldReturnCorrectViewWithModel()
             => MyController<GamesController>
-                .Instance(instance =>
-                    instance.WithData(FiveGames))
+                .Instance(controller => controller
+                        .WithData(FiveGames))
                 .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
@@ -107,7 +107,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidGameId()
             => MyController<GamesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestGame))
                 .Calling(c => c.Details(TestGame.Id))
                 .ShouldReturn()
@@ -125,7 +125,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
             => MyController<GamesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithUser(user => user
                         .InRole(AdministratorRoleName))
                     .WithData(TestGame))
@@ -137,7 +137,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<GamesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestGame)
                     .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestGame.Id))
@@ -224,7 +224,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<GamesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestGame)
                     .WithUser(TestUser.Identifier))
                 .Calling(c => c.Delete(TestGame.Id))
@@ -256,8 +256,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void SearchShouldReturnCorrectViewWithModel()
             => MyController<GamesController>
-                .Instance(instance =>
-                    instance.WithData(FiveGames))
+                .Instance(controller => controller
+                        .WithData(FiveGames))
                 .Calling(c => c.Search(Guid.NewGuid()
                     .ToString(), DefaultPageIndex))
                 .ShouldReturn()
@@ -267,8 +267,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void FilterShouldReturnCorrectViewWithModel()
             => MyController<GamesController>
-                .Instance(instance =>
-                    instance.WithData(FiveGames))
+                .Instance(controller => controller
+                        .WithData(FiveGames))
                 .Calling(c => c.Filter(new Random().Next(),
                     DefaultPageIndex))
                 .ShouldReturn()
@@ -278,8 +278,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void MineShouldReturnCorrectViewWithModel()
             => MyController<GamesController>
-                .Instance(instance =>
-                    instance.WithData(FiveGames))
+                .Instance(controller => controller
+                        .WithData(FiveGames))
                 .Calling(c => c.Mine(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view

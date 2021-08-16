@@ -27,9 +27,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void AllShouldReturnCorrectViewWithModel()
             => MyController<ArticlesController>
-                .Instance(instance =>
-                    instance.WithData(FiveArticles))
-                .Calling(a => a.All(DefaultPageIndex))
+                .Instance(controller => controller
+                    .WithData(FiveArticles))
+                .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleFullModel>());
@@ -48,7 +48,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<ArticlesController>
                 .Instance(controller => controller
                     .WithData(TestCategory)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Create(TestArticleFormModel))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -72,7 +72,7 @@ namespace GamingWiki.Tests.Controllers
         public void PostCreateShouldReturnViewWithInvalidModelState()
             => MyController<ArticlesController>
                 .Instance(controller => controller
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Create(TestArticleFormModel))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -87,16 +87,16 @@ namespace GamingWiki.Tests.Controllers
         public void DetailsShouldReturnErrorViewWithInvalidArticleId()
             => MyController<ArticlesController>
                 .Instance()
-                .Calling(a => a.Details(new Random().Next()))
+                .Calling(c => c.Details(TestArticle.Id))
                 .ShouldReturn()
                 .View("Error");
 
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidArticleId()
             => MyController<ArticlesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestArticle))
-                .Calling(a => a.Details(With.Value(TestArticle.Id)))
+                .Calling(c => c.Details(TestArticle.Id))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleServiceDetailsModel>());
@@ -105,18 +105,18 @@ namespace GamingWiki.Tests.Controllers
         public void GetEditShouldReturnErrorViewWithInvalidId()
             => MyController<ArticlesController>
                 .Instance()
-                .Calling(a => a.Edit(new Random().Next()))
+                .Calling(c => c.Edit(TestArticle.Id))
                 .ShouldReturn()
                 .View("Error");
 
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
             => MyController<ArticlesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithUser(user => user
                         .InRole(AdministratorRoleName))
                     .WithData(TestArticle))
-                .Calling(a => a.Edit(TestArticle.Id))
+                .Calling(c => c.Edit(TestArticle.Id))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ArticleServiceEditModel>());
@@ -124,9 +124,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<ArticlesController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestArticle))
-                .Calling(a => a.Edit(TestArticle.Id))
+                .Calling(c => c.Edit(TestArticle.Id))
                 .ShouldReturn()
                 .Unauthorized();
 
@@ -135,7 +135,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<ArticlesController>
                 .Instance(controller => controller
                     .WithData(TestArticle)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestValidArticleEditModel, TestArticle.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -174,7 +174,7 @@ namespace GamingWiki.Tests.Controllers
         public void PostEditShouldReturnBadRequestUponUnsuccessfulEdition()
             => MyController<ArticlesController>
                 .Instance(controller => controller
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestValidArticleEditModel, TestArticle.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes

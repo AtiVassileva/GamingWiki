@@ -73,7 +73,7 @@ namespace GamingWiki.Tests.Controllers
         public void DeleteShouldReturnErrorViewWithInvalidReplyId()
             => MyController<RepliesController>
                 .Instance()
-                .Calling(c => c.Delete(new Random().Next()))
+                .Calling(c => c.Delete(TestReply.Id))
                 .ShouldReturn()
                 .View("Error");
 

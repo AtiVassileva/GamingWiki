@@ -49,7 +49,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CommentsController>
                 .Instance(controller => controller
                     .WithData(TestArticle)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Add(TestInvalidCommentFormModel, TestArticle.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -81,7 +81,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<CommentsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestComment))
                 .Calling(c => c.Delete(TestComment.Id))
                 .ShouldReturn()
@@ -98,10 +98,10 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Delete(TestComment.Id))
                 .ShouldHave()
                 .Data(data => data
-                    .WithSet<Comment>(comments => !comments
-                        .Any(c =>
-                            c.Content == TestComment.Content
-                            && c.ArticleId == TestArticle.Id)
+                    .WithSet<Comment>(comments => comments
+                        .All(c =>
+                            c.Content != TestComment.Content
+                            && c.ArticleId != TestArticle.Id)
                     )).TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()

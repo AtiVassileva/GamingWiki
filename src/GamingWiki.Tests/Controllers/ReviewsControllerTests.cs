@@ -26,8 +26,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void AllShouldReturnCorrectViewWithModel()
             => MyController<ReviewsController>
-                .Instance(controller =>
-                    controller.WithData(FiveReviews))
+                .Instance(controller => controller
+                        .WithData(FiveReviews))
                 .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
@@ -83,18 +83,18 @@ namespace GamingWiki.Tests.Controllers
         public void GetEditShouldReturnErrorViewWithInvalidId()
             => MyController<ReviewsController>
                 .Instance()
-                .Calling(a => a.Edit(TestReview.Id))
+                .Calling(c => c.Edit(TestReview.Id))
                 .ShouldReturn()
                 .View("Error");
 
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
             => MyController<ReviewsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestReview)
                     .WithUser(user => user
                         .InRole(AdministratorRoleName)))
-                .Calling(a => a.Edit(TestReview.Id))
+                .Calling(c => c.Edit(TestReview.Id))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ReviewDetailsServiceModel>());
@@ -102,7 +102,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<ReviewsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestReview)
                     .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestReview.Id))
@@ -171,7 +171,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<ReviewsController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestReview)
                     .WithUser(TestUser.Identifier))
                 .Calling(c => c.Delete(TestReview.Id))
@@ -201,9 +201,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetSearchShouldReturnCorrectViewWithModel()
             => MyController<ReviewsController>
-                .Instance(instance =>
-                    instance.WithData(FiveReviews))
-                .Calling(a => a.Search(Guid.NewGuid().ToString(), 
+                .Instance(controller => controller
+                        .WithData(FiveReviews))
+                .Calling(c => c.Search(Guid.NewGuid().ToString(), 
                     DefaultPageIndex, null))
                 .ShouldReturn()
                 .View(view => view
@@ -212,8 +212,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void PostSearchShouldReturnCorrectViewWithModel()
             => MyController<ReviewsController>
-                .Instance(instance =>
-                    instance.WithData(FiveReviews))
+                .Instance(controller => controller
+                        .WithData(FiveReviews))
                 .Calling(c => c.Search(Guid.NewGuid().ToString(), 
                     DefaultPageIndex))
                 .ShouldHave()
@@ -227,8 +227,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void MineShouldReturnCorrectViewWithModel()
             => MyController<ReviewsController>
-                .Instance(instance =>
-                    instance.WithData(FiveReviews))
+                .Instance(controller => controller
+                        .WithData(FiveReviews))
                 .Calling(c => c.Mine(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view

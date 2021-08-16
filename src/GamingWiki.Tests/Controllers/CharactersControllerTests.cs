@@ -27,8 +27,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void AllShouldReturnCorrectViewWithModel()
             => MyController<CharactersController>
-                .Instance(instance =>
-                    instance.WithData(FiveCharacters))
+                .Instance(controller => controller
+                        .WithData(FiveCharacters))
                 .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
@@ -72,7 +72,7 @@ namespace GamingWiki.Tests.Controllers
         public void PostCreateShouldReturnViewWithInvalidModelState()
             => MyController<CharactersController>
                 .Instance(controller => controller
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Create(TestCharacterFormModel))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -94,9 +94,9 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidCharacterId()
             => MyController<CharactersController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestCharacter))
-                .Calling(c => c.Details(With.Value(TestCharacter.Id)))
+                .Calling(c => c.Details((TestCharacter.Id)))
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<CharacterServiceDetailsModel>());
@@ -112,7 +112,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
             => MyController<CharactersController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithUser(user => user
                         .InRole(AdministratorRoleName))
                     .WithData(TestCharacter))
@@ -124,7 +124,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void GetEditShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<CharactersController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestCharacter))
                 .Calling(c => c.Edit(TestCharacter.Id))
                 .ShouldReturn()
@@ -135,7 +135,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(controller => controller
                     .WithData(TestCharacter)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestValidCharacterEditModel, TestCharacter.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -159,7 +159,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(controller => controller
                     .WithData(TestCharacter)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestInvalidCharacterEditModel, TestCharacter.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -175,7 +175,7 @@ namespace GamingWiki.Tests.Controllers
             => MyController<CharactersController>
                 .Instance(controller => controller
                     .WithData(TestCharacterClass)
-                    .WithUser(TestUser.Username, TestUser.Identifier))
+                    .WithUser(TestUser.Identifier))
                 .Calling(c => c.Edit(TestValidCharacterEditModel, TestCharacter.Id))
                 .ShouldHave()
                 .ActionAttributes(attributes => attributes
@@ -195,7 +195,7 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
             => MyController<CharactersController>
-                .Instance(instance => instance
+                .Instance(controller => controller
                     .WithData(TestCharacter))
                 .Calling(c => c.Delete(TestCharacter.Id))
                 .ShouldReturn()
@@ -211,10 +211,10 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Delete(TestCharacter.Id))
                 .ShouldHave()
                 .Data(data => data
-                    .WithSet<Character>(characters => !characters
-                        .Any(c =>
-                            c.Name == TestCharacterFormModel.Name
-                            && c.Description == TestCharacterFormModel.Name)
+                    .WithSet<Character>(characters => characters
+                        .All(c =>
+                            c.Name != TestCharacterFormModel.Name
+                            && c.Description != TestCharacterFormModel.Name)
                     )).TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
@@ -226,8 +226,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void SearchShouldReturnCorrectViewWithModel()
             => MyController<CharactersController>
-                .Instance(instance =>
-                    instance.WithData(FiveCharacters))
+                .Instance(controller => controller
+                        .WithData(FiveCharacters))
                 .Calling(c => c.Search(Guid.NewGuid()
                     .ToString(), DefaultPageIndex))
                 .ShouldReturn()
@@ -237,8 +237,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void FilterShouldReturnCorrectViewWithModel()
             => MyController<CharactersController>
-                .Instance(instance =>
-                    instance.WithData(FiveCharacters))
+                .Instance(controller => controller
+                        .WithData(FiveCharacters))
                 .Calling(c => c.Filter(new Random().Next(), DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
@@ -247,8 +247,8 @@ namespace GamingWiki.Tests.Controllers
         [Fact]
         public void MineShouldReturnCorrectViewWithModel()
             => MyController<CharactersController>
-                .Instance(instance =>
-                    instance.WithData(FiveCharacters))
+                .Instance(controller => controller
+                        .WithData(FiveCharacters))
                 .Calling(c => c.Mine(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
