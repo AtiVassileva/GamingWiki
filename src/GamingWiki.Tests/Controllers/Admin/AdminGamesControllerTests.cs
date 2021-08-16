@@ -1,10 +1,12 @@
-﻿using GamingWiki.Models;
+﻿using System.Collections.Generic;
+using GamingWiki.Models;
 using GamingWiki.Web.Areas.Admin.Controllers;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using static GamingWiki.Tests.Data.Games;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 using System.Linq;
+using GamingWiki.Services.Models.Games;
 
 namespace GamingWiki.Tests.Controllers.Admin
 {
@@ -36,6 +38,7 @@ namespace GamingWiki.Tests.Controllers.Admin
                 .Instance()
                 .Calling(c => c.Pending())
                 .ShouldReturn()
-                .View();
+                .View(view => view
+                    .WithModelOfType<IEnumerable<GamePendingModel>>());
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GamingWiki.Models;
+using GamingWiki.Services.Models.Characters;
 using GamingWiki.Web.Areas.Admin.Controllers;
 using static GamingWiki.Tests.Data.Characters;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
@@ -35,6 +37,7 @@ namespace GamingWiki.Tests.Controllers.Admin
                 .Instance()
                 .Calling(c => c.Pending())
                 .ShouldReturn()
-                .View();
+                .View(view => view
+                    .WithModelOfType<IEnumerable<CharacterPendingModel>>());
     }
 }
