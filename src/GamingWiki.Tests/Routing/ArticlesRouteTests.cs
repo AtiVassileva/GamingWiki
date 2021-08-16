@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models.Articles;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 using static GamingWiki.Tests.Data.Articles;
@@ -30,24 +31,15 @@ namespace GamingWiki.Tests.Routing
                 .ShouldMap("/Articles/Create")
                 .To<ArticlesController>(c => c.Create());
 
-        //[Fact]
-        //public void PostCreateShouldBeMapped()
-        //    => MyRouting
-        //        .Configuration()
-        //        .ShouldMap(request => request
-        //            .WithMethod(HttpMethod.Post)
-        //            .WithLocation("/Articles/Create")
-        //            .WithFormFields(new
-        //            {
-        //                TestArticleFormModel.Heading,
-        //                CategoryId = 1,
-        //                TestArticleFormModel.Content,
-        //                TestArticleFormModel.PictureUrl
-        //            }))
-        //        .To<ArticlesController>(c =>
-        //            c.Create(TestArticleFormModel))
-        //        .AndAlso()
-        //        .ToValidModelState();
+        [Fact]
+        public void PostCreateShouldBeMapped()
+            => MyRouting
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation("/Articles/Create"))
+                .To<ArticlesController>(c =>
+                    c.Create(With.Any<ArticleFormModel>()));
 
         [Fact]
         public void DetailsShouldBeMapped()

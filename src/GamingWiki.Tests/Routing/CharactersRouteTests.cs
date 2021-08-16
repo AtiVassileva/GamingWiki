@@ -1,4 +1,6 @@
-﻿using GamingWiki.Web.Controllers;
+﻿using GamingWiki.Services.Models.Characters;
+using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Tests.Data.Characters;
 using static GamingWiki.Tests.Data.Classes;
 using static GamingWiki.Tests.Common.TestConstants;
@@ -32,24 +34,16 @@ namespace GamingWiki.Tests.Routing
                 .ShouldMap("/Characters/Create")
                 .To<CharactersController>(c => c.Create());
 
-        ////[Fact]
-        ////public void PostCreateShouldBeMapped()
-        ////    => MyRouting
-        ////        .Configuration()
-        ////        .ShouldMap(request => request
-        ////            .WithMethod(HttpMethod.Post)
-        ////            .WithLocation("/Articles/Create")
-        ////            .WithFormFields(new
-        ////            {
-        ////                TestArticleFormModel.Heading,
-        ////                CategoryId = 1,
-        ////                TestArticleFormModel.Content,
-        ////                TestArticleFormModel.PictureUrl
-        ////            }))
-        ////        .To<ArticlesController>(c =>
-        ////            c.Create(TestArticleFormModel))
-        ////        .AndAlso()
-        ////        .ToValidModelState();
+
+        [Fact]
+        public void PostCreateShouldBeMapped()
+        => MyRouting
+            .Configuration()
+        .ShouldMap(request => request
+            .WithMethod(HttpMethod.Post)
+        .WithLocation("/Characters/Create"))
+            .To<CharactersController>(c =>
+        c.Create(With.Any<CharacterFormModel>()));
 
         [Fact]
         public void DetailsShouldBeMapped()
@@ -67,23 +61,16 @@ namespace GamingWiki.Tests.Routing
                 .To<CharactersController>(c =>
                     c.Edit(1));
 
-        //[Fact]
-        //public void PostEditShouldBeMapped()
-        //    => MyRouting
-        //        .Configuration()
-        //        .ShouldMap(request => request
-        //            .WithMethod(HttpMethod.Post)
-        //            .WithLocation($"/Characters/Edit?characterId={TestCharacter.Id}")
-        //            .WithFormFields(new
-        //            {
-        //                TestValidCharacterEditModel.Description,
-        //                TestValidCharacterEditModel.PictureUrl,
-        //                TestValidCharacterEditModel.ClassId,
-        //            }))
-        //        .To<CharactersController>(c =>
-        //            c.Edit(TestValidCharacterEditModel, TestCharacter.Id))
-        //        .AndAlso()
-        //        .ToValidModelState();
+        [Fact]
+        public void PostEditShouldBeMapped()
+            => MyRouting
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Characters/Edit?characterId={TestCharacter.Id}"))
+                .To<CharactersController>(c =>
+                    c.Edit(With.Any<CharacterServiceEditModel>(), 
+                        TestCharacter.Id));
 
         [Fact]
         public void DeleteShouldBeMapped()

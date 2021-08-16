@@ -42,7 +42,7 @@ namespace GamingWiki.Tests.Data
         public static CharacterServiceEditModel TestValidCharacterEditModel
             => new()
             {
-                Id = TestCharacter.Id,
+                Id = DefaultId,
                 Name = DefaultName,
                 Description = DefaultDescription,
                 PictureUrl = DefaultUrl,

@@ -1,4 +1,6 @@
 ﻿using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models.Reviews;
+using static GamingWiki.Tests.Data.Reviews;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
@@ -29,24 +31,15 @@ namespace GamingWiki.Tests.Routing
                 .ShouldMap("/Reviews/Create?gameId=1")
                 .To<ReviewsController>(c => c.Create(1));
 
-        ////[Fact]
-        ////public void PostCreateShouldBeMapped()
-        ////    => MyRouting
-        ////        .Configuration()
-        ////        .ShouldMap(request => request
-        ////            .WithMethod(HttpMethod.Post)
-        ////            .WithLocation("/Articles/Create")
-        ////            .WithFormFields(new
-        ////            {
-        ////                TestArticleFormModel.Heading,
-        ////                CategoryId = 1,
-        ////                TestArticleFormModel.Content,
-        ////                TestArticleFormModel.PictureUrl
-        ////            }))
-        ////        .To<ArticlesController>(c =>
-        ////            c.Create(TestArticleFormModel))
-        ////        .AndAlso()
-        ////        .ToValidModelState();
+        [Fact]
+        public void PostCreateShouldBeMapped()
+        => MyRouting
+            .Configuration()
+            .ShouldMap(request => request
+                .WithMethod(HttpMethod.Post)
+                .WithLocation("/Reviews/Create?gameId=1"))
+            .To<ReviewsController>(c =>
+                c.Create(With.Any<ReviewFormModel>(), 1));
         
         [Fact]
         public void GetEditShouldBeMapped()
@@ -56,25 +49,17 @@ namespace GamingWiki.Tests.Routing
                 .To<ReviewsController>(c =>
                     c.Edit(1));
 
-        //[Fact]
-        //public void PostEditShouldBeMapped()
-        //    => MyRouting
-        //        .Configuration()
-        //        .ShouldMap(request => request
-        //            .WithMethod(HttpMethod.Post)
-        //            .WithLocation($"/Articles/Edit?articleId={TestValidArticleEditModel.Id}")
-        //            .WithFormFields(new
-        //            {
-        //                TestValidArticleEditModel.Id,
-        //                TestValidArticleEditModel.Heading,
-        //                TestValidArticleEditModel.Content,
-        //                TestValidArticleEditModel.PictureUrl
-        //            }))
-        //        .To<ArticlesController>(c =>
-        //            c.Edit(TestValidArticleEditModel, TestValidArticleEditModel.Id))
-        //        .AndAlso()
-        //        .ToValidModelState();
-
+        [Fact]
+        public void PostEditShouldBeMapped()
+            => MyRouting
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Reviews/Edit?reviewId={TestReview.Id}"))
+                .To<ReviewsController>(c =>
+                    c.Edit(With.Any<ReviewFormModel>(),
+                        TestReview.Id));
+        
         [Fact]
         public void DeleteShouldBeMapped()
             => MyRouting

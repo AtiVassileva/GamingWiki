@@ -1,4 +1,7 @@
-﻿using GamingWiki.Web.Controllers;
+﻿using GamingWiki.Services.Models.Tricks;
+using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models.Tricks;
+using static GamingWiki.Tests.Data.Tricks;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
@@ -29,25 +32,16 @@ namespace GamingWiki.Tests.Routing
                 .ShouldMap("/Tricks/Create")
                 .To<TricksController>(c => c.Create());
 
-        //////[Fact]
-        //////public void PostCreateShouldBeMapped()
-        //////    => MyRouting
-        //////        .Configuration()
-        //////        .ShouldMap(request => request
-        //////            .WithMethod(HttpMethod.Post)
-        //////            .WithLocation("/Articles/Create")
-        //////            .WithFormFields(new
-        //////            {
-        //////                TestArticleFormModel.Heading,
-        //////                CategoryId = 1,
-        //////                TestArticleFormModel.Content,
-        //////                TestArticleFormModel.PictureUrl
-        //////            }))
-        //////        .To<ArticlesController>(c =>
-        //////            c.Create(TestArticleFormModel))
-        //////        .AndAlso()
-        //////        .ToValidModelState();
-
+        [Fact]
+        public void PostCreateShouldBeMapped()
+        => MyRouting
+            .Configuration()
+            .ShouldMap(request => request
+                .WithMethod(HttpMethod.Post)
+                .WithLocation("/Tricks/Create"))
+            .To<TricksController>(c =>
+                c.Create(With.Any<TrickFormModel>()));
+        
         [Fact]
         public void GetEditShouldBeMapped()
             => MyRouting
@@ -56,25 +50,17 @@ namespace GamingWiki.Tests.Routing
                 .To<TricksController>(c =>
                     c.Edit(1));
 
-        ////[Fact]
-        ////public void PostEditShouldBeMapped()
-        ////    => MyRouting
-        ////        .Configuration()
-        ////        .ShouldMap(request => request
-        ////            .WithMethod(HttpMethod.Post)
-        ////            .WithLocation($"/Articles/Edit?articleId={TestValidArticleEditModel.Id}")
-        ////            .WithFormFields(new
-        ////            {
-        ////                TestValidArticleEditModel.Id,
-        ////                TestValidArticleEditModel.Heading,
-        ////                TestValidArticleEditModel.Content,
-        ////                TestValidArticleEditModel.PictureUrl
-        ////            }))
-        ////        .To<ArticlesController>(c =>
-        ////            c.Edit(TestValidArticleEditModel, TestValidArticleEditModel.Id))
-        ////        .AndAlso()
-        ////        .ToValidModelState();
-
+        [Fact]
+        public void PostEditShouldBeMapped()
+            => MyRouting
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Tricks/Edit?trickId={TestTrick.Id}"))
+                .To<TricksController>(c =>
+                    c.Edit(With.Any<TrickServiceEditModel>(),
+                        TestTrick.Id));
+        
         [Fact]
         public void DeleteShouldBeMapped()
             => MyRouting
