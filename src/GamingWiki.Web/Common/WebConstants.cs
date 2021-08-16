@@ -14,5 +14,19 @@ namespace GamingWiki.Web.Common
 
         public static ErrorViewModel CreateError(string message)
             => new() { Message = message };
+
+        public class Cache
+        {
+            public const int CacheExpiringTime = 20;
+
+            public const string LatestArticlesCacheKey
+                = nameof(LatestArticlesCacheKey);
+
+            public const string LatestGamesCacheKey 
+                = nameof(LatestGamesCacheKey);
+
+            public const string LatestTricksCacheKey
+                = nameof(LatestTricksCacheKey);
+        }
     }
 }

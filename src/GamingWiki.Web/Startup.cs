@@ -43,6 +43,8 @@ namespace GamingWiki.Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddMemoryCache();
+
             services.AddControllersWithViews(options => options.Filters
                 .Add<AutoValidateAntiforgeryTokenAttribute>());
 
