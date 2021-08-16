@@ -85,6 +85,11 @@ namespace GamingWiki.Web.Controllers
         [HttpPost]
         public IActionResult Edit(TrickServiceEditModel model, int trickId)
         {
+            if (!this.trickService.TrickExists(trickId))
+            {
+                return this.View("Error", CreateError(NonExistingTrickExceptionMessage));
+            }
+
             if (!this.ModelState.IsValid)
             {
                 var detailsModel = this.trickService.Details(trickId);

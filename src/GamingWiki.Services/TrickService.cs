@@ -94,8 +94,8 @@ namespace GamingWiki.Services
 
         public TrickServiceListingModel Details(int trickId)
             => this.GetTricks(this.dbContext.Tricks
-                .Where(t => t.Id == trickId))
-                .FirstOrDefault();
+            .Where(t => t.Id == trickId))
+            .FirstOrDefault();
 
         public IEnumerable<GameServiceSimpleModel> GetGames()
             => this.dbContext.Games
