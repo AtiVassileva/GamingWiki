@@ -63,5 +63,19 @@ namespace GamingWiki.Tests.Data
                 ContributorId = TestUser.Id,
                 IsApproved = false
             };
+
+        public static Character TestNotApprovedCharacter
+            => new()
+            {
+                Id = DefaultId,
+                Name = DefaultName,
+                Description = DefaultDescription,
+                ContributorId = TestUser.Id,
+                ClassId = TestCharacterClass.Id,
+                Class = TestCharacterClass,
+                GameId = TestGame.Id,
+                Game = TestGame,
+                IsApproved = false
+            };
     }
 }

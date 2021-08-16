@@ -82,6 +82,14 @@ namespace GamingWiki.Tests.Data
                 SupportedPlatforms = GenerateRandomPlatforms
             };
 
+        public static Game TestNotApprovedGame => new()
+        {
+            Id = DefaultId,
+            Area = TestArea,
+            Genre = TestGenre,
+            IsApproved = false
+        };
+
         private static IEnumerable<int> GenerateRandomPlatforms
             => new List<int>(new Random().Next(0, 5));
     }
