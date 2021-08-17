@@ -27,13 +27,14 @@ namespace GamingWiki.Tests.Pipeline
                 .WithModelOfType<GameFullModel>()
                 .Passing(gameListing =>
                 {
-                    gameListing.Games.Count.ShouldBe(0);
+                    gameListing.Games.Count.ShouldBe(3);
                     gameListing.Games.PageIndex.ShouldBe(0);
-                    gameListing.Games.TotalPages.ShouldBe(0);
+                    gameListing.Games.TotalPages.ShouldBe(2);
                 }));
 
         [Theory]
-        [InlineData(1, 0, 0)]
+        [InlineData(1, 3, 2)]
+        [InlineData(2, 2, 2)]
         public void AllWithPageShouldReturnCorrectViewWithCorrectModel(int pageIndex, int expectedCountOnPage, int totalPages)
             => MyPipeline
                 .Configuration()

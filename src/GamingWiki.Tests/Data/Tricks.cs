@@ -12,7 +12,10 @@ namespace GamingWiki.Tests.Data
     public static class Tricks
     {
         public static IEnumerable<Trick> FiveTricks
-            => Enumerable.Range(0, 5).Select(_ => new Trick());
+            => Enumerable.Range(0, 5).Select(_ => new Trick
+            {
+                GameId = TestGame.Id
+            });
 
         public static TrickFormModel TestTrickValidFormModel
             => new()
