@@ -13,7 +13,10 @@ namespace GamingWiki.Tests.Data
     public static class Characters
     {
         public static IEnumerable<Character> FiveCharacters
-            => Enumerable.Range(0, 5).Select(_ => new Character());
+            => Enumerable.Range(0, 5).Select(_ => new Character
+            {
+                IsApproved = true
+            });
 
         public static Character TestCharacter =>
             new ()
