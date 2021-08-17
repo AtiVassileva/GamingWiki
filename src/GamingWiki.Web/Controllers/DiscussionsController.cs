@@ -180,7 +180,7 @@ namespace GamingWiki.Web.Controllers
                 TempData[GlobalMessageKey] = FullDiscussionExceptionMessage;
                 TempData[ColorKey] = "danger";
 
-                return RedirectToAction(nameof(this.Details), discussionId);
+                return RedirectToAction(nameof(this.Details), new { discussionId });
             }
 
             var userId = this.User.GetId();
@@ -213,7 +213,7 @@ namespace GamingWiki.Web.Controllers
                 TempData[GlobalMessageKey] = NotDiscussionMemberExceptionMessage;
                 TempData[ColorKey] = "danger";
 
-                return RedirectToAction(nameof(this.Details), discussionId);
+                return RedirectToAction(nameof(this.Details), new { discussionId });
             }
 
             this.discussionService.RemoveUserFromDiscussion(discussionId, userId);
@@ -236,7 +236,7 @@ namespace GamingWiki.Web.Controllers
                 TempData[GlobalMessageKey] = NotDiscussionMemberExceptionMessage;
                 TempData[ColorKey] = "danger";
 
-                return RedirectToAction(nameof(this.Details), discussionId);
+                return RedirectToAction(nameof(this.Details), new { discussionId });
             }
 
             var detailsModel = this.discussionService

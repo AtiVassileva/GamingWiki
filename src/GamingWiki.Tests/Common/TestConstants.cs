@@ -5,6 +5,7 @@
         public const int DefaultPageIndex = 1;
 
         public const string DefaultTestUserName = "TestUser";
+        public const string DefaultTestUserId = "TestUserId";
 
         public const int DefaultId = 5;
 
