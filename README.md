@@ -82,6 +82,8 @@ delete comments and replies no matter who added them.
     FontAwesome
     
     MyTested.AspNetCore.Mvc
+    
+    xUnit
 
 # Screenshots 
 
