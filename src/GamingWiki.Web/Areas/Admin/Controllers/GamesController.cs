@@ -13,8 +13,7 @@ namespace GamingWiki.Web.Areas.Admin.Controllers
         public IActionResult Approve(int gameId)
         {
             this.helper.Approve(gameId);
-            return RedirectToAction("All", "Games",
-                new { area = "" });
+            return RedirectToAction("All", "Games", new { area = "" });
         }
 
         public IActionResult Pending() 
