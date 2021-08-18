@@ -5,10 +5,9 @@ using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Tests.Data.Articles;
-using static GamingWiki.Tests.Data.Categories;
-using static GamingWiki.Tests.Common.TestConstants;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -151,7 +150,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m => 
+                    m.Message == NonExistingArticleExceptionMessage));
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -194,7 +194,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingArticleExceptionMessage));
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -243,7 +244,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingArticleExceptionMessage));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

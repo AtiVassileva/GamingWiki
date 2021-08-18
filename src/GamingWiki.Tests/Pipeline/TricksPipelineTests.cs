@@ -5,6 +5,8 @@ using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Tricks;
 using static GamingWiki.Tests.Data.Tricks;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -136,7 +138,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m => m
+                    .Message == NonExistingTrickExceptionMessage));
 
         [Fact]
         public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
@@ -168,6 +171,10 @@ namespace GamingWiki.Tests.Pipeline
                 .To<TricksController>(c => c.Delete(TestTrick.Id))
                 .Which(controller => controller
                     .WithData(TestTrick))
+                .ShouldHave()
+                .TempData(tempData => tempData
+                    .ContainingEntryWithKey(GlobalMessageKey))
+                .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<TricksController>(c => c
@@ -200,7 +207,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m => m
+                    .Message == NonExistingTrickExceptionMessage));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

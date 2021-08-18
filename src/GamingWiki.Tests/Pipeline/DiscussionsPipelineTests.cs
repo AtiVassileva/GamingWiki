@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Discussions;
 using GamingWiki.Tests.Data;
 using GamingWiki.Web.Controllers;
@@ -7,6 +6,8 @@ using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Discussions;
 using static GamingWiki.Tests.Data.Discussions;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -124,7 +125,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingDiscussionExceptionMessage));
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -167,7 +169,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingDiscussionExceptionMessage));
 
         [Fact]
         public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
@@ -199,6 +202,10 @@ namespace GamingWiki.Tests.Pipeline
                 .To<DiscussionsController>(c => c.Delete(TestDiscussion.Id))
                 .Which(controller => controller
                     .WithData(TestDiscussion))
+                .ShouldHave()
+                .TempData(tempData => tempData
+                    .ContainingEntryWithKey(GlobalMessageKey))
+                .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<DiscussionsController>(c => c
@@ -231,7 +238,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingDiscussionExceptionMessage));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -337,7 +345,7 @@ namespace GamingWiki.Tests.Pipeline
                     m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
                     m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
                 }));
-        
+
         [Fact]
         public void JoinShouldBeMappedAndRedirectUponSuccessfulAction()
             => MyPipeline
@@ -352,7 +360,7 @@ namespace GamingWiki.Tests.Pipeline
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<DiscussionsController>(c => c.Chat(TestDiscussion.Id)));
-        
+
         [Fact]
         public void JoinShouldBeMappedAndRedirectWhenUserParticipatesInDiscussion()
             => MyPipeline
@@ -380,7 +388,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingDiscussionExceptionMessage));
 
         [Fact]
         public void JoinShouldBeaMappedAndShouldRedirectWhenDiscussionIsFull()
@@ -441,20 +450,22 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ErrorViewModel>());
-[Fact]
+                    .WithModelOfType<ErrorViewModel>(m =>
+                        m.Message == NonExistingDiscussionExceptionMessage));
+        [Fact]
         public void ChatShouldReturnErrorViewWithInvalidId()
-            => MyPipeline
-                .Configuration()
-                .ShouldMap(request => request
-                    .WithLocation($"/Discussions/Chat?discussionId={TestDiscussion.Id}")
-                    .WithUser()
-                    .WithAntiForgeryToken())
-                .To<DiscussionsController>(c => c.Chat(TestDiscussion.Id))
-                .Which()
-                .ShouldReturn()
-                .View(view => view
-                    .WithModelOfType<ErrorViewModel>());
+                    => MyPipeline
+                        .Configuration()
+                        .ShouldMap(request => request
+                            .WithLocation($"/Discussions/Chat?discussionId={TestDiscussion.Id}")
+                            .WithUser()
+                            .WithAntiForgeryToken())
+                        .To<DiscussionsController>(c => c.Chat(TestDiscussion.Id))
+                        .Which()
+                        .ShouldReturn()
+                        .View(view => view
+                            .WithModelOfType<ErrorViewModel>(m =>
+                                m.Message == NonExistingDiscussionExceptionMessage));
 
         [Fact]
         public void ChatShouldRedirectWhenUserDoesNotParticipate()

@@ -2,6 +2,7 @@
 using GamingWiki.Web.Controllers;
 using static GamingWiki.Tests.Data.Messages;
 using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using MyTested.AspNetCore.Mvc;
 using System.Linq;
@@ -47,7 +48,8 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ErrorViewModel>());
+                    .WithModelOfType<ErrorViewModel>(m => 
+                        m.Message == NonExistingMessageExceptionMessage));
 
         [Fact]
         public void DeleteShouldBeMappedAndReturnUnauthorizedForUnauthorizedUsers()

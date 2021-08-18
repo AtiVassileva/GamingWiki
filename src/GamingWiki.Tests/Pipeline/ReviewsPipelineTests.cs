@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GamingWiki.Services.Models.Classes;
 using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
@@ -7,6 +6,8 @@ using GamingWiki.Web.Models.Reviews;
 using static GamingWiki.Tests.Data.Reviews;
 using static GamingWiki.Tests.Data.Games;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -139,7 +140,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m => m
+                    .Message == NonExistingReviewExceptionMessage));
 
         [Fact]
         public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
@@ -171,6 +173,10 @@ namespace GamingWiki.Tests.Pipeline
                 .To<ReviewsController>(c => c.Delete(TestReview.Id))
                 .Which(controller => controller
                     .WithData(TestReview))
+                .ShouldHave()
+                .TempData(tempData => tempData
+                    .ContainingEntryWithKey(GlobalMessageKey))
+                .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<ReviewsController>(c => c
@@ -203,7 +209,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m => m
+                    .Message == NonExistingReviewExceptionMessage));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

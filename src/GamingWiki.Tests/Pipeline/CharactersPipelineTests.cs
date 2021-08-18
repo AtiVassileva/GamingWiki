@@ -5,6 +5,8 @@ using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -127,7 +129,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingCharacterExceptionMessage));
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -189,7 +192,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingCharacterExceptionMessage));
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -202,6 +206,10 @@ namespace GamingWiki.Tests.Pipeline
                 .To<CharactersController>(c => c.Delete(TestCharacter.Id))
                 .Which(controller => controller
                     .WithData(TestCharacter))
+                .ShouldHave()
+                .TempData(tempData => tempData
+                    .ContainingEntryWithKey(GlobalMessageKey))
+                .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<CharactersController>(c => c
@@ -234,7 +242,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingCharacterExceptionMessage));
 
         [Fact]
         public void SearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

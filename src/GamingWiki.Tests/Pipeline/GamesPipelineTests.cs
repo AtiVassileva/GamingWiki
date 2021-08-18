@@ -6,6 +6,8 @@ using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Tests.Data.Games;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -127,7 +129,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m => 
+                    m.Message == NonExistingGameExceptionMessage));
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -170,7 +173,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingGameExceptionMessage));
 
         [Fact]
         public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
@@ -201,6 +205,10 @@ namespace GamingWiki.Tests.Pipeline
                 .To<GamesController>(c => c.Delete(TestGame.Id))
                 .Which(controller => controller
                     .WithData(TestGame))
+                .ShouldHave()
+                .TempData(tempData => tempData
+                    .ContainingEntryWithKey(GlobalMessageKey))
+                .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<GamesController>(c => c
@@ -233,7 +241,8 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ErrorViewModel>());
+                .WithModelOfType<ErrorViewModel>(m =>
+                    m.Message == NonExistingGameExceptionMessage));
 
         [Fact]
         public void SearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

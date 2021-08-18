@@ -88,7 +88,7 @@ namespace GamingWiki.Web.Controllers
         {
             if (!this.characterService.CharacterExists(characterId))
             {
-                return this.View("Error", CreateError(NonExistingGameExceptionMessage));
+                return this.View("Error", CreateError(NonExistingCharacterExceptionMessage));
             }
 
             var contributorId = this.characterService.GetContributorId(characterId);

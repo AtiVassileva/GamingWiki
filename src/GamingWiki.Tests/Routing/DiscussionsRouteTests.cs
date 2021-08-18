@@ -42,8 +42,7 @@ namespace GamingWiki.Tests.Routing
                 .To<DiscussionsController>(c => c.Create())
                 .Which()
                 .ShouldReturn()
-                .View(view => view
-                    .WithModelOfType<DiscussionFormModel>());
+                .View();
 
         [Fact]
         public void PostCreateShouldBeMapped()

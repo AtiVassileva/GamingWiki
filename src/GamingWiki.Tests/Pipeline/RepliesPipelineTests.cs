@@ -4,6 +4,7 @@ using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using static GamingWiki.Web.Common.WebConstants;
+using static GamingWiki.Web.Common.ExceptionMessages;
 using static GamingWiki.Tests.Data.Replies;
 using static GamingWiki.Tests.Data.Comments;
 using MyTested.AspNetCore.Mvc;
@@ -61,7 +62,8 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ErrorViewModel>());
+                    .WithModelOfType<ErrorViewModel>(m => 
+                        m.Message == NonExistingCommentExceptionMessage));
 
         [Fact]
         public void AddShouldBeMappedAndRedirectUponUnsuccessfulAction()
@@ -133,6 +135,7 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ErrorViewModel>());
+                    .WithModelOfType<ErrorViewModel>(m =>
+                        m.Message == NonExistingReplyExceptionMessage));
     }
 }
