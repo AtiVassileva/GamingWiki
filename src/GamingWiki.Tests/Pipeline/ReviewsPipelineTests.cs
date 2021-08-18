@@ -1,4 +1,6 @@
-﻿using GamingWiki.Services.Models.Reviews;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Models.Classes;
+using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Reviews;
@@ -26,7 +28,11 @@ namespace GamingWiki.Tests.Pipeline
                .WithData(FiveReviews))
            .ShouldReturn()
            .View(view => view
-               .WithModelOfType<ReviewFullModel>()
+               .WithModelOfType<ReviewFullModel>(m =>
+               {
+                   m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                   m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+               })
                .Passing(reviewListing =>
                {
                    reviewListing.Reviews.Count.ShouldBe(0);
@@ -48,7 +54,11 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(FiveReviews))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ReviewFullModel>()
+                    .WithModelOfType<ReviewFullModel>(m =>
+                    {
+                        m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                     .Passing(reviewListing =>
                     {
                         reviewListing.Reviews.Count.ShouldBe(expectedCountOnPage);
@@ -208,7 +218,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ReviewFullModel>());
+                .WithModelOfType<ReviewFullModel>(m =>
+                {
+                    m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -223,7 +237,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-            .WithModelOfType<ReviewFullModel>());
+            .WithModelOfType<ReviewFullModel>(m =>
+            {
+                m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+            }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithName()
@@ -238,7 +256,11 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ReviewFullModel>());
+                    .WithModelOfType<ReviewFullModel>(m =>
+                    {
+                        m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -258,7 +280,11 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ReviewFullModel>());
+                .WithModelOfType<ReviewFullModel>(m =>
+                {
+                    m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -278,7 +304,11 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ReviewFullModel>());
+                .WithModelOfType<ReviewFullModel>(m =>
+                {
+                    m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -293,7 +323,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ReviewFullModel>());
+                .WithModelOfType<ReviewFullModel>(m =>
+                {
+                    m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -308,6 +342,10 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ReviewFullModel>());
+                .WithModelOfType<ReviewFullModel>(m =>
+                {
+                    m.Reviews.ShouldBeOfType(typeof(PaginatedList<ReviewDetailsServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
     }
 }

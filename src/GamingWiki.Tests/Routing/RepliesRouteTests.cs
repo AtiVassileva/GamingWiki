@@ -1,4 +1,5 @@
-﻿using GamingWiki.Web.Controllers;
+﻿using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using GamingWiki.Web.Controllers;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 using static GamingWiki.Tests.Data.Comments;
@@ -21,15 +22,29 @@ namespace GamingWiki.Tests.Routing
                     }))
                 .To<RepliesController>(c =>
                     c.Add(TestValidReplyFormModel, TestComment.Id))
+                .Which(controller => controller
+                    .WithData(TestComment)
+                    .WithUser())
+                .ShouldHave()
+                .ValidModelState()
                 .AndAlso()
-                .ToValidModelState();
+                .ShouldReturn()
+                .Redirect(redirect => redirect
+                    .To<ArticlesController>(c => c.Details(With.Any<int>())));
 
         [Fact]
         public void DeleteShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Replies/Delete?replyId=1")
+                .ShouldMap($"/Replies/Delete?replyId={TestReply.Id}")
                 .To<RepliesController>(c =>
-                    c.Delete(1));
+                    c.Delete(TestReply.Id))
+                .Which(controller => controller
+                    .WithData(TestReply)
+                    .WithData(TestComment)
+                    .WithUser(user => user.InRole(AdministratorRoleName)))
+                .ShouldReturn()
+                .Redirect(redirect => redirect
+                    .To<ArticlesController>(c => c.Details(With.Any<int>())));
     }
 }

@@ -1,4 +1,6 @@
-﻿using GamingWiki.Services.Models.Characters;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Models.Characters;
+using GamingWiki.Services.Models.Classes;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
@@ -25,7 +27,13 @@ namespace GamingWiki.Tests.Pipeline
                 .WithData(FiveCharacters))
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<CharacterFullModel>().Passing(characterListing =>
+                .WithModelOfType<CharacterFullModel>(m =>
+                {
+                    m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                    m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                })
+                .Passing(characterListing =>
                 {
                     characterListing.Characters.Count.ShouldBe(3);
                     characterListing.Characters.PageIndex.ShouldBe(0);
@@ -47,7 +55,12 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(FiveCharacters))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<CharacterFullModel>()
+                    .WithModelOfType<CharacterFullModel>(m =>
+                    {
+                        m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                        m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                     .Passing(characterListing =>
                     {
                         characterListing.Characters.Count.ShouldBe(expectedCountOnPage);
@@ -236,7 +249,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<CharacterFullModel>());
+                .WithModelOfType<CharacterFullModel>(m =>
+                {
+                    m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                    m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void SearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -251,7 +269,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-            .WithModelOfType<CharacterFullModel>());
+            .WithModelOfType<CharacterFullModel>(m =>
+            {
+                m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+            }));
 
         [Fact]
         public void FilterShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -266,7 +289,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<CharacterFullModel>());
+                .WithModelOfType<CharacterFullModel>(m =>
+                {
+                    m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                    m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void FilterShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -281,7 +309,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<CharacterFullModel>());
+                .WithModelOfType<CharacterFullModel>(m =>
+                {
+                    m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                    m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -296,7 +329,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<CharacterFullModel>());
+                .WithModelOfType<CharacterFullModel>(m =>
+                {
+                    m.Characters.ShouldBeOfType(typeof(PaginatedList<CharacterAllServiceModel>));
+                    m.Classes.ShouldBeOfType(typeof(List<ClassSimpleServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithoutPageIndex()

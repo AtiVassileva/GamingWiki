@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Services.Models.Tricks;
+using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models.Tricks;
 using static GamingWiki.Tests.Data.Tricks;
@@ -15,7 +16,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Tricks/All")
                 .To<TricksController>(c =>
-                    c.All(With.No<int>()));
+                    c.All(With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void AllShouldBeMappedWithPageParameter()
@@ -23,14 +28,22 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Tricks/All?pageIndex=1")
                 .To<TricksController>(c =>
-                    c.All(1));
+                    c.All(1))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void GetCreateShouldBeMapped()
             => MyRouting
                 .Configuration()
                 .ShouldMap("/Tricks/Create")
-                .To<TricksController>(c => c.Create());
+                .To<TricksController>(c => c.Create())
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFormModel>());
 
         [Fact]
         public void PostCreateShouldBeMapped()
@@ -46,9 +59,15 @@ namespace GamingWiki.Tests.Routing
         public void GetEditShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Tricks/Edit?trickId=1")
+                .ShouldMap($"/Tricks/Edit?trickId={TestTrick.Id}")
                 .To<TricksController>(c =>
-                    c.Edit(1));
+                    c.Edit(TestTrick.Id))
+                .Which(controller => controller
+                    .WithData(TestTrick)
+                    .WithUser(user => user.InRole(AdministratorRoleName)))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickServiceEditModel>());
 
         [Fact]
         public void PostEditShouldBeMapped()
@@ -75,7 +94,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Tricks/Search?parameter=a")
                 .To<TricksController>(c =>
-                    c.Search("a", With.No<int>(), null));
+                    c.Search("a", With.No<int>(), null))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedWithPageIndex()
@@ -83,7 +106,11 @@ namespace GamingWiki.Tests.Routing
             .Configuration()
             .ShouldMap("/Tricks/Search?parameter=a&pageIndex=1")
             .To<TricksController>(c =>
-                c.Search("a", 1, null));
+                c.Search("a", 1, null))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedWithoutName()
@@ -91,7 +118,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Tricks/Search?parameter=a&pageIndex=1")
                 .To<TricksController>(c =>
-                    c.Search("a", 1, With.No<string>()));
+                    c.Search("a", 1, With.No<string>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedWithName()
@@ -99,7 +130,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Tricks/Search?parameter=a&pageIndex=1&name=test")
                 .To<TricksController>(c =>
-                    c.Search("a", 1, "test"));
+                    c.Search("a", 1, "test"))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void PostSearchShouldBeMappedWithoutPageIndex()
@@ -109,7 +144,11 @@ namespace GamingWiki.Tests.Routing
                     .WithMethod(HttpMethod.Post)
                     .WithLocation("/Tricks/Search?searchCriteria=abc"))
                 .To<TricksController>(c =>
-                    c.Search("abc", With.No<int>()));
+                    c.Search("abc", With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void PostSearchShouldBeMappedWithPageIndex()
@@ -119,7 +158,11 @@ namespace GamingWiki.Tests.Routing
                 .WithMethod(HttpMethod.Post)
                 .WithLocation("/Tricks/Search?searchCriteria=abc&pageIndex=1"))
             .To<TricksController>(c =>
-                c.Search("abc", 1));
+                c.Search("abc", 1))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void MineShouldBeMappedWithoutPageIndex()
@@ -127,7 +170,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Tricks/Mine")
                 .To<TricksController>(c =>
-                    c.Mine(With.No<int>()));
+                    c.Mine(With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFullModel>());
 
         [Fact]
         public void MineShouldBeMappedWithPageIndex()
@@ -135,6 +182,10 @@ namespace GamingWiki.Tests.Routing
             .Configuration()
             .ShouldMap("/Tricks/Mine?pageIndex=1")
             .To<TricksController>(c =>
-                c.Mine(1));
+                c.Mine(1))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<TrickFullModel>());
     }
 }

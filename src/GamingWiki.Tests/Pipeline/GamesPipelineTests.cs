@@ -1,4 +1,6 @@
-﻿using GamingWiki.Services.Models.Games;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Models.Games;
+using GamingWiki.Services.Models.Genres;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
@@ -25,7 +27,12 @@ namespace GamingWiki.Tests.Pipeline
                 .WithData(FiveGames))
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<GameFullModel>()
+                .WithModelOfType<GameFullModel>(m =>
+                {
+                    m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                    m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                })
                 .Passing(gameListing =>
                 {
                     gameListing.Games.Count.ShouldBe(3);
@@ -48,7 +55,12 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(FiveGames))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<GameFullModel>()
+                    .WithModelOfType<GameFullModel>(m =>
+                    {
+                        m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                        m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                     .Passing(gameListing =>
                     {
                         gameListing.Games.Count.ShouldBe(expectedCountOnPage);
@@ -236,7 +248,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<GameFullModel>());
+                .WithModelOfType<GameFullModel>(m =>
+                {
+                    m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                    m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void SearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -251,7 +268,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-            .WithModelOfType<GameFullModel>());
+            .WithModelOfType<GameFullModel>(m =>
+            {
+                m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+            }));
 
         [Fact]
         public void FilterShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -266,7 +288,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<GameFullModel>());
+                .WithModelOfType<GameFullModel>(m =>
+                {
+                    m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                    m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void FilterShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -281,7 +308,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<GameFullModel>());
+                .WithModelOfType<GameFullModel>(m =>
+                {
+                    m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                    m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -296,7 +328,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<GameFullModel>());
+                .WithModelOfType<GameFullModel>(m =>
+                {
+                    m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                    m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -311,6 +348,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<GameFullModel>());
+                .WithModelOfType<GameFullModel>(m =>
+                {
+                    m.Games.ShouldBeOfType(typeof(PaginatedList<GameServiceListingModel>));
+                    m.Genres.ShouldBeOfType(typeof(List<GenreServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
     }
 }

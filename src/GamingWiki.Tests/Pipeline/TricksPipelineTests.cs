@@ -1,4 +1,5 @@
-﻿using GamingWiki.Services.Models.Tricks;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Models.Tricks;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Tricks;
@@ -25,7 +26,11 @@ namespace GamingWiki.Tests.Pipeline
                .WithData(FiveTricks))
            .ShouldReturn()
            .View(view => view
-               .WithModelOfType<TrickFullModel>()
+               .WithModelOfType<TrickFullModel>(m =>
+               {
+                   m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                   m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+               })
                .Passing(trickListing =>
                {
                    trickListing.Tricks.Count.ShouldBe(0);
@@ -47,7 +52,11 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(FiveTricks))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<TrickFullModel>()
+                    .WithModelOfType<TrickFullModel>(m =>
+                    {
+                        m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                     .Passing(trickListing =>
                     {
                         trickListing.Tricks.Count.ShouldBe(expectedCountOnPage);
@@ -206,7 +215,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<TrickFullModel>());
+                .WithModelOfType<TrickFullModel>(m =>
+                {
+                    m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -221,7 +234,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-            .WithModelOfType<TrickFullModel>());
+            .WithModelOfType<TrickFullModel>(m =>
+            {
+                m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+            }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithName()
@@ -236,7 +253,11 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<TrickFullModel>());
+                    .WithModelOfType<TrickFullModel>(m =>
+                    {
+                        m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -256,7 +277,11 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<TrickFullModel>());
+                .WithModelOfType<TrickFullModel>(m =>
+                {
+                    m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -276,7 +301,11 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<TrickFullModel>());
+                .WithModelOfType<TrickFullModel>(m =>
+                {
+                    m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -291,7 +320,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<TrickFullModel>());
+                .WithModelOfType<TrickFullModel>(m =>
+                {
+                    m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -306,6 +339,10 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<TrickFullModel>());
+                .WithModelOfType<TrickFullModel>(m =>
+                {
+                    m.Tricks.ShouldBeOfType(typeof(PaginatedList<TrickServiceListingModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
     }
 }

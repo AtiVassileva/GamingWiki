@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Services.Models.Characters;
+using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Tests.Data.Characters;
@@ -15,7 +16,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Characters/All")
                 .To<CharactersController>(c =>
-                    c.All(With.No<int>()));
+                    c.All(With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFullModel>());
 
         [Fact]
         public void AllShouldBeMappedWithPageParameter()
@@ -23,14 +28,22 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Characters/All?pageIndex=1")
                 .To<CharactersController>(c =>
-                    c.All(1));
+                    c.All(1))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFullModel>());
 
         [Fact]
         public void GetCreateShouldBeMapped()
             => MyRouting
                 .Configuration()
                 .ShouldMap("/Characters/Create")
-                .To<CharactersController>(c => c.Create());
+                .To<CharactersController>(c => c.Create())
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFormModel>());
 
 
         [Fact]
@@ -47,17 +60,28 @@ namespace GamingWiki.Tests.Routing
         public void DetailsShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Characters/Details?characterId=1")
+                .ShouldMap($"/Characters/Details?characterId={TestCharacter.Id}")
                 .To<CharactersController>(c =>
-                    c.Details(1));
+                    c.Details(TestCharacter.Id))
+                .Which(controller => controller
+                    .WithData(TestCharacter))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterServiceDetailsModel>());
 
         [Fact]
         public void GetEditShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Characters/Edit?characterId=1")
+                .ShouldMap($"/Characters/Edit?characterId={TestCharacter.Id}")
                 .To<CharactersController>(c =>
-                    c.Edit(1));
+                    c.Edit(TestCharacter.Id))
+                .Which(controller => controller
+                    .WithData(TestCharacter)
+                    .WithUser(user => user.InRole(AdministratorRoleName)))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterServiceEditModel>());
 
         [Fact]
         public void PostEditShouldBeMapped()
@@ -84,7 +108,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Characters/Search?parameter=a")
                 .To<CharactersController>(c =>
-                    c.Search("a", With.No<int>()));
+                    c.Search("a", With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFullModel>());
 
         [Fact]
         public void SearchShouldBeMappedWithPageIndex()
@@ -92,7 +120,11 @@ namespace GamingWiki.Tests.Routing
             .Configuration()
             .ShouldMap("/Characters/Search?parameter=a&pageIndex=1")
             .To<CharactersController>(c =>
-                c.Search("a", 1));
+                c.Search("a", 1))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<CharacterFullModel>());
 
         [Fact]
         public void FilterShouldBeMappedWithoutPageIndex()
@@ -100,7 +132,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Characters/Filter?parameter=1")
                 .To<CharactersController>(c =>
-                    c.Filter(1, With.No<int>()));
+                    c.Filter(1, With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFullModel>());
 
         [Fact]
         public void FilterShouldBeMappedWithPageIndex()
@@ -108,7 +144,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Characters/Filter?parameter=1&pageIndex=1")
                 .To<CharactersController>(c =>
-                    c.Filter(1, 1));
+                    c.Filter(1, 1))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFullModel>());
 
 
         [Fact]
@@ -117,7 +157,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Characters/Mine")
                 .To<CharactersController>(c =>
-                    c.Mine(With.No<int>()));
+                    c.Mine(With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFullModel>());
 
         [Fact]
         public void MineShouldBeMappedWithPageIndex()
@@ -125,6 +169,10 @@ namespace GamingWiki.Tests.Routing
             .Configuration()
             .ShouldMap("/Characters/Mine?pageIndex=1")
             .To<CharactersController>(c =>
-                c.Mine(1));
+                c.Mine(1))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<CharacterFullModel>());
     }
 }

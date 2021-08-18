@@ -1,4 +1,6 @@
-﻿using GamingWiki.Services.Models.Discussions;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Models.Classes;
+using GamingWiki.Services.Models.Discussions;
 using GamingWiki.Tests.Data;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
@@ -26,7 +28,11 @@ namespace GamingWiki.Tests.Pipeline
                 .WithData(FiveDiscussions))
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<DiscussionFullModel>()
+                .WithModelOfType<DiscussionFullModel>(m =>
+                {
+                    m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                })
                 .Passing(discussionListing =>
                 {
                     discussionListing.Discussions.Count.ShouldBe(0);
@@ -48,7 +54,11 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(FiveDiscussions))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<DiscussionFullModel>()
+                    .WithModelOfType<DiscussionFullModel>(m =>
+                    {
+                        m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                     .Passing(discussionListing =>
                     {
                         discussionListing.Discussions.Count.ShouldBe(expectedCountOnPage);
@@ -236,7 +246,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<DiscussionFullModel>());
+                .WithModelOfType<DiscussionFullModel>(m =>
+                {
+                    m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -251,7 +265,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-            .WithModelOfType<DiscussionFullModel>());
+            .WithModelOfType<DiscussionFullModel>(m =>
+            {
+                m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+            }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithName()
@@ -266,7 +284,11 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<DiscussionFullModel>());
+                    .WithModelOfType<DiscussionFullModel>(m =>
+                    {
+                        m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -286,7 +308,11 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<DiscussionFullModel>());
+                .WithModelOfType<DiscussionFullModel>(m =>
+                {
+                    m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -306,7 +332,11 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<DiscussionFullModel>());
+                .WithModelOfType<DiscussionFullModel>(m =>
+                {
+                    m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
         
         [Fact]
         public void JoinShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -470,7 +500,11 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<DiscussionFullModel>());
+                .WithModelOfType<DiscussionFullModel>(m =>
+                {
+                    m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -485,6 +519,10 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<DiscussionFullModel>());
+                .WithModelOfType<DiscussionFullModel>(m =>
+                {
+                    m.Discussions.ShouldBeOfType(typeof(PaginatedList<DiscussionAllServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
     }
 }

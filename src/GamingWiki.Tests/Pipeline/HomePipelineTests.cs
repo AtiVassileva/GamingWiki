@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GamingWiki.Services.Models.Articles;
+using GamingWiki.Services.Models.Games;
+using GamingWiki.Services.Models.Tricks;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Home;
@@ -28,7 +32,12 @@ namespace GamingWiki.Tests.Pipeline
                 .WithData(FiveTricks))
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<HomeViewModel>()
+                .WithModelOfType<HomeViewModel>(m =>
+                {
+                    m.LatestGames.ShouldBeOfType(typeof(List<GameServiceListingModel>));
+                    m.LatestArticles.ShouldBeOfType(typeof(List<ArticleServiceHomeModel>));
+                    m.LatestTricks.ShouldBeOfType(typeof(List<TrickServiceHomeModel>));
+                })
                 .Passing(model =>
                     {
                         model.LatestArticles.Count().ShouldBe(3);

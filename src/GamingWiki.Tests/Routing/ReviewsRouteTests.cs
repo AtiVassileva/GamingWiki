@@ -1,4 +1,6 @@
-﻿using GamingWiki.Web.Controllers;
+﻿using GamingWiki.Services.Models.Reviews;
+using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models.Reviews;
 using static GamingWiki.Tests.Data.Reviews;
 using MyTested.AspNetCore.Mvc;
@@ -14,7 +16,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Reviews/All")
                 .To<ReviewsController>(c =>
-                    c.All(With.No<int>()));
+                    c.All(With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void AllShouldBeMappedWithPageParameter()
@@ -22,14 +28,22 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Reviews/All?pageIndex=1")
                 .To<ReviewsController>(c =>
-                    c.All(1));
+                    c.All(1))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void GetCreateShouldBeMapped()
             => MyRouting
                 .Configuration()
                 .ShouldMap("/Reviews/Create?gameId=1")
-                .To<ReviewsController>(c => c.Create(1));
+                .To<ReviewsController>(c => c.Create(1))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFormModel>());
 
         [Fact]
         public void PostCreateShouldBeMapped()
@@ -45,9 +59,15 @@ namespace GamingWiki.Tests.Routing
         public void GetEditShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Reviews/Edit?reviewId=1")
+                .ShouldMap($"/Reviews/Edit?reviewId={TestReview.Id}")
                 .To<ReviewsController>(c =>
-                    c.Edit(1));
+                    c.Edit(TestReview.Id))
+                .Which(controller => controller
+                    .WithData(TestReview)
+                    .WithUser(user => user.InRole(AdministratorRoleName)))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewDetailsServiceModel>());
 
         [Fact]
         public void PostEditShouldBeMapped()
@@ -74,7 +94,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Reviews/Search?parameter=a")
                 .To<ReviewsController>(c =>
-                    c.Search("a", With.No<int>(), null));
+                    c.Search("a", With.No<int>(), null))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedWithPageIndex()
@@ -82,7 +106,11 @@ namespace GamingWiki.Tests.Routing
             .Configuration()
             .ShouldMap("/Reviews/Search?parameter=a&pageIndex=1")
             .To<ReviewsController>(c =>
-                c.Search("a", 1, null));
+                c.Search("a", 1, null))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedWithoutName()
@@ -90,7 +118,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Reviews/Search?parameter=a&pageIndex=1")
                 .To<ReviewsController>(c =>
-                    c.Search("a", 1, With.No<string>()));
+                    c.Search("a", 1, With.No<string>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedWithName()
@@ -98,7 +130,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Reviews/Search?parameter=a&pageIndex=1&name=test")
                 .To<ReviewsController>(c =>
-                    c.Search("a", 1, "test"));
+                    c.Search("a", 1, "test"))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void PostSearchShouldBeMappedWithoutPageIndex()
@@ -108,7 +144,11 @@ namespace GamingWiki.Tests.Routing
                     .WithMethod(HttpMethod.Post)
                     .WithLocation("/Reviews/Search?searchCriteria=abc"))
                 .To<ReviewsController>(c =>
-                    c.Search("abc", With.No<int>()));
+                    c.Search("abc", With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void PostSearchShouldBeMappedWithPageIndex()
@@ -118,7 +158,11 @@ namespace GamingWiki.Tests.Routing
                 .WithMethod(HttpMethod.Post)
                 .WithLocation("/Reviews/Search?searchCriteria=abc&pageIndex=1"))
             .To<ReviewsController>(c =>
-                c.Search("abc", 1));
+                c.Search("abc", 1))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void MineShouldBeMappedWithoutPageIndex()
@@ -126,7 +170,11 @@ namespace GamingWiki.Tests.Routing
                 .Configuration()
                 .ShouldMap("/Reviews/Mine")
                 .To<ReviewsController>(c =>
-                    c.Mine(With.No<int>()));
+                    c.Mine(With.No<int>()))
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ReviewFullModel>());
 
         [Fact]
         public void MineShouldBeMappedWithPageIndex()
@@ -134,6 +182,10 @@ namespace GamingWiki.Tests.Routing
             .Configuration()
             .ShouldMap("/Reviews/Mine?pageIndex=1")
             .To<ReviewsController>(c =>
-                c.Mine(1));
+                c.Mine(1))
+            .Which()
+            .ShouldReturn()
+            .View(view => view
+                .WithModelOfType<ReviewFullModel>());
     }
 }
