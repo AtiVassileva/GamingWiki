@@ -68,6 +68,23 @@ namespace GamingWiki.Tests.Pipeline
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<TrickFormModel>());
+        [Fact]
+        public void PostCreateShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation("/Tricks/Create")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<TricksController>(c => c.Create(new TrickFormModel()))
+                .Which()
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickFormModel>());
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -111,6 +128,25 @@ namespace GamingWiki.Tests.Pipeline
             .ShouldReturn()
             .View(view => view
                 .WithModelOfType<ErrorViewModel>());
+
+        [Fact]
+        public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Tricks/Edit?trickId={TestTrick.Id}")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<TricksController>(c => c.Edit(new TrickServiceEditModel(), TestTrick.Id))
+                .Which(controller => controller
+                    .WithData(TestTrick))
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<TrickServiceEditModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()

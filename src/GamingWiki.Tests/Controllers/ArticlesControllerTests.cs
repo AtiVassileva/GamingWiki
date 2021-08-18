@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GamingWiki.Models;
 using GamingWiki.Services.Models.Articles;
+using GamingWiki.Services.Models.Categories;
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using MyTested.AspNetCore.Mvc;
+using Shouldly;
 using Xunit;
 using static GamingWiki.Tests.Data.Articles;
 using static GamingWiki.Tests.Data.Categories;
@@ -33,7 +36,12 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.All(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>());
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void GetCreateShouldReturnCorrectView()
@@ -149,7 +157,8 @@ namespace GamingWiki.Tests.Controllers
                         .Any(a =>
                             a.Heading == TestArticleFormModel.Heading
                             && a.Content == TestArticleFormModel.Content)
-                    )).TempData(tempData => tempData
+                    ))
+                .TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
                 .ShouldReturn()
@@ -218,7 +227,8 @@ namespace GamingWiki.Tests.Controllers
                         .All(a =>
                             a.Heading != TestArticleFormModel.Heading
                             && a.Content != TestArticleFormModel.Content)
-                    )).TempData(tempData => tempData
+                    ))
+                .TempData(tempData => tempData
                     .ContainingEntryWithKey(GlobalMessageKey))
                 .AndAlso()
                 .ShouldReturn()
@@ -235,7 +245,12 @@ namespace GamingWiki.Tests.Controllers
                     DefaultPageIndex, null))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>());
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void PostSearchShouldReturnCorrectViewWithModel()
@@ -250,7 +265,12 @@ namespace GamingWiki.Tests.Controllers
                 .AndAlso()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>());
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void FilterShouldReturnCorrectViewWithModel()
@@ -260,7 +280,12 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Filter(new Random().Next(), DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>());
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void MineShouldReturnCorrectViewWithModel()
@@ -270,6 +295,11 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Mine(DefaultPageIndex))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>());
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeNull();
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
     }
 }

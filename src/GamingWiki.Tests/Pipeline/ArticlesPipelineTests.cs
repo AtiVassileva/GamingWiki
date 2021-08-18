@@ -5,6 +5,8 @@ using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Tests.Data.Articles;
+using static GamingWiki.Tests.Data.Categories;
+using static GamingWiki.Tests.Common.TestConstants;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using static GamingWiki.Web.Common.WebConstants;
 using MyTested.AspNetCore.Mvc;
@@ -71,51 +73,23 @@ namespace GamingWiki.Tests.Pipeline
                         articleListing.Articles.TotalPages.ShouldBe(totalPages);
                     }));
 
-        //[Theory]
-        //[InlineData(DefaultHeading, DefaultUrl, 1, DefaultContent)]
-        //public void PostCreateShouldSaveArticleHaveValidModelStateAndRedirect(string heading, string pictureUrl, int categoryId, string content)
-        //    => MyPipeline
-        //        .Configuration()
-        //        .ShouldMap(request => request
-        //            .WithMethod(HttpMethod.Post)
-        //            .WithLocation("/Articles/Create")
-        //            .WithFormFields(new
-        //            {
-        //                Heading = heading,
-        //                PictureUrl = pictureUrl,
-        //                CategoryId = categoryId,
-        //                Content = content
-        //            }).WithUser()
-        //            .WithAntiForgeryToken())
-        //        .To<ArticlesController>(c => c.Create(new ArticleFormModel()
-        //        {
-        //            Heading = heading,
-        //            PictureUrl = pictureUrl,
-        //            CategoryId = categoryId,
-        //            Content = content
-        //        }))
-        //        .Which(controller => controller
-        //            .WithData(TestCategory))
-        //        .ShouldHave()
-        //        .ValidModelState();
-        //.AndAlso()
-        //.ShouldHave()
-        //.Data(data => data
-        //    .WithSet<Article>(articles =>
-        //    {
-        //        articles.ShouldNotBeEmpty();
-        //        articles.SingleOrDefault(a => a.Heading == DefaultHeading)
-        //            .ShouldNotBeNull();
-        //    }))
-        //.AndAlso()
-        //.ShouldHave()
-        //.TempData(tempData => tempData
-        //    .ContainingEntryWithKey(GlobalMessageKey))
-        //.AndAlso()
-        //.ShouldReturn()
-        //.Redirect(redirect => redirect
-        //    .To<ArticlesController>(c => c
-        //        .All(With.Any<int>()))));
+        [Fact]
+        public void PostCreateShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation("/Articles/Create")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<ArticlesController>(c => c.Create(new ArticleFormModel()))
+                .Which()
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ArticleFormModel>());
 
         [Fact]
         public void GetCreateShouldBeMappedAndReturnCorrectView()
@@ -145,6 +119,25 @@ namespace GamingWiki.Tests.Pipeline
             .ShouldReturn()
             .View(view => view
                 .WithModelOfType<ArticleServiceDetailsModel>());
+
+        [Fact]
+        public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Articles/Edit?articleId={TestArticle.Id}")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<ArticlesController>(c => c.Edit(new ArticleServiceEditModel(), TestArticle.Id))
+                .Which(controller => controller
+                    .WithData(TestArticle))
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ArticleServiceEditModel>());
 
         [Fact]
         public void DetailsShouldBeMappedAndReturnErrorViewWithInvalidId()

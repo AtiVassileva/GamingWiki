@@ -70,6 +70,24 @@ namespace GamingWiki.Tests.Pipeline
                     .WithModelOfType<CharacterFormModel>());
 
         [Fact]
+        public void PostCreateShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation("/Characters/Create")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<CharactersController>(c => c.Create(new CharacterFormModel()))
+                .Which()
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterFormModel>());
+
+        [Fact]
         public void DetailsShouldBeMappedAndReturnCorrectViewWithValidId()
         => MyPipeline
             .Configuration()
@@ -126,6 +144,25 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(TestCharacter))
                 .ShouldReturn()
                 .Unauthorized();
+
+        [Fact]
+        public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Characters/Edit?characterId={TestCharacter.Id}")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<CharactersController>(c => c.Edit(new CharacterServiceEditModel(), TestCharacter.Id))
+                .Which(controller => controller
+                    .WithData(TestCharacter))
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<CharacterServiceEditModel>());
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnErrorViewWithInvalidId()

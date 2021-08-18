@@ -5,7 +5,6 @@ using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using MyTested.AspNetCore.Mvc;
 using System.Linq;
-using GamingWiki.Web.Areas.Admin;
 using GamingWiki.Web.Models;
 using Xunit;
 

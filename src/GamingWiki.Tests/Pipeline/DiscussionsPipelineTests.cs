@@ -70,6 +70,24 @@ namespace GamingWiki.Tests.Pipeline
                 .View();
 
         [Fact]
+        public void PostCreateShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation("/Discussions/Create")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<DiscussionsController>(c => c.Create(new DiscussionFormModel()))
+                .Which()
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<DiscussionFormModel>());
+
+        [Fact]
         public void DetailsShouldBeMappedAndReturnCorrectViewWithValidId()
         => MyPipeline
             .Configuration()
@@ -140,6 +158,25 @@ namespace GamingWiki.Tests.Pipeline
             .ShouldReturn()
             .View(view => view
                 .WithModelOfType<ErrorViewModel>());
+
+        [Fact]
+        public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Discussions/Edit?discussionId={TestDiscussion.Id}")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<DiscussionsController>(c => c.Edit(new DiscussionServiceEditModel(), TestDiscussion.Id))
+                .Which(controller => controller
+                    .WithData(TestDiscussion))
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<DiscussionServiceEditModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()

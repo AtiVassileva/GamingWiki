@@ -71,6 +71,24 @@ namespace GamingWiki.Tests.Pipeline
                     .WithModelOfType<GameFormModel>());
 
         [Fact]
+        public void PostCreateShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation("/Games/Create")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<GamesController>(c => c.Create(new GameFormModel()))
+                .Which()
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<GameFormModel>());
+
+        [Fact]
         public void DetailsShouldBeMappedAndReturnCorrectViewWithValidId()
         => MyPipeline
             .Configuration()
@@ -142,6 +160,24 @@ namespace GamingWiki.Tests.Pipeline
             .View(view => view
                 .WithModelOfType<ErrorViewModel>());
 
+        [Fact]
+        public void PostEditShouldBeMappedAndHaveInvalidModelStateAndReturnView()
+            => MyPipeline
+                .Configuration()
+                .ShouldMap(request => request
+                    .WithMethod(HttpMethod.Post)
+                    .WithLocation($"/Games/Edit?gameId={TestGame.Id}")
+                    .WithUser()
+                    .WithAntiForgeryToken())
+                .To<GamesController>(c => c.Edit(new GameServiceEditModel(), TestGame.Id))
+                .Which(controller => controller
+                    .WithData(TestGame))
+                .ShouldHave()
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<GameServiceEditModel>());
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
             => MyPipeline
