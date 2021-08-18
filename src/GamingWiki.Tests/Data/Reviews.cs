@@ -13,7 +13,10 @@ namespace GamingWiki.Tests.Data
     public static class Reviews
     {
         public static IEnumerable<Review> FiveReviews
-            => Enumerable.Range(0, 5).Select(_ => new Review());
+            => Enumerable.Range(0, 5).Select(_ => new Review
+            {
+                Description = DefaultDescription
+            });
 
         public static ReviewFormModel TestReviewValidFormModel
             => new()

@@ -21,7 +21,7 @@ namespace GamingWiki.Tests.Data
             };
 
         public static IEnumerable<Game> FiveGames
-            => Enumerable.Range(0, 5).Select(_ => new Game(){IsApproved = true});
+            => Enumerable.Range(0, 5).Select(_ => new Game{IsApproved = true});
 
         public static GameFormModel TestValidGameFormModel
             => new()
