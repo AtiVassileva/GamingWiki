@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using GamingWiki.Models;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 using static GamingWiki.Tests.Data.Messages;
@@ -25,7 +26,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(TestMessage.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()

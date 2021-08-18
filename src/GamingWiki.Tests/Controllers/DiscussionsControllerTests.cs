@@ -3,6 +3,7 @@ using System.Linq;
 using GamingWiki.Models;
 using GamingWiki.Services.Models.Discussions;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Discussions;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
@@ -85,7 +86,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Details(TestDiscussion.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidDiscussionId()
@@ -103,7 +105,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Edit(TestDiscussion.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
@@ -186,7 +189,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(TestDiscussion.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()
@@ -252,7 +256,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Join(TestDiscussion.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void JoinShouldRedirectWhenDiscussionIsFull()
@@ -314,7 +319,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Leave(TestDiscussion.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void LeaveShouldRedirectWhenUserDoesNotParticipateInDiscussion()
@@ -353,7 +359,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Chat(TestDiscussion.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void ChatShouldRedirectWhenUserDoesNotParticipateInDiscussion()

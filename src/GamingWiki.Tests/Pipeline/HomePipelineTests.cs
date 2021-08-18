@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Home;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
@@ -59,6 +60,7 @@ namespace GamingWiki.Tests.Pipeline
                 .To<HomeController>(c => c.Error())
                 .Which()
                 .ShouldReturn()
-                .View();
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
     }
 }

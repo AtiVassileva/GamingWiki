@@ -1,5 +1,6 @@
 ﻿using GamingWiki.Services.Models.Characters;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using MyTested.AspNetCore.Mvc;
@@ -94,7 +95,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<CharactersController>(c => c.Details(TestCharacter.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -136,7 +138,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<CharactersController>(c => c.Edit(TestCharacter.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -180,7 +183,8 @@ namespace GamingWiki.Tests.Pipeline
                 c.Delete(TestCharacter.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void SearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

@@ -1,6 +1,7 @@
 ﻿using GamingWiki.Services.Models.Discussions;
 using GamingWiki.Tests.Data;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Discussions;
 using static GamingWiki.Tests.Data.Discussions;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
@@ -94,7 +95,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<DiscussionsController>(c => c.Details(TestDiscussion.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -136,7 +138,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<DiscussionsController>(c => c.Edit(TestDiscussion.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -180,7 +183,8 @@ namespace GamingWiki.Tests.Pipeline
                 c.Delete(TestDiscussion.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -308,7 +312,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<DiscussionsController>(c => c.Join(TestDiscussion.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void JoinShouldBeaMappedAndShouldRedirectWhenDiscussionIsFull()
@@ -368,7 +373,8 @@ namespace GamingWiki.Tests.Pipeline
                 .To<DiscussionsController>(c => c.Leave(TestDiscussion.Id))
                 .Which()
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 [Fact]
         public void ChatShouldReturnErrorViewWithInvalidId()
             => MyPipeline
@@ -380,7 +386,8 @@ namespace GamingWiki.Tests.Pipeline
                 .To<DiscussionsController>(c => c.Chat(TestDiscussion.Id))
                 .Which()
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void ChatShouldRedirectWhenUserDoesNotParticipate()

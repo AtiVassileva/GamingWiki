@@ -6,6 +6,7 @@ using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using MyTested.AspNetCore.Mvc;
 using System.Linq;
 using GamingWiki.Web.Areas.Admin;
+using GamingWiki.Web.Models;
 using Xunit;
 
 namespace GamingWiki.Tests.Pipeline
@@ -46,7 +47,8 @@ namespace GamingWiki.Tests.Pipeline
                 .To<MessagesController>(c => c.Delete(TestMessage.Id))
                 .Which()
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndReturnUnauthorizedForUnauthorizedUsers()

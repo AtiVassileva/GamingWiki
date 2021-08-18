@@ -1,5 +1,6 @@
 ﻿using GamingWiki.Services.Models.Tricks;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Tricks;
 using static GamingWiki.Tests.Data.Tricks;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
@@ -108,7 +109,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<TricksController>(c => c.Edit(TestTrick.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -152,7 +154,8 @@ namespace GamingWiki.Tests.Pipeline
                 c.Delete(TestTrick.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

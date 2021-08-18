@@ -3,6 +3,7 @@ using System.Linq;
 using GamingWiki.Models;
 using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Reviews;
 using static GamingWiki.Tests.Common.TestConstants;
 using static GamingWiki.Web.Common.WebConstants;
@@ -85,7 +86,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Edit(TestReview.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
@@ -158,7 +160,8 @@ namespace GamingWiki.Tests.Controllers
                     .RestrictingForHttpMethod(HttpMethod.Post))
                 .AndAlso()
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnErrorViewWithInvalidReviewId()
@@ -166,7 +169,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(TestReview.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()

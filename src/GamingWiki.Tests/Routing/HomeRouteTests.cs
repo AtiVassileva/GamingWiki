@@ -1,4 +1,5 @@
 ﻿using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 
@@ -25,6 +26,10 @@ namespace GamingWiki.Tests.Routing
             => MyRouting
                 .Configuration()
                 .ShouldMap("/Home/Error")
-                .To<HomeController>(c => c.Error());
+                .To<HomeController>(c => c.Error())
+                .Which()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
     }
 }

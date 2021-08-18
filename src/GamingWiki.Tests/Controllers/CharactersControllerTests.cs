@@ -3,6 +3,7 @@ using System.Linq;
 using GamingWiki.Models;
 using GamingWiki.Services.Models.Characters;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Tests.Data.Characters;
 using static GamingWiki.Tests.Data.Classes;
@@ -89,7 +90,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Details(TestCharacter.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidCharacterId()
@@ -107,7 +109,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Edit(TestCharacter.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
@@ -190,7 +193,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(TestCharacter.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()

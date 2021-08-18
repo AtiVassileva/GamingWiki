@@ -1,8 +1,12 @@
-﻿using GamingWiki.Services.Models.Articles;
+﻿using System.Collections.Generic;
+using GamingWiki.Services.Models.Articles;
+using GamingWiki.Services.Models.Categories;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Articles;
 using static GamingWiki.Tests.Data.Articles;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
+using static GamingWiki.Web.Common.WebConstants;
 using MyTested.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -24,7 +28,13 @@ namespace GamingWiki.Tests.Pipeline
                 .WithData(FiveArticles))
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>()
+                .WithModelOfType<ArticleFullModel>(
+                    m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                 .Passing(articleListing =>
                 {
                     articleListing.Articles.Count.ShouldBe(2);
@@ -48,13 +58,64 @@ namespace GamingWiki.Tests.Pipeline
                     .WithData(FiveArticles))
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>()
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    })
                     .Passing(articleListing =>
                     {
                         articleListing.Articles.Count.ShouldBe(expectedCountOnPage);
                         articleListing.Articles.PageIndex.ShouldBe(pageIndex);
                         articleListing.Articles.TotalPages.ShouldBe(totalPages);
                     }));
+
+        //[Theory]
+        //[InlineData(DefaultHeading, DefaultUrl, 1, DefaultContent)]
+        //public void PostCreateShouldSaveArticleHaveValidModelStateAndRedirect(string heading, string pictureUrl, int categoryId, string content)
+        //    => MyPipeline
+        //        .Configuration()
+        //        .ShouldMap(request => request
+        //            .WithMethod(HttpMethod.Post)
+        //            .WithLocation("/Articles/Create")
+        //            .WithFormFields(new
+        //            {
+        //                Heading = heading,
+        //                PictureUrl = pictureUrl,
+        //                CategoryId = categoryId,
+        //                Content = content
+        //            }).WithUser()
+        //            .WithAntiForgeryToken())
+        //        .To<ArticlesController>(c => c.Create(new ArticleFormModel()
+        //        {
+        //            Heading = heading,
+        //            PictureUrl = pictureUrl,
+        //            CategoryId = categoryId,
+        //            Content = content
+        //        }))
+        //        .Which(controller => controller
+        //            .WithData(TestCategory))
+        //        .ShouldHave()
+        //        .ValidModelState();
+        //.AndAlso()
+        //.ShouldHave()
+        //.Data(data => data
+        //    .WithSet<Article>(articles =>
+        //    {
+        //        articles.ShouldNotBeEmpty();
+        //        articles.SingleOrDefault(a => a.Heading == DefaultHeading)
+        //            .ShouldNotBeNull();
+        //    }))
+        //.AndAlso()
+        //.ShouldHave()
+        //.TempData(tempData => tempData
+        //    .ContainingEntryWithKey(GlobalMessageKey))
+        //.AndAlso()
+        //.ShouldReturn()
+        //.Redirect(redirect => redirect
+        //    .To<ArticlesController>(c => c
+        //        .All(With.Any<int>()))));
 
         [Fact]
         public void GetCreateShouldBeMappedAndReturnCorrectView()
@@ -96,7 +157,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<ArticlesController>(c => c.Details(TestArticle.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -138,7 +200,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<ArticlesController>(c => c.Edit(TestArticle.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -151,6 +214,10 @@ namespace GamingWiki.Tests.Pipeline
                 .To<ArticlesController>(c => c.Delete(TestArticle.Id))
                 .Which(controller => controller
                     .WithData(TestArticle))
+                .ShouldHave()
+                .TempData(tempData => tempData
+                        .ContainingEntryWithKey(GlobalMessageKey))
+                .AndAlso()
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<ArticlesController>(c => c
@@ -182,7 +249,8 @@ namespace GamingWiki.Tests.Pipeline
                 c.Delete(TestArticle.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -197,7 +265,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>());
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -212,7 +285,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-            .WithModelOfType<ArticleFullModel>());
+            .WithModelOfType<ArticleFullModel>(m =>
+            {
+                m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+            }));
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithName()
@@ -227,7 +305,12 @@ namespace GamingWiki.Tests.Pipeline
                 .Which()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<ArticleFullModel>());
+                    .WithModelOfType<ArticleFullModel>(m =>
+                    {
+                        m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                        m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                        m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                    }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -247,7 +330,12 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>());
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void PostSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -267,7 +355,12 @@ namespace GamingWiki.Tests.Pipeline
             .AndAlso()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>());
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void FilterShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
@@ -282,7 +375,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>());
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void FilterShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -297,7 +395,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>());
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeOfType(typeof(List<CategoryServiceModel>));
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithPageIndex()
@@ -312,8 +415,13 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>()); 
-        
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeNull();
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
+
         [Fact]
         public void MineShouldBeMappedAndReturnCorrectViewWithoutPageIndex()
         => MyPipeline
@@ -327,55 +435,12 @@ namespace GamingWiki.Tests.Pipeline
             .Which()
             .ShouldReturn()
             .View(view => view
-                .WithModelOfType<ArticleFullModel>());
+                .WithModelOfType<ArticleFullModel>(m =>
+                {
+                    m.Articles.ShouldBeOfType(typeof(PaginatedList<ArticleAllServiceModel>));
+                    m.Categories.ShouldBeNull();
+                    m.Tokens.ShouldBeOfType(typeof(KeyValuePair<object, object>));
+                }));
 
-
-
-        //[Theory]
-        //[InlineData(DefaultHeading, DefaultUrl, DefaultId, DefaultContent)]
-        //public void PostCreateShouldSaveArticleHaveValidModelStateAndRedirect(string heading, string pictureUrl, int categoryId, string content)
-        //=> MyPipeline
-        //    .Configuration()
-        //    .ShouldMap(request => request
-        //        .WithMethod(HttpMethod.Post)
-        //        .WithLocation("/Articles/Create")
-        //        .WithFormFields(new
-        //        {
-        //            Heading = heading,
-        //            PictureUrl = pictureUrl,
-        //            CategoryId = categoryId,
-        //            Content = content
-        //        })
-        //        .WithUser()
-        //        .WithAntiForgeryToken())
-        //    .To<ArticlesController>(c => c.Create(new ArticleFormModel
-        //    {
-        //        Heading = heading,
-        //        PictureUrl = pictureUrl,
-        //        CategoryId = categoryId,
-        //        Content = content
-        //    }))
-        //    .Which(controller => controller
-        //        .WithData(TestCategory))
-        //    .ShouldHave()
-        //    .ValidModelState()
-        //    .AndAlso()
-        //    .ShouldHave()
-        //    .Data(data => data
-        //        .WithSet<Article>(articles =>
-        //        {
-        //            articles.ShouldNotBeEmpty();
-        //            articles.SingleOrDefault(a => a.Heading == TestArticleFormModel.Heading)
-        //                .ShouldNotBeNull();
-        //        }))
-        //    .AndAlso()
-        //    .ShouldHave()
-        //    .TempData(tempData => tempData
-        //        .ContainingEntryWithKey(GlobalMessageKey))
-        //    .AndAlso()
-        //    .ShouldReturn()
-        //    .Redirect(redirect => redirect
-        //        .To<ArticlesController>(c => c
-        //            .All(With.Any<int>())));
     }
 }

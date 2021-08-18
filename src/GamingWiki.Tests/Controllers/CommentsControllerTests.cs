@@ -9,6 +9,7 @@ using static GamingWiki.Web.Common.WebConstants;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
 
 using System.Linq;
+using GamingWiki.Web.Models;
 
 namespace GamingWiki.Tests.Controllers
 {
@@ -68,7 +69,8 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Add(TestValidCommentFormModel, 
                     TestComment.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnErrorViewWithInvalidCommentId()
@@ -76,7 +78,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(new Random().Next()))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()

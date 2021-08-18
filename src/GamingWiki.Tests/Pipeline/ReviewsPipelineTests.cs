@@ -1,5 +1,6 @@
 ﻿using GamingWiki.Services.Models.Reviews;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Reviews;
 using static GamingWiki.Tests.Data.Reviews;
 using static GamingWiki.Tests.Data.Games;
@@ -109,7 +110,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<ReviewsController>(c => c.Edit(TestReview.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -153,7 +155,8 @@ namespace GamingWiki.Tests.Pipeline
                 c.Delete(TestReview.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetSearchShouldBeMappedAndReturnCorrectViewWithPageIndex()

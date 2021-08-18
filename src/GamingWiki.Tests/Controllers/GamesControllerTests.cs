@@ -12,6 +12,7 @@ using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using Xunit;
 using System.Linq;
 using GamingWiki.Services.Models.Games;
+using GamingWiki.Web.Models;
 
 namespace GamingWiki.Tests.Controllers
 {
@@ -102,7 +103,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Details(TestGame.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DetailsShouldReturnCorrectViewWithValidGameId()
@@ -120,7 +122,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Edit(TestGame.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldReturnCorrectViewWithValidId()
@@ -219,7 +222,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(TestGame.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()

@@ -4,6 +4,7 @@ using GamingWiki.Web.Controllers;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 using System.Linq;
+using GamingWiki.Web.Models;
 using static GamingWiki.Tests.Data.Replies;
 using static GamingWiki.Tests.Data.Comments;
 using static GamingWiki.Web.Common.WebConstants;
@@ -67,7 +68,8 @@ namespace GamingWiki.Tests.Controllers
                 .Calling(c => c.Add(TestValidReplyFormModel,
                     TestComment.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnErrorViewWithInvalidReplyId()
@@ -75,7 +77,8 @@ namespace GamingWiki.Tests.Controllers
                 .Instance()
                 .Calling(c => c.Delete(TestReply.Id))
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldReturnUnauthorizedForUnauthorizedUsers()

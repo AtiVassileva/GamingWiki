@@ -2,8 +2,6 @@
 using GamingWiki.Web.Controllers;
 using GamingWiki.Web.Models.Characters;
 using static GamingWiki.Tests.Data.Characters;
-using static GamingWiki.Tests.Data.Classes;
-using static GamingWiki.Tests.Common.TestConstants;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 

@@ -7,6 +7,7 @@ using static GamingWiki.Web.Areas.Admin.AdminConstants;
 using MyTested.AspNetCore.Mvc;
 using System.Linq;
 using GamingWiki.Web.Areas.Admin;
+using GamingWiki.Web.Models;
 using Xunit;
 
 namespace GamingWiki.Tests.Pipeline
@@ -60,7 +61,8 @@ namespace GamingWiki.Tests.Pipeline
                     .Add(TestValidCommentFormModel, TestArticle.Id))
                 .Which()
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void AddShouldBeMappedAndRedirectUponUnsuccessfulAction()
@@ -130,6 +132,7 @@ namespace GamingWiki.Tests.Pipeline
                     .Delete(TestComment.Id))
                 .Which()
                 .ShouldReturn()
-                .View("Error");
+                .View(view => view
+                    .WithModelOfType<ErrorViewModel>());
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GamingWiki.Services.Models.Games;
 using GamingWiki.Web.Controllers;
+using GamingWiki.Web.Models;
 using GamingWiki.Web.Models.Games;
 using static GamingWiki.Tests.Data.Games;
 using static GamingWiki.Web.Areas.Admin.AdminConstants;
@@ -95,7 +96,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<GamesController>(c => c.Details(TestGame.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void GetEditShouldBeMappedAndReturnCorrectViewWithValidId()
@@ -137,7 +139,8 @@ namespace GamingWiki.Tests.Pipeline
             .To<GamesController>(c => c.Edit(TestGame.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void DeleteShouldBeMappedAndRedirectUponSuccessfulAction()
@@ -181,7 +184,8 @@ namespace GamingWiki.Tests.Pipeline
                 c.Delete(TestGame.Id))
             .Which()
             .ShouldReturn()
-            .View("Error");
+            .View(view => view
+                .WithModelOfType<ErrorViewModel>());
 
         [Fact]
         public void SearchShouldBeMappedAndReturnCorrectViewWithPageIndex()
